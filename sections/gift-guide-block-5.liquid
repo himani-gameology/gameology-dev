@@ -1,0 +1,40 @@
+<div class="row gift-guide-block">
+  <div class=" col-12 col-lg-6 p-0 pl-lg-10 pr-lg-10 d-flex justify-content-center">
+    <a href="{{ section.settings.block-left-url }}"><img src="{{ section.settings.block-left-img | img_url:"master" }}"></a>
+  </div>
+  <div class="col-12 col-lg-6 p-0 pl-lg-10 pr-lg-10 d-flex justify-content-center">
+    <a href="{{ section.settings.block-right-url }}"><img src="{{ section.settings.block-right-img | img_url:"master" }}"></a>
+  </div>
+</div>
+{% schema %}
+{
+    "name": "Gift Guide Block 5",
+    "settings": [
+        {
+            "type": "image_picker",
+            "id": "block-left-img",
+            "label": "Left Block Image (1/2 Wide)"
+        },
+        {
+            "type": "url",
+            "id": "block-left-url",
+            "label": "Left Block Url"
+        },
+        {
+            "type": "image_picker",
+            "id": "block-right-img",
+            "label": "Right Block Image (1/2 Wide)"
+        },
+        {
+            "type": "url",
+            "id": "block-right-url",
+            "label": "Right Block Url"
+        }
+    ],
+    "presets": [
+        {
+            "name": "Gift Guide Block 5"
+        }
+    ]
+}
+{% endschema %}

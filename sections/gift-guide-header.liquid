@@ -1,0 +1,22 @@
+<div class="gift-guide-header d-flex justify-content-center">
+  <img src="{{ section.settings.gift-guide-header | img_url:"master" }}">
+  
+</div>
+{% schema %}
+{
+    "name": "Gift Guide Header",
+    "settings": [
+        {
+            "type": "image_picker",
+            "id": "gift-guide-header",
+            "label": "Header Image"
+        },
+        
+    ],
+    "presets": [
+        {
+            "name": "Gift GuideHeader"
+        }
+    ]
+}
+{% endschema %}

@@ -1,0 +1,58 @@
+{%- case type -%}
+{%- when 'isHoliday' -%}
+  {%- assign holiday = settings.list_holiday | strip_newlines | split: ',' -%}
+  {%- capture newHoliday -%}
+    {%- for day in holiday -%}
+      {%- liquid
+        assign dateH = day | split: '/' | join: '-'
+        assign m = dateH | date: '%m'
+        assign d = dateH | date: '%d'
+      -%},{{- 'now' | date: '%Y' -}}/{{- m -}}/{{- d -}}
+    {%- endfor -%}
+  {%- endcapture -%}
+  {%- assign holiday = newHoliday | remove_first: ',' | split: ',' -%}
+
+  {%- assign skipDays = 0 -%}
+  {%- assign timeOfDay = 86400 -%}
+
+  {%- for i in (1..daysCheck) -%}
+    {%- assign numberDay = timeOfDay | times: i -%}
+    {%- assign newDate = date | plus: numberDay -%}
+    {%- assign dayOfWeek = newDate | date: "%u" | times: 1 -%}
+    {%- assign isHoliday = newDate | date: '%Y/%m/%d' -%}
+
+    {%- if dayOfWeek == 6 or dayOfWeek == 7 or holiday contains isHoliday -%}
+      {%- assign skipDays = skipDays | plus: 1 -%}
+
+      {%- if forloop.first -%}
+        {%- assign daysCheck = daysCheck -%}
+      {%- else -%}
+        {%- assign daysCheck = 1 -%}
+      {%- endif -%}
+
+      {%- render 'item-117', type: 'isHoliday', date: newDate, daysCheck: daysCheck -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {%- if skipDays > 0 -%}{%- break -%}{%- endif -%}
+
+  {{- date | plus: numberDay | date: '%d %B' -}}
+
+{%- else -%}
+  <div class="hidden_task show-test_117">
+    <div class="banner-on-melbourne">
+      <h4 class="cart-adventure"><strong>FREE</strong> Click and Collect from Clayton or Brunswick</h4>
+      <a href="javascript:void(0);" id="notMelbourne"><small>Not in Melbourne?</small></a>
+    </div>
+
+    <div class="banner-on-other">
+      {%- assign current_days = 'now' | date: '%s' -%}
+      {%- capture estimateDate -%}{%- render 'item-117', type: 'isHoliday', date: current_days, daysCheck: 2 -%}{%- endcapture -%}
+
+      <h4 class="cart-adventure">Get your order as early as <strong>{{estimateDate}}*</strong></h4>
+      <small>*with express shipping</small>
+    </div>
+  </div>
+
+{%- endcase -%}

@@ -1,0 +1,200 @@
+{%- comment -%}
+Don't edit this file, it will be overwrite!!
+If you want to overwrite the BP styling, please add after this snippets
+If you want to overwrite the BP script, please add those before this snippets.
+If you have no idea how to do it. Please contact shopify@laybuy.com. Good Luck, best wish!
+Version: v0.2.0
+{%- endcomment -%}
+<style>
+.laybuy-paragraph {
+  margin-top    : 2em;
+  display       : -webkit-flex;
+  display       : -ms-flexbox;
+  display       : flex;
+  flex-wrap     : wrap;
+  align-items   : center;
+  font-size     : 1rem;
+  letter-spacing: .05rem;
+  line-height   : 2em;
+  color         : #000;
+  text-transform: none;
+}
+.laybuy-paragraph .laybuy-logo-and-text {
+  display: flex;
+  align-items: center;
+}
+.laybuy-paragraph .laybuy-link-inner {
+  text-decoration: unset;
+  white-space: nowrap;
+  padding-left: 5px;
+}
+@media (max-width: 450px) {
+  .laybuy-paragraph {
+    justify-content: center;
+  }
+}
+.laybuy-paragraph > * {
+  margin-right: 0.25em;
+}
+.laybuy-paragraph span.laybuy-money {
+  font-weight: 600 !important;
+}
+.laybuy-paragraph img#laybuy-logo {
+  height: 14px;
+}
+.laybuy-paragraph img#laybuy-logo.small {
+  height: 14px;
+}
+.laybuy-paragraph img#laybuy-logo.medium {
+  height: 16px;
+}
+.laybuy-paragraph img#laybuy-logo.large {
+  height: 18px;
+}
+.laybuy-paragraph.hide {
+  display: none;
+}
+.laybuy-paragraph .laybuy-text2,
+.laybuy-paragraph .max-instalment-price {
+    display: none;
+}
+.laybuy-paragraph.over .laybuy-text2,
+.laybuy-paragraph.over .max-instalment-price {
+    display: inline-block;
+}
+#laybuy-popup-wrapper {
+  position: fixed;
+  display : none;
+  z-index : 999999999;
+  left    : 0;
+  top     : 0;
+  right   : 0;
+  bottom  : 0;
+  overflow: auto;
+}
+#laybuy-popup-outer {
+  display                : -webkit-flex;
+  display                : -ms-flexbox;
+  display                : flex;
+  -webkit-justify-content: center;
+  -ms-flex-pack          : center;
+  justify-content        : center;
+  -webkit-align-content  : center;
+  -ms-flex-line-pack     : center;
+  align-content          : center;
+  -webkit-align-items    : center;
+  -ms-flex-align         : center;
+  align-items            : center;
+  width                  : 100%;
+  min-height             : 100%;
+  background-color       : rgba(0, 0, 0, 0.3);
+}
+#laybuy-popup-inner {
+  width        : 90vw;
+  max-width    : 620px;
+  height       : 482px;
+  position     : relative;
+  border-radius: 0.65em;
+}
+#laybuy-popup-inner > iframe {
+  width     : 100%;
+  height    : calc(100% + 3.2em);
+  background: transparent;
+  border    : 0;
+}
+@media screen and (max-width: 545px) {
+  #laybuy-popup-inner {
+    height: 800px;
+    margin: 2em 0 0;
+  }
+}
+</style>
+{%- assign product_style = '{"color": "#000000", "font-size": "14px", "justify-content": "flex-start", "letter-spacing": "0rem", "line-height": "1.5em", "margin-top": "1em"}' -%}
+{%- assign cart_style = '{"color": "#000000", "font-size": "10px", "justify-content": "flex-end", "letter-spacing": "0rem", "line-height": "1.5em", "margin-top": "1em"}' -%}
+{%- assign collection_style = '{"color": "#000000", "font-size": "10px", "justify-content": "flex-start", "letter-spacing": "0rem", "line-height": "1.5em", "margin-top": "1em"}' -%}
+{%- assign style = '{}' -%}
+{%- assign laybuy_logo_class = 'small' -%}
+{%- if template.name == 'product' -%}
+    {%- assign style = product_style -%}
+{%- elsif template.name == 'cart' -%}
+    {%- assign style = cart_style -%}
+{%- elsif template.name == 'collection' -%}
+    {%- assign style = collection_style -%}
+{%- endif -%}
+{%- assign laybuy_js = 'laybuy-helper.js' | asset_url -%}
+<script type="text/javascript">
+var LBConfigs = window.LBConfigs || {};
+LBConfigs.product = {
+    enable: 1,
+    selector: '#laybuy',
+    inject: 0,
+    inject_pos: 0,ajaxSelector: '#laybuy',
+    productData: {% if template.name == 'product' %}{{ product | json }}{% else %}null{% endif %},
+    variantID: {% if template.name == 'product' %}{{ product.selected_or_first_available_variant.id | json }}{% else %}null{% endif %}
+};
+LBConfigs.cart = {
+    enable: 1,
+    selector: '.laybuy-cart-container',
+    inject: 0,
+    inject_pos: 0,
+};
+LBConfigs.collection = {
+    enable: 1,
+    selector: '',
+    inject: 0,
+    inject_pos: 0,};
+LBConfigs.logo_class = {"cart": "small", "collection": "small", "product": "medium"};
+LBConfigs.onlinePopup = 1;
+LBConfigs.style = {{ style }};
+LBConfigs.icons = {
+    showAll: 0,
+    selector: 'your-footer-class',
+    inject: 0,
+    class: '',
+};
+LBConfigs.popup = {
+    enable: 0,
+    delay: 5000,
+    position: 'side left'
+};
+LBConfigs.shop = {
+    logo_html: '<img src="https://www.laybuy.com/assets/laybuy-logo-small.svg" id="laybuy-logo" alt="Laybuy" class="small">',
+    currency: {{ cart.currency.iso_code | json }},
+    texts: {
+        "global": {
+            "product_line_2": "",
+            "product_line_3": " today & 5 weekly interest-free payments of ",
+            "collection_line_2": " with ",
+            "collection_line_3": " today & 5 weekly interest-free payments of ",
+            "cart_line_2": " with ",
+            "cart_line_3": " today & 5 weekly interest-free payments of ",
+        },
+        "standard": {
+            "product_line_1": "6 weekly payments of ",
+            "collection_line_1": "or 6 weekly interest-free payments from ",
+            "cart_line_1": "or 6 weekly interest-free payments from ",
+        },
+        "over": {
+            "product_line_1": "or from ",
+            "collection_line_1": "or from ",
+            "cart_line_1": "or from ",
+        }
+    }
+};
+LBConfigs.currencies = [
+  {iso_code: 'AUD', symbol: '$', max: 120000 },
+  {iso_code: 'NZD', symbol: '$', max: 150000 },
+  {iso_code: 'GBP', symbol: '£', max: 72000 },
+  {iso_code: 'USD', symbol: '$', max: 24000 }
+];
+(LBConfigs.init || function() {
+    document.addEventListener('DOMContentLoaded', function() {
+        let script = document.createElement('script');
+        script.onload = function () {
+            LaybuyHelper.run(window.LBConfigs)
+        };
+        script.src = '{{ laybuy_js }}';
+        document.head.appendChild(script);
+    })
+})();
+</script>

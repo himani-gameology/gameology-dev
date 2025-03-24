@@ -1,0 +1,685 @@
+{%- if show_tab_reviews and settings.reviews_type != 'disable' -%}
+    {% capture tab_reviews_html %}
+        {%- if settings.reviews_type == 'default' -%}
+            <div id="shopify-product-reviews" data-id="{{ product.id }}">{{ metafields.spr.reviews }}</div>
+        {%- elsif settings.reviews_type == 'growave' and settings.app_growave_enable == true -%}
+            {% capture the_snippet_reviews %}{% render 'socialshopwave-widget-recommends' with 1 %}{% endcapture %}
+            {%- unless the_snippet_reviews contains 'Liquid error' -%}
+                {{ the_snippet_reviews }}
+            {%- endunless -%}
+        {%- endif -%}
+    {%- endcapture -%}
+{%- endif -%}
+{%- if tabs_type == 'sheet' -%}
+    {%- if show_tab_description and description_place == 'tabs' and description != blank -%}
+        <div class="pt-10 mt-100">
+            <div class="rte overflow-hidden">
+                {{ description }}
+            </div>
+        </div>
+    {%- endif -%}
+    {%- if show_tab_reviews and settings.reviews_type != 'disable' -%}
+        <div class="pt-10 {% if show_tab_description and description_place == 'tabs' and description != blank %}mt-40{% else %}mt-100{% endif %}">
+            {{ tab_reviews_html }}
+        </div>
+    {%- endif -%}
+{%- elsif tabs_type == 'tabs' -%}
+    {% capture tabs_script_html %}
+        <script>
+            Loader.require({type: "script", name: "tabs"});
+        </script>
+    {% endcapture %}
+    {%- case template_layout -%}
+    {%- when '1' -%}
+        <div class="tabs product-tabs js-tabs" data-type="horizontal" data-postload="tabs">
+            <div class="tabs__head" data-js-tabs-head>
+                <div class="tabs__slider" data-js-tabs-slider>
+                    {%- assign active_tab = ' data-active="true"' -%}
+                    {%- if show_tab_description and description_place == 'tabs' and description != blank -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>
+                          Product Description
+                          <svg width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6.01686 5.99991C5.78284 6.00229 5.55704 5.92492 5.38806 5.78445L0.265578 1.33009C0.0967445 1.18498 0.00118013 0.987501 8.64703e-06 0.781316C-0.00103434 0.575129 0.0923126 0.376966 0.259581 0.230398C0.42685 0.0839292 0.654481 0.0010238 0.892149 7.5016e-06C1.12982 -0.000897326 1.35824 0.0800844 1.52719 0.225196L6.01687 4.13405L10.5066 0.225196C10.7352 0.0451334 11.0549 -0.0196725 11.3519 0.053843C11.6488 0.127361 11.881 0.328798 11.9657 0.586345C12.0504 0.843994 11.9757 1.12134 11.7682 1.3197L6.6457 5.78448C6.47674 5.92496 6.25093 6.00232 6.0169 5.99995L6.01686 5.99991Z" fill="black"/>
+                          </svg>
+                        </div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- for block in section.blocks -%}
+                        {%- if block.type == 'tab_custom_html' or block.type == 'tab_custom_text' -%}
+                            <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ block.settings.title }}</div>
+                            {%- assign active_tab = null -%}
+                        {%- endif -%}
+                    {%- endfor -%}
+                    {%- if metafields.tab.title and metafields.tab.content -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ metafields.tab.title }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- if metafields.tab1.title and metafields.tab1.content -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ metafields.tab1.title }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- if metafields.tab2.title and metafields.tab2.content -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ metafields.tab2.title }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- if metafields.tab3.title and metafields.tab3.content -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ metafields.tab3.title }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- if show_tab_reviews and settings.reviews_type != 'disable' -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }} data-tab="reviews">{{ 'products.product.tabs.reviews' | t }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- if settings.app_klarna_enable and settings.app_klarna_show_info_tab -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }} data-tab="klarna">{{ 'products.product.tabs.klarna' | t }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                </div>
+                <div class="tabs__nav tabs__nav--prev" data-js-tabs-nav-prev><i>{% render 'icon-theme-006' %}</i></div>
+                <div class="tabs__nav tabs__nav--next" data-js-tabs-nav-next><i>{% render 'icon-theme-007' %}</i></div>
+            </div>
+            <div class="tabs__body">
+                {%- assign active_tab = true -%}
+                {%- if show_tab_description and description_place == 'tabs' and description != blank -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ 'products.product.tabs.description' | t }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+							<h4 class="mb-30">Product Information</h4>
+                            {% if description.size > 600 %}
+                                <div class="description-part d-block d-md-none">{{ description | strip_html | truncate: 430 }}</div>
+                                <div class="description-full d-none d-md-block">{{ description }}</div>
+                                <div class="readmore-description-js d-block d-md-none">
+                                    <span>Show more</span>
+                                </div>
+                            {% else %}
+                                {{ description }}
+                            {% endif %}
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- assign custom_tab_index = 1 -%}
+                {%- for block in section.blocks -%}
+                    {%- if block.type == 'tab_custom_html' or block.type == 'tab_custom_text' -%}
+                        {%- case custom_tab_index -%}
+                        {%- when 2 %}{% assign custom_tab_default_page = 'include-product-tab-custom-html-2' -%}
+                    {%- else %}{% assign custom_tab_default_page = 'include-product-tab-custom-html' -%}
+                        {%- endcase -%}
+                        <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                            <span data-js-tabs-btn-mobile>{{ block.settings.title }} <i>{% render 'icon-theme-188' %}</i></span>
+                            <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                                {% include 'parse-page-html-content' with default_page: custom_tab_default_page page_content: block.settings.page_content html: block.settings.content %}
+                            </div>
+                        </div>
+                        {%- assign custom_tab_index = custom_tab_index | plus: 1 -%}
+                    {%- endif -%}
+                {%- endfor -%}
+                {%- if metafields.tab.title and metafields.tab.content -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ metafields.tab.title }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            {% include 'parse-for-icons' content: metafields.tab.content %}
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- if metafields.tab1.title and metafields.tab1.content -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ metafields.tab1.title }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            {% include 'parse-for-icons' content: metafields.tab1.content %}
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- if metafields.tab2.title and metafields.tab2.content -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ metafields.tab2.title }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            {% include 'parse-for-icons' content: metafields.tab2.content %}
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- if metafields.tab3.title and metafields.tab3.content -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ metafields.tab3.title }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            {% include 'parse-for-icons' content: metafields.tab3.content %}
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- if show_tab_reviews and settings.reviews_type != 'disable' -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ 'products.product.tabs.reviews' | t }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            <div class="tabs-review">
+                                {{ tab_reviews_html }}
+                            </div>
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- if settings.app_klarna_enable and settings.app_klarna_show_info_tab -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ 'products.product.tabs.klarna' | t }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            <div class="d-flex px-15">
+                                <div class="klarna-message-tab"></div>
+                            </div>
+                        </div>
+                    </div>
+                {%- endif -%}
+            </div>
+            {{ tabs_script_html }}
+        </div>
+    {%- when '2' -%}
+        <div class="tabs product-tabs js-tabs" data-type="mobile" data-postload="tabs">
+            <div class="tabs__head" data-js-tabs-head>
+                <div class="tabs__slider" data-js-tabs-slider>
+                    {%- assign active_tab = ' data-active="true"' -%}
+                    {%- if show_tab_description and description_place == 'tabs' and description != blank -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ 'products.product.tabs.description' | t }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- for block in section.blocks -%}
+                        {%- if block.type == 'tab_custom_html' or block.type == 'tab_custom_text' -%}
+                            <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ block.settings.title }}</div>
+                            {%- assign active_tab = null -%}
+                        {%- endif -%}
+                    {%- endfor -%}
+                    {%- if metafields.tab.title and metafields.tab.content -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ metafields.tab.title }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- if metafields.tab1.title and metafields.tab1.content -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ metafields.tab1.title }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- if metafields.tab2.title and metafields.tab2.content -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ metafields.tab2.title }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- if metafields.tab3.title and metafields.tab3.content -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ metafields.tab3.title }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- if show_tab_reviews and settings.reviews_type != 'disable' -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }} data-tab="reviews">{{ 'products.product.tabs.reviews' | t }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- if settings.app_klarna_enable and settings.app_klarna_show_info_tab -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }} data-tab="klarna">{{ 'products.product.tabs.klarna' | t }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                </div>
+                <div class="tabs__nav tabs__nav--prev" data-js-tabs-nav-prev><i>{% render 'icon-theme-006' %}</i></div>
+                <div class="tabs__nav tabs__nav--next" data-js-tabs-nav-next><i>{% render 'icon-theme-007' %}</i></div>
+            </div>
+            <div class="tabs__body">
+                {%- assign active_tab = true -%}
+                {%- if show_tab_description and description_place == 'tabs' and description != blank -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ 'products.product.tabs.description' | t }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            {{ description }}
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- assign custom_tab_index = 1 -%}
+                {%- for block in section.blocks -%}
+                    {%- if block.type == 'tab_custom_html' or block.type == 'tab_custom_text' -%}
+                        {%- case custom_tab_index -%}
+                        {%- when 2 %}{% assign custom_tab_default_page = 'include-product-tab-custom-html-2' -%}
+                    {%- else %}{% assign custom_tab_default_page = 'include-product-tab-custom-html' -%}
+                        {%- endcase -%}
+                        <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                            <span data-js-tabs-btn-mobile>{{ block.settings.title }} <i>{% render 'icon-theme-188' %}</i></span>
+                            <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                                {% include 'parse-page-html-content' with default_page: custom_tab_default_page page_content: block.settings.page_content html: block.settings.content %}
+                            </div>
+                        </div>
+                        {%- assign custom_tab_index = custom_tab_index | plus: 1 -%}
+                    {%- endif -%}
+                {%- endfor -%}
+                {%- if metafields.tab.title and metafields.tab.content -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ metafields.tab.title }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            {% include 'parse-for-icons' content: metafields.tab.content %}
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- if metafields.tab1.title and metafields.tab1.content -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ metafields.tab1.title }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            {% include 'parse-for-icons' content: metafields.tab1.content %}
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- if metafields.tab2.title and metafields.tab2.content -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ metafields.tab2.title }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            {% include 'parse-for-icons' content: metafields.tab2.content %}
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- if metafields.tab3.title and metafields.tab3.content -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ metafields.tab3.title }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            {% include 'parse-for-icons' content: metafields.tab3.content %}
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- if show_tab_reviews and settings.reviews_type != 'disable' -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ 'products.product.tabs.reviews' | t }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            <div class="tabs-review">
+                                {{ tab_reviews_html }}
+                            </div>
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- if settings.app_klarna_enable and settings.app_klarna_show_info_tab -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ 'products.product.tabs.klarna' | t }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            <div class="d-flex px-15">
+                                <div class="klarna-message-tab"></div>
+                            </div>
+                        </div>
+                    </div>
+                {%- endif -%}
+            </div>
+            {{ tabs_script_html }}
+        </div>
+    {%- when '3' -%}
+        <div class="tabs product-tabs js-tabs" data-type="mobile" data-postload="tabs">
+            <div class="tabs__head" data-js-tabs-head>
+                <div class="tabs__slider" data-js-tabs-slider>
+                    {%- assign active_tab = ' data-active="true"' -%}
+                    {%- if show_tab_description and description_place == 'tabs' and description != blank -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ 'products.product.tabs.description' | t }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- for block in section.blocks -%}
+                        {%- if block.type == 'tab_custom_html' or block.type == 'tab_custom_text' -%}
+                            <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ block.settings.title }}</div>
+                            {%- assign active_tab = null -%}
+                        {%- endif -%}
+                    {%- endfor -%}
+                    {%- if metafields.tab.title and metafields.tab.content -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ metafields.tab.title }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- if metafields.tab1.title and metafields.tab1.content -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ metafields.tab1.title }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- if metafields.tab2.title and metafields.tab2.content -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ metafields.tab2.title }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- if metafields.tab3.title and metafields.tab3.content -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ metafields.tab3.title }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- if show_tab_reviews and settings.reviews_type != 'disable' -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }} data-tab="reviews">{{ 'products.product.tabs.reviews' | t }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- if settings.app_klarna_enable and settings.app_klarna_show_info_tab -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }} data-tab="klarna">{{ 'products.product.tabs.klarna' | t }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                </div>
+                <div class="tabs__nav tabs__nav--prev" data-js-tabs-nav-prev><i>{% render 'icon-theme-006' %}</i></div>
+                <div class="tabs__nav tabs__nav--next" data-js-tabs-nav-next><i>{% render 'icon-theme-007' %}</i></div>
+            </div>
+            <div class="tabs__body">
+                {%- assign active_tab = true -%}
+                {%- if show_tab_description and description_place == 'tabs' and description != blank -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ 'products.product.tabs.description' | t }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            {{ description }}
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- assign custom_tab_index = 1 -%}
+                {%- for block in section.blocks -%}
+                    {%- if block.type == 'tab_custom_html' or block.type == 'tab_custom_text' -%}
+                        {%- case custom_tab_index -%}
+                        {%- when 2 %}{% assign custom_tab_default_page = 'include-product-tab-custom-html-2' -%}
+                    {%- else %}{% assign custom_tab_default_page = 'include-product-tab-custom-html' -%}
+                        {%- endcase -%}
+                        <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                            <span data-js-tabs-btn-mobile>{{ block.settings.title }} <i>{% render 'icon-theme-188' %}</i></span>
+                            <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                                {% include 'parse-page-html-content' with default_page: custom_tab_default_page page_content: block.settings.page_content html: block.settings.content %}
+                            </div>
+                        </div>
+                        {%- assign custom_tab_index = custom_tab_index | plus: 1 -%}
+                    {%- endif -%}
+                {%- endfor -%}
+                {%- if metafields.tab.title and metafields.tab.content -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ metafields.tab.title }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            {% include 'parse-for-icons' content: metafields.tab.content %}
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- if metafields.tab1.title and metafields.tab1.content -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ metafields.tab1.title }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            {% include 'parse-for-icons' content: metafields.tab1.content %}
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- if metafields.tab2.title and metafields.tab2.content -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ metafields.tab2.title }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            {% include 'parse-for-icons' content: metafields.tab2.content %}
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- if metafields.tab3.title and metafields.tab3.content -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ metafields.tab3.title }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            {% include 'parse-for-icons' content: metafields.tab3.content %}
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- if show_tab_reviews and settings.reviews_type != 'disable' -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ 'products.product.tabs.reviews' | t }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            <div class="tabs-review">
+                                {{ tab_reviews_html }}
+                            </div>
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- if settings.app_klarna_enable and settings.app_klarna_show_info_tab -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ 'products.product.tabs.klarna' | t }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            <div class="d-flex px-15">
+                                <div class="klarna-message-tab"></div>
+                            </div>
+                        </div>
+                    </div>
+                {%- endif -%}
+            </div>
+            {{ tabs_script_html }}
+        </div>
+    {%- when '4' -%}
+        <div class="tabs product-tabs js-tabs" data-type="mobile" data-postload="tabs">
+            <div class="tabs__head" data-js-tabs-head>
+                <div class="tabs__slider" data-js-tabs-slider>
+                    {%- assign active_tab = ' data-active="true"' -%}
+                    {%- if show_tab_description and description_place == 'tabs' and description != blank -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ 'products.product.tabs.description' | t }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- for block in section.blocks -%}
+                        {%- if block.type == 'tab_custom_html' or block.type == 'tab_custom_text' -%}
+                            <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ block.settings.title }}</div>
+                            {%- assign active_tab = null -%}
+                        {%- endif -%}
+                    {%- endfor -%}
+                    {%- if metafields.tab.title and metafields.tab.content -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ metafields.tab.title }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- if metafields.tab1.title and metafields.tab1.content -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ metafields.tab1.title }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- if metafields.tab2.title and metafields.tab2.content -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ metafields.tab2.title }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- if metafields.tab3.title and metafields.tab3.content -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ metafields.tab3.title }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- if show_tab_reviews and settings.reviews_type != 'disable' -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }} data-tab="reviews">{{ 'products.product.tabs.reviews' | t }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- if settings.app_klarna_enable and settings.app_klarna_show_info_tab -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }} data-tab="klarna">{{ 'products.product.tabs.klarna' | t }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                </div>
+                <div class="tabs__nav tabs__nav--prev" data-js-tabs-nav-prev><i>{% render 'icon-theme-006' %}</i></div>
+                <div class="tabs__nav tabs__nav--next" data-js-tabs-nav-next><i>{% render 'icon-theme-007' %}</i></div>
+            </div>
+            <div class="tabs__body">
+                {%- assign active_tab = true -%}
+                {%- if show_tab_description and description_place == 'tabs' and description != blank -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ 'products.product.tabs.description' | t }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            {{ description }}
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- assign custom_tab_index = 1 -%}
+                {%- for block in section.blocks -%}
+                    {%- if block.type == 'tab_custom_html' or block.type == 'tab_custom_text' -%}
+                        {%- case custom_tab_index -%}
+                        {%- when 2 %}{% assign custom_tab_default_page = 'include-product-tab-custom-html-2' -%}
+                    {%- else %}{% assign custom_tab_default_page = 'include-product-tab-custom-html' -%}
+                        {%- endcase -%}
+                        <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                            <span data-js-tabs-btn-mobile>{{ block.settings.title }} <i>{% render 'icon-theme-188' %}</i></span>
+                            <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                                {% include 'parse-page-html-content' with default_page: custom_tab_default_page page_content: block.settings.page_content html: block.settings.content %}
+                            </div>
+                        </div>
+                        {%- assign custom_tab_index = custom_tab_index | plus: 1 -%}
+                    {%- endif -%}
+                {%- endfor -%}
+                {%- if metafields.tab.title and metafields.tab.content -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ metafields.tab.title }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            {% include 'parse-for-icons' content: metafields.tab.content %}
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- if metafields.tab1.title and metafields.tab1.content -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ metafields.tab1.title }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            {% include 'parse-for-icons' content: metafields.tab1.content %}
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- if metafields.tab2.title and metafields.tab2.content -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ metafields.tab2.title }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            {% include 'parse-for-icons' content: metafields.tab2.content %}
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- if metafields.tab3.title and metafields.tab3.content -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ metafields.tab3.title }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            {% include 'parse-for-icons' content: metafields.tab3.content %}
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- if show_tab_reviews and settings.reviews_type != 'disable' -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ 'products.product.tabs.reviews' | t }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            <div class="tabs-review">
+                                {{ tab_reviews_html }}
+                            </div>
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- if settings.app_klarna_enable and settings.app_klarna_show_info_tab -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ 'products.product.tabs.klarna' | t }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            <div class="d-flex px-15">
+                                <div class="klarna-message-tab"></div>
+                            </div>
+                        </div>
+                    </div>
+                {%- endif -%}
+            </div>
+            {{ tabs_script_html }}
+        </div>
+    {%- when '5' -%}
+        <div class="tabs product-tabs js-tabs" data-type="horizontal" data-postload="tabs">
+            <div class="tabs__head" data-js-tabs-head>
+                <div class="tabs__slider" data-js-tabs-slider>
+                    {%- assign active_tab = ' data-active="true"' -%}
+                    {%- if show_tab_description and description_place == 'tabs' and description != blank -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ 'products.product.tabs.description' | t }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- for block in section.blocks -%}
+                        {%- if block.type == 'tab_custom_html' or block.type == 'tab_custom_text' -%}
+                            <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ block.settings.title }}</div>
+                            {%- assign active_tab = null -%}
+                        {%- endif -%}
+                    {%- endfor -%}
+                    {%- if metafields.tab.title and metafields.tab.content -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ metafields.tab.title }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- if metafields.tab1.title and metafields.tab1.content -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ metafields.tab1.title }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- if metafields.tab2.title and metafields.tab2.content -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ metafields.tab2.title }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- if metafields.tab3.title and metafields.tab3.content -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }}>{{ metafields.tab3.title }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- if show_tab_reviews and settings.reviews_type != 'disable' -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }} data-tab="reviews">{{ 'products.product.tabs.reviews' | t }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                    {%- if settings.app_klarna_enable and settings.app_klarna_show_info_tab -%}
+                        <div class="tabs__btn{% if active_tab %} active{% endif %}" data-js-tabs-btn{{ active_tab }} data-tab="klarna">{{ 'products.product.tabs.klarna' | t }}</div>
+                        {%- assign active_tab = null -%}
+                    {%- endif -%}
+                </div>
+                <div class="tabs__nav tabs__nav--prev" data-js-tabs-nav-prev><i>{% render 'icon-theme-006' %}</i></div>
+                <div class="tabs__nav tabs__nav--next" data-js-tabs-nav-next><i>{% render 'icon-theme-007' %}</i></div>
+            </div>
+            <div class="tabs__body">
+                {%- assign active_tab = true -%}
+                {%- if show_tab_description and description_place == 'tabs' and description != blank -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ 'products.product.tabs.description' | t }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            {{ description }}
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- assign custom_tab_index = 1 -%}
+                {%- for block in section.blocks -%}
+                    {%- if block.type == 'tab_custom_html' or block.type == 'tab_custom_text' -%}
+                        {%- case custom_tab_index -%}
+                        {%- when 2 %}{% assign custom_tab_default_page = 'include-product-tab-custom-html-2' -%}
+                    {%- else %}{% assign custom_tab_default_page = 'include-product-tab-custom-html' -%}
+                        {%- endcase -%}
+                        <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                            <span data-js-tabs-btn-mobile>{{ block.settings.title }} <i>{% render 'icon-theme-188' %}</i></span>
+                            <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                                {% include 'parse-page-html-content' with default_page: custom_tab_default_page page_content: block.settings.page_content html: block.settings.content %}
+                            </div>
+                        </div>
+                        {%- assign custom_tab_index = custom_tab_index | plus: 1 -%}
+                    {%- endif -%}
+                {%- endfor -%}
+                {%- if metafields.tab.title and metafields.tab.content -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ metafields.tab.title }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            {% include 'parse-for-icons' content: metafields.tab.content %}
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- if metafields.tab1.title and metafields.tab1.content -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ metafields.tab1.title }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            {% include 'parse-for-icons' content: metafields.tab1.content %}
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- if metafields.tab2.title and metafields.tab2.content -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ metafields.tab2.title }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            {% include 'parse-for-icons' content: metafields.tab2.content %}
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- if metafields.tab3.title and metafields.tab3.content -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ metafields.tab3.title }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content rte overflow-hidden" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            {% include 'parse-for-icons' content: metafields.tab3.content %}
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- if show_tab_reviews and settings.reviews_type != 'disable' -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ 'products.product.tabs.reviews' | t }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            <div class="tabs-review">
+                                {{ tab_reviews_html }}
+                            </div>
+                        </div>
+                    </div>
+                {%- endif -%}
+                {%- if settings.app_klarna_enable and settings.app_klarna_show_info_tab -%}
+                    <div{% if active_tab %} class="active"{% endif %} data-js-tabs-tab>
+                        <span data-js-tabs-btn-mobile>{{ 'products.product.tabs.klarna' | t }} <i>{% render 'icon-theme-188' %}</i></span>
+                        <div class="tabs__content" data-js-tabs-content{% if active_tab %} style="display: block;"{% assign active_tab = null %}{% endif %}>
+                            <div class="d-flex px-15">
+                                <div class="klarna-message-tab"></div>
+                            </div>
+                        </div>
+                    </div>
+                {%- endif -%}
+            </div>
+            {{ tabs_script_html }}
+        </div>
+    {%- endcase -%}
+{%- endif -%}
+
+<script>
+  jQuery(".readmore-description-js").on("click",function(){
+    if (jQuery(".readmore-description-js span").hasClass("show-less")) {
+      jQuery(".description-part").removeClass("d-block");
+      jQuery(".description-part").addClass("d-none");
+      jQuery(".description-full").removeClass("d-none");
+      jQuery(".description-full").addClass("d-block");
+    } else {
+      jQuery(".description-part").removeClass("d-none");
+      jQuery(".description-part").addClass("d-block");
+      jQuery(".description-full").removeClass("d-block");
+      jQuery(".description-full").addClass("d-none");
+    }
+  });
+  
+</script>

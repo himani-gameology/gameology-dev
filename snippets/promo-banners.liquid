@@ -1,0 +1,40 @@
+{% if template contains 'collection' or template contains 'product' %}
+  <div class="promo-banners">
+    {% if settings.promo_banners_left_img != blank %}
+      <img src="{{ settings.promo_banners_left_img | img_url: '100px' }}">
+    {% endif %}
+    {% if settings.promo_banners_text != blank %}
+      <div class="rte">{{ settings.promo_banners_text }}</div>
+    {% endif %}
+    {% if settings.promo_banners_right_img != blank %}
+      <img src="{{ settings.promo_banners_right_img | img_url: '100px' }}">
+    {% endif %}
+  </div>
+  <style type="text/css">
+    {% if settings.promo_banners_bg_img != blank %}
+      .promo-banners {
+        background-image: url("{{ settings.promo_banners_bg_img | img_url: '2000x' }}");
+      }
+    {% endif %}
+    {% if settings.promo_banners_bg_img_mobile != blank %}
+      @media (max-width: 786px) {
+        .promo-banners {
+          background-image: url("{{ settings.promo_banners_bg_img_mobile | img_url: '2000x' }}");
+        }
+      }
+    {% endif %}
+    {% if settings.promo_banners_bg != blank %}
+      .promo-banners {
+        background-color: {{ settings.promo_banners_bg }};
+      }
+    {% endif %}
+    {% if settings.promo_banners_color != blank %}
+      .promo-banners * {
+        color: {{ settings.promo_banners_color }} !important;
+      }
+    {% endif %}
+    .promo-banners {
+      background-size: {{ settings.promo_banners_bg_size }};
+    }
+  </style>
+{% endif %}

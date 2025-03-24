@@ -1,0 +1,378 @@
+<div class="search-popup search-popup-227">
+    <div class="search-popup__search container">
+        <div class="search-form-header py-10 text-center" style="display: none;">
+            <div class="search-form__form px-10 mx-auto">
+                <form action="{{ routes.search_url }}" method="get" role="search" class="mb-0">
+                    <label class="position-relative d-flex align-items-center mr-0">
+                        <input type="search"
+                              class="pl-20 pr-40 mb-0"
+                              name="q"
+                              value="{{ search.terms | escape }}"
+                              placeholder="{{ 'general.search.placeholder' | t }}">
+                        <input type="hidden" name="options[prefix]" value="last" aria-hidden="true" />
+                        <i class="position-absolute right-0 mr-15">
+                            {% render 'icon-theme-168' %}
+                        </i>
+                    </label>
+                </form>
+            </div>
+        </div>
+    </div>
+
+  <div class="search-popup__logged-in container">
+    <div class="search-popup__visited-products">
+      <p class="search-popup__label">
+        STILL INTERESTED IN THESE?
+      </p>
+
+      <div class="wrap">
+
+      </div>
+    </div>
+  </div>
+
+  <div class="search-popup__default container active">
+    <div class="search-popup__searched-terms">
+      <p class="search-popup__label">
+        SUGGESTED KEYWORDS
+      </p>
+
+    </div>
+    <div class="search-popup__category-suggestions">
+      <p class="search-popup__label">
+        CATEGORY SUGGESTIONS
+      </p>
+      <div class="wrap">
+      {% for i in (1..3) %}
+        {% capture collection %}search_popup_collection_{{ i }}{% endcapture %}
+
+        {% if settings[collection] != empty %}
+          <div class="search-popup__category-suggestion">
+            <a href="{{ settings[collection].url }}">
+              {{ settings[collection].featured_image | image_url: width: 300 | image_tag }}
+
+              <p>
+              {{ settings[collection].title }}
+              </p>
+            </a>
+          </div>
+        {% endif %}
+      {% endfor %}
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<style>
+#shopify-section-header {
+  position: relative;
+}
+
+.search-popup {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  display: none;
+  pointer-events: none;
+  z-index: 99;
+}
+
+.search-popup__logged-in {
+  display: none !important;
+}
+.search-popup__default {
+  padding-top: 26px;
+  padding-bottom: 26px;
+}
+
+/* .search-popup__logged-in.active {
+  display: block !important;
+} */
+
+.search-popup__default.active {
+  display: flex !important;
+}
+
+.search-popup.show {
+  display: block;
+  pointer-events: auto;
+}
+
+.search-popup.fixed {
+  position: fixed;
+  top: 106px;
+}
+
+.search-popup__label {
+  font-family: "Basic Commercial",sans-serif;
+  font-size: 15px;
+  line-height: 16px;
+  font-weight: 700;
+  color: #000;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 6px;
+  margin-bottom: 15px;
+  max-width: 264px;
+  letter-spacing: 0.75px;
+}
+
+.search-popup__visited-products {
+  opacity: 0;
+}
+
+.search-popup__visited-products .wrap {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  column-gap: 15px;
+  row-gap: 15px;
+}
+
+.search-popup__visited-product .product-collection__title {
+  font-family: "Roboto", sans-serif;
+}
+
+.search-popup__visited-product .product-collection__title a {
+  height: unset !important;
+}
+
+.search-popup__visited-product .product-collection__title p {
+  font-family: "Roboto", sans-serif;
+  font-size: 12px;
+  color: #141414;
+  margin-bottom: 0;
+  font-weight: 400;
+}
+
+.search-popup__visited-product .product-collection__image {
+  width: 100%;
+  max-width: 75px;
+}
+
+.search-popup__visited-product .product-image__image {
+  max-width: 82px;
+  display: flex;
+  align-items: center;
+}
+
+.search-popup__visited-product .product-title-block {
+  margin-left: 13px;
+}
+
+.search-popup__visited-product .product-collection__labels,
+.search-popup__visited-product .price-save_price {
+  display: none !important;
+}
+
+.search-popup__visited-product .product-collection__price {
+  margin-top: 0;
+}
+
+.search-popup__visited-product .product-collection__price span {
+  font-weight: 400 !important;
+  font-family: "Roboto", sans-serif;
+}
+
+.search-popup__visited-product .price-compare_at_price p {
+  color: #858585;
+  font-size: 12px;
+  font-weight: 400 !important;
+  font-family: "Roboto", sans-serif;
+}
+
+.search-popup__searched-terms {
+  display: none;
+  margin-bottom: 30px;
+}
+
+.search-popup__searched-terms.show {
+  display: block;
+}
+
+.search-popup__searched-term a {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+}
+
+.search-popup__category-suggestions {
+  display: flex;
+  flex-direction: column;
+}
+
+.search-popup__category-suggestions .wrap {
+  display: flex;
+  column-gap: 5px;
+  /* grid-template-columns: repeat(3, 1fr); */
+}
+
+.search-popup__category-suggestion {
+  position: relative;
+}
+
+.search-popup__category-suggestion img {
+  position: relative;
+  aspect-ratio: 1/1;
+  max-width: 90px;
+  max-height: 90px;
+}
+
+.search-popup__category-suggestion::after {
+  position: absolute;
+  content: '';
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  background-color: rgb(0 0 0 / 32%);
+}
+
+.search-popup__category-suggestion p {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  z-index: 2;
+  color: white;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+  margin-bottom: 0;
+  text-align: center;
+  width: 100%;
+}
+
+.search-popup__visited-products .price.single--price span {
+  font-weight: 400 !important;
+  font-family: "Roboto", sans-serif;
+  font-size: 15px !important;
+}
+
+@media (max-width: 1024px) {
+  .search-popup {
+    border: 1px solid #E5E5E5;
+    width: calc(100% - 27px);
+    left: 50%;
+    transform: translateX(-50%);
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .search-popup .product-collection__title,.search-popup .product-collection-bottom {
+    height: auto !important;
+  }
+  .search-popup .single--price {
+    margin-top: 0 !important;
+  }
+}
+@media (max-width: 767px) {
+  .search-popup__visited-product:last-child:not(:first-child):not(:nth-child(2)):not(:nth-child(3)):not(:nth-child(4)),.search-popup__visited-product:nth-last-child(2):not(:first-child):not(:nth-child(2)):not(:nth-child(3)):not(:nth-child(4)) {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .search-popup.fixed {
+    position: fixed;
+    top: 117px;
+  }
+
+  .search-popup__category-suggestion img {
+    position: relative;
+    aspect-ratio: 1/1;
+    max-width: 100px;
+    max-height: 100px;
+  }
+
+  .search-popup__visited-products .wrap {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 15px;
+    row-gap: 15px;
+  }
+
+
+}
+
+@media (min-width: 1024px) {
+
+  .search-popup__logged-in,.search-popup__default {
+    padding-top: 22px;
+    padding-bottom: 49px;
+  }
+
+  .search-popup__default {
+    display: flex;
+  }
+
+  .search-popup__searched-terms {
+    margin-bottom: 0;
+  }
+
+  .search-popup__category-suggestions {
+    flex-basis: 70%;
+  }
+
+  .search-popup__category-suggestions .wrap {
+    column-gap: 20px;
+  }
+
+
+  .search-popup__searched-terms {
+    flex-basis: 30%;
+  }
+
+  .search-popup__category-suggestion {
+    max-width: 150px;
+  }
+
+  .search-popup__category-suggestion img {
+    max-height: 150px;
+    max-width: 150px
+  }
+.search-popup__category-suggestion p { font-size: 16px; }
+  .search-popup__label {
+    font-family: "Basic Commercial",sans-serif;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 700;
+    color: #000;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 4px;
+    margin-bottom: 19px;
+    letter-spacing: 0px;
+  }
+
+  .search-popup__visited-products .wrap {
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 15px;
+    row-gap: 15px;
+  }
+
+  .search-popup__visited-product .product-title-block {
+    margin-left: 17px;
+  }
+
+  .search-popup__visited-product .product-image__image {
+    max-width: 82px;
+  }
+
+  .search-popup__visited-product .product-collection__image {
+    width: 100%;
+    max-width: 83px;
+  }
+
+  .search-popup__visited-products .price.single--price span {
+    font-size: 17px !important;
+  }
+}
+
+</style>
+
+<script>
+  Loader.require({type: "script", name: "personalised_search_popup"});
+</script>

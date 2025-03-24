@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=0">
+	<link rel="stylesheet" type="text/css" href="{CDNURL}/ebay/css/trend-style.css?noless&v=4"/>
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet"> 
+    <style>
+        div {
+            border: solid 1px black;
+            padding: 10px;
+            margin: 10px;
+
+        }
+
+        .titleCss {
+            font-weight: bold;
+            font-size: 20px;
+            color: blue;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="divBoby">
+        <div>
+            <span class="titleCss">title : </span>
+            <span>{Title}</span>
+        </div>
+        <div>
+            <span class="titleCss">Price : </span>
+            <span> {format eBayPrice, eBayCurrency}</span>
+        </div>
+        <div>
+            <span class="titleCss">Description : </span>
+            <span>{include field="EbayDescription"} </span>
+        </div>
+        <div>
+            <span class="titleCss">Main Product Image : </span>
+            <span>
+                <img src="{CDNUrl}/productimages/{ProductID}.png?width=547&amp;etag={etag}" alt="">
+            </span>
+        </div>
+        <div>
+            <span class="titleCss">ProductID : </span>
+            <span>{ProductID}</span>
+        </div>
+        <div>
+            <span class="titleCss"> EbayUserID: </span>
+            <span>{EbayUserID}</span>
+        </div>
+        <div>
+            <span class="titleCss"> eBayPrice: </span>
+            <span>{eBayPrice}</span>
+        </div>
+        <div>
+            <span class="titleCss"> MerchantName: </span>
+            <span>1. {MerchantName}</span>
+            <span>2. {include field="MerchantName"} </span>
+        </div>
+        <div>
+            <span class="titleCss"> EbayItemID: </span>
+            <span>1. {EbayItemID}</span>
+            <span>2. {include field="EbayItemID"} </span>
+        </div>
+        <div>
+            <span class="titleCss"> BundleQuantity: </span>
+            <span>{BundleQuantity}</span>
+        </div>
+        <div>
+            <span class="titleCss"> ProductCode: </span>
+            <span>{ProductCode}</span>CDNURL
+        </div>
+        <div>
+            <span class="titleCss"> CDNURL: </span>
+            <span>{CDNURL}</span>
+        </div>
+
+
+        <div>
+            <span class="titleCss"> EbayShippingType: </span>
+            <span>{EbayShippingType}</span>
+        </div>
+        <div>
+            <span class="titleCss"> MerchantURL: </span>
+            <span>{MerchantURL}</span>
+        </div>
+        <div>
+            <span class="titleCss"> MoneyOrderAccepted: </span>
+            <span>{MoneyOrderAccepted}</span>
+        </div>
+    </div>
+</body>
+
+</html>

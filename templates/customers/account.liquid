@@ -1,0 +1,323 @@
+{% include 'breadcrumbs' %}
+<div class="account pb-60">
+  <div class="container">
+    <h1 class="h3 mt-30 mb-40 text-center">{{ 'customer.account.title' | t }}</h1>
+    <div class="tabs js-tabs" data-type="horizontal" data-postload="tabs">
+      <div class="tabs__head" data-js-tabs-head>
+        <div class="tabs__slider justify-content-lg-center" data-js-tabs-slider>
+          <div class="tabs__btn active" data-js-tabs-btn data-active="true">{{ 'customer.orders.tab' | t }}</div>
+          <div class="tabs__btn" data-js-tabs-btn>PRE-ORDERS AWAITING</div>
+          <div class="tabs__btn" data-js-tabs-btn>REWARDS</div>
+          <div class="tabs__btn" data-js-tabs-btn>WISHLIST</div>
+          <div class="tabs__btn" data-js-tabs-btn>{{ 'customer.account.details_tab' | t }}</div>
+          <div class="tabs__btn" data-js-tabs-btn>RESET PASSWORD</div>
+        </div>
+        <div class="tabs__nav tabs__nav--prev" data-js-tabs-nav-prev><i>{% render 'icon-theme-006' %}</i></div>
+        <div class="tabs__nav tabs__nav--next" data-js-tabs-nav-next><i>{% render 'icon-theme-007' %}</i></div>
+      </div>
+      <div class="tabs__body">
+        <div data-js-tabs-tab class="active">
+          <span data-js-tabs-btn-mobile>{{ 'customer.orders.tab' | t }} <i>{% render 'icon-theme-188' %}</i></span>
+          <div id="tab_orders" class="tabs__content rte overflow-hidden" data-js-tabs-content style="display: block;">
+            <h2 class="h4 mt-20 mb-30 text-center">{{ 'customer.orders.title' | t }}</h2>
+            {% paginate customer.orders by 20 %}
+              {%- if customer.orders.size != 0 -%}
+                {%- for order in customer.orders -%}
+                  <div class="d-lg-none">
+                    <div class="d-flex">
+                      <div>
+                        <h4>{{ 'customer.orders.order_number' | t }}</h4>
+                      </div>
+                      <div class="ml-auto">
+                        <a href="{{ order.customer_url }}" class="btn">{{ order.name }}</a>
+                      </div>
+                    </div>
+                    <div class="table-wrapper">
+                      <table class="table-account responsive-table {% if forloop.index0 > 0 %}mb-60{% else %}mb-30{% endif %}">
+                        <tr>
+                          <td>{{ 'customer.orders.date' | t }}</td>
+                          <td>{{ order.created_at | date: format: 'month_day_year' }}</td>
+                        </tr>
+                        <tr>
+                          <td>{{ 'customer.orders.payment_status' | t }}</td>
+                          <td>{{ order.financial_status_label }}</td>
+                        </tr>
+                        <tr>
+                          <td>{{ 'customer.orders.fulfillment_status' | t }}</td>
+                          <td>{{ order.fulfillment_status_label }}</td>
+                        </tr>
+                        <tr>
+                          <td>{{ 'customer.orders.total' | t }}</td>
+                          <td>{{ order.total_price | money }}</td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                {%- endfor -%}
+                <div class="d-none d-lg-block">
+                  <div class="table-wrapper">
+                    <table class="table-account-history responsive-table mb-30">
+                      <thead>
+                      <tr class="responsive-table-row">
+                        <th>{{ 'customer.orders.order_number' | t }}</th>
+                        <th>{{ 'customer.orders.date' | t }}</th>
+                        <th>{{ 'customer.orders.payment_status' | t }}</th>
+                        <th>{{ 'customer.orders.fulfillment_status' | t }}</th>
+                        <th>{{ 'customer.orders.total' | t }}</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      {%- for order in customer.orders -%}
+                        <tr class="responsive-table-row">
+                          <td data-label="{{ 'customer.orders.order_number' | t }}">{{ order.name | link_to: order.customer_url }}</td>
+                          <td data-label="{{ 'customer.orders.date' | t }}">{{ order.created_at | date: format: 'month_day_year' }}</td>
+                          <td data-label="{{ 'customer.orders.payment_status' | t }}">{{ order.financial_status_label }}</td>
+                          <td data-label="{{ 'customer.orders.fulfillment_status' | t }}">{{ order.fulfillment_status_label }}</td>
+                          <td data-label="{{ 'customer.orders.total' | t }}">{{ order.total_price | money }}</td>
+                        </tr>
+                      {%- endfor -%}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              {%- else -%}
+                <p class="text-center">{{ 'customer.orders.none' | t }}</p>
+              {%- endif -%}
+              {%- if paginate.pages > 1 -%}
+                {% include 'pagination' with pagination_type: 'classic' %}
+              {%- endif -%}
+            {% endpaginate %}
+          </div>
+        </div>
+        <!-- Zeta Digital - Display pre-order Tab (22/07/2022) -->
+        <div data-js-tabs-tab>
+          <div class="mt-15"></div>
+          <span data-js-tabs-btn-mobile>PRE-ORDERS AWAITING<i>{% render 'icon-theme-188' %}</i></span>
+          <div id="tab__preorders" class="tabs__content rte overflow-hidden" data-js-tabs-content>
+            <div class="table-wrapper">
+              <table class="responsive-table mb-30">
+                <thead>
+                <tr class="responsive-table-row" style="border-top: none;">
+                  <th style="border-top: none;"></th>
+                  <th style="border-top: none;">Product</th>
+                  <th style="border-top: none;">Release Date</th>
+                  <th style="border-top: none;">Order Number</th>
+                </tr>
+                </thead>
+                <tbody>
+                {%- for order in customer.orders -%}
+                  {%- for line_item in order.line_items -%}
+                    {% for tag in line_item.product.tags %}
+                      {% if tag == "preorder" %}
+                        <tr class="responsive-table-row">
+                          <td style="padding:0!important;">{{ line_item.image | image_url: width: 150 | image_tag: srcset: nil }}</td>
+                          <td>{{ line_item.title | link_to: line_item.product.url }}</td>
+                          <td id="preorder-product-release-date-{{ line_item.variant_id }}"></td>
+                          <td>{{ order.name | link_to: order.customer_url }}</td>
+                        </tr>
+                      {% endif %}
+                    {%- endfor -%}
+                  {%- endfor -%} 
+                {%- endfor -%}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- Zeta Digital - Display pre-order Tab (22/07/2022) -->
+        <!-- Zeta Digital - Display Reward Tab (10/11/2020) -->
+        <div data-js-tabs-tab>
+          <div class="mt-15"></div>
+          <span data-js-tabs-btn-mobile>REWARDS<i>{% render 'icon-theme-188' %}</i></span>
+          <div class="tabs__content rte overflow-hidden" data-js-tabs-content>
+			<div class="yotpo-widget-instance" data-yotpo-instance-id="44719"></div>
+          </div>
+        </div>
+        <!-- Zeta Digital - Display Reward Tab (10/11/2020) -->
+        <!-- Zeta Digital - Display Wishlist Tab (05/11/2021) -->
+        <div data-js-tabs-tab>
+          <div class="mt-15"></div>
+          <span data-js-tabs-btn-mobile>WISHLIST<i>{% render 'icon-theme-188' %}</i></span>
+          <div class="tabs__content rte overflow-hidden" data-js-tabs-content>
+            <a href="#" class="iwish-float-icon btn btn--full js-popup-button" >VIEW MY WISHLIST </a>
+          </div>
+                
+        </div>
+        <!-- Zeta Digital - Display Wishlist Tab (05/11/2021) -->
+        <div data-js-tabs-tab>
+          <span data-js-tabs-btn-mobile>{{ 'customer.account.details_tab' | t }} <i>{% render 'icon-theme-188' %}</i></span>
+          <div class="tabs__content rte overflow-hidden" data-js-tabs-content>
+            <h2 class="h4 mt-20 mb-30 text-center">{{ 'customer.account.details' | t }}</h2>
+            {%- if customer.default_address != blank -%}
+              <div class="table-wrapper">
+                <table class="table-account responsive-table mb-30">
+                  {%- if customer.default_address.first_name != blank -%}
+                    <tr>
+                      <td>{{ 'customer.addresses.first_name' | t }}:</td>
+                      <td>{{ customer.default_address.first_name }}</td>
+                    </tr>
+                  {%- endif -%}
+                  {%- if customer.default_address.last_name != blank -%}
+                    <tr>
+                      <td>{{ 'customer.addresses.last_name' | t }}:</td>
+                      <td>{{ customer.default_address.last_name }}</td>
+                    </tr>
+                  {%- endif -%}
+                  {%- if customer.default_address.address1 != blank -%}
+                    <tr>
+                      <td>{{ 'customer.addresses.address1' | t }}:</td>
+                      <td>{{ customer.default_address.address1 }}</td>
+                    </tr>
+                  {%- endif -%}
+                  {%- if customer.default_address.address2 != blank -%}
+                    <tr>
+                      <td>{{ 'customer.addresses.address2' | t }}:</td>
+                      <td>{{ customer.default_address.address2 }}</td>
+                    </tr>
+                  {%- endif -%}
+                  {%- if customer.default_address.company != blank -%}
+                    <tr>
+                      <td>{{ 'customer.addresses.company' | t }}:</td>
+                      <td>{{ customer.default_address.company }}</td>
+                    </tr>
+                  {%- endif -%}
+                  {%- if customer.default_address.city != blank -%}
+                    <tr>
+                      <td>{{ 'customer.addresses.city' | t }}:</td>
+                      <td>{{ customer.default_address.city }}</td>
+                    </tr>
+                  {%- endif -%}
+                  {%- if customer.default_address.province != blank -%}
+                    <tr>
+                      <td>{{ 'customer.addresses.province' | t }}:</td>
+                      <td>{{ customer.default_address.province }}</td>
+                    </tr>
+                  {%- endif -%}
+                  {%- if customer.default_address.province_code != blank -%}
+                    <tr>
+                      <td>{{ 'customer.addresses.province_code' | t }}:</td>
+                      <td>{{ customer.default_address.province_code }}</td>
+                    </tr>
+                  {%- endif -%}
+                  {%- if customer.default_address.zip != blank -%}
+                    <tr>
+                      <td>{{ 'customer.addresses.zip' | t }}:</td>
+                      <td>{{ customer.default_address.zip }}</td>
+                    </tr>
+                  {%- endif -%}
+                  {%- if customer.default_address.country != blank -%}
+                    <tr>
+                      <td>{{ 'customer.addresses.country' | t }}:</td>
+                      <td>{{ customer.default_address.country }}</td>
+                    </tr>
+                  {%- endif -%}
+                  {%- if customer.default_address.phone != blank -%}
+                    <tr>
+                      <td>{{ 'customer.addresses.phone' | t }}:</td>
+                      <td>{{ customer.default_address.phone }}</td>
+                    </tr>
+                  {%- endif -%}
+                </table>
+              </div>
+            {%- endif -%}
+            <p class="text-center">
+              <a href="/account/addresses">{{ 'customer.account.view_addresses' | t }} ({{ customer.addresses_count }})</a>
+            </p>
+          </div>
+        </div>
+        <!-- Zeta Digital - Reset Password Tab (24/06/2020) -->
+        <div data-js-tabs-tab style="text-align: center; margin: 0 auto">
+          <span data-js-tabs-btn-mobile>RESET PASSWORD<i>{% render 'icon-theme-188' %}</i></span>
+          <div class="tabs__content rte overflow-hidden" data-js-tabs-content>
+            <p>Please click the reset button below. We will send you an email to reset your password.</p>
+            <a class="btn btn--full" id="reset-password-btn">RESET</a>
+            <p style="color: red; padding-top: 20px; font-size: 20px;" id="reset-password-result"></p>
+          </div>
+        </div>
+        <!-- Zeta Digital - Reset Password Tab (24/06/2020) -->
+      </div>
+      <script>
+        Loader.require({type: "script", name: "tabs"});
+      </script>
+    </div>
+    <div class="d-flex justify-content-center justify-content-lg-end mt-60">
+      <a href="/account/logout" class="btn">{{ "general.popups.account.authorized.log_out" | t }}</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  @media only screen and (min-width: 1200px) {
+    #tab__preorders {
+      padding-top: 0 !important;
+    }
+  }
+</style>
+<!-- Zeta Digital - Reset Password (24/06/2020) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+<script>
+  jQuery('#reset-password-btn').on('click', function(){
+    jQuery('#reset-password-btn').attr('disabled', 'disabled');
+    jQuery.ajax({
+      dataType: "json",
+      type: "POST",
+      url: "https://www.gameology.com.au/account/recover",
+      data: {'form_type': 'recover_customer_password', 'email': "{{ customer.email }}"},
+      success: function(response) {
+         jQuery('#reset-password-result').html("We have sent you an email to reset the password, please check your emailbox!");
+      },
+      error: function(response) {
+        if (response.status == 302 || response.status == 404 || response.status == 200){
+          jQuery('#reset-password-result').html("We have sent you an email to reset the password, please check your emailbox!");
+        }
+        else {
+          jQuery('#reset-password-result').html('Error: ' + response.responseJSON.errors);
+        }
+      }
+    });  
+  });
+</script>
+
+<script>
+{%- for order in customer.orders -%}
+  {%- for line_item in order.line_items -%}
+    {% for tag in line_item.product.tags %}
+      {% if tag == "preorder" %}
+        var description = `{{ line_item.product.description | escape }}`;
+        description = description.substr(description.search("Release Date:"), 100);
+        var datePattern = /[0-9]{2,}-*[a-zA-Z]{3,}-*[0-9]{2,}/i;
+        var monthPattern = /[a-zA-Z]{3,}-*[0-9]{2,}/i;
+        var quarterPattern = /[a-zA-Z0-9]{2,}-*[0-9]{2,}/i;
+        var releaseDate = description.match(datePattern);
+        if (releaseDate != null){
+          jQuery('#preorder-product-release-date-{{ line_item.variant_id }}').html(releaseDate);
+        }
+        else {
+          let releaseMonth = description.match(monthPattern);
+          if (releaseMonth != null){
+            jQuery('#preorder-product-release-date-{{ line_item.variant_id }}').html(releaseMonth);
+          }
+          else {
+            let releaseQuarter = description.match(quarterPattern);
+            if (releaseQuarter != null){
+              jQuery('#preorder-product-release-date-{{ line_item.variant_id }}').html(releaseQuarter);
+            }
+            else {
+              jQuery('#preorder-product-release-date-{{ line_item.variant_id }}').html("");
+            }
+          }
+        }
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+{% endfor %}
+</script>
+
+<!-- Zeta Digital - Collapse All Tabs on Mobile (31/07/2022) -->
+<script>
+  if(jQuery(window).width() <= 1024) {
+    jQuery('.tabs__btn').removeClass("active");
+    jQuery('.tabs__body .active').removeClass("active");
+    jQuery('#tab_orders').css("display","none");
+  }
+</script>

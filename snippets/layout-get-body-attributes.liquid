@@ -1,0 +1,21 @@
+{% liquid
+    assign cro_class_names = '';
+    if request.page_type == 'product'
+      if settings.enable_test_300 == true and settings.hide_test_300_elements == false
+        assign cro_class_names = cro_class_names | append: ' test_300 ' | append: settings.default_variation_test_300
+      endif
+
+      if settings.enable_test_273 == true
+        assign cro_class_names = cro_class_names | append: ' test_273 '
+      endif
+    endif
+
+    if settings.enable_test_301 == true and settings.hide_test_301_elements == false
+      assign cro_class_names = cro_class_names | append: ' test_301 '
+    endif
+%}
+{% capture body_attributes %}
+    id="{{ page_title | handle }}" class="template-{{ template.name | handle }} {{- cro_class_names -}} {% if settings.ss_enable and collection.handle and collection.handle == settings.ss_collection_handle %} ss-shop{% endif %} theme-css-animate{% if template == 'customers/account' %} js-return-product{% endif %}"
+    {%- if settings.show_multiple_currencies %} data-currency-multiple="true"{% endif %}
+{%- endcapture -%}
+{{ body_attributes }}

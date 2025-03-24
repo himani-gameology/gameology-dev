@@ -1,0 +1,73 @@
+{% liquid
+    assign title    = section.settings.title
+    assign text     = section.settings.text
+    assign subtext  = section.settings.subtext
+    assign svg_1    = section.settings.svg_1
+    assign svg_2    = section.settings.svg_2
+    assign svg_mb   = section.settings.svg_mb
+    assign bg_color = section.settings.bg_color
+%}
+
+<div data-section-id="{{ section.id }}" data-section-type="banner-top" class="show-test_111" style="background-color: {{ bg_color}}">
+    <div class="collection-banner-top">
+        {% if title != blank %}
+            <h3 class="title">{% if svg_mb != blank %}<span class="d-lg-none svg-mb">{{svg_mb}}</span>{% endif %}{{title}}</h3>
+        {% endif %}
+        {% if text != blank %}
+            <div class="text-1">{{text}}</div>
+        {% endif %}
+        {% if subtext != blank %}
+            <div class="text-2">{{subtext}}</div>
+        {% endif %}
+        {% if svg_1 != blank %}
+            <div class="d-none d-lg-block svg-1">{{svg_1}}</div>
+        {% endif %}
+        {% if svg_2 != blank %}
+            <div class="d-none d-lg-block svg-2">{{svg_2}}</div>
+        {% endif %}
+    </div>
+</div>
+
+
+{% schema %}
+{
+    "name": "Banner",
+    "settings": [
+        {
+            "type": "text",
+            "id": "title",
+            "label": "Title"
+        },
+        {
+            "type": "text",
+            "id": "text",
+            "label": "Text"
+        },
+        {
+            "type": "textarea",
+            "id": "subtext",
+            "label": "Subtext"
+        },
+        {
+            "type": "textarea",
+            "id": "svg_1",
+            "label": "SVG 1"
+        },
+        {
+            "type": "textarea",
+            "id": "svg_2",
+            "label": "SVG 2"
+        },
+        {
+            "type": "textarea",
+            "id": "svg_mb",
+            "label": "SVG Mobile"
+        },
+        {
+            "type": "color",
+            "id": "bg_color",
+            "label": "Background color"
+        }
+    ]
+}
+{% endschema %}

@@ -1,0 +1,82 @@
+<div class="row gift-guide-price-range-block text-center pt-50 pb-0">
+  <h3 class="col-12 text-left mb-10">BROWSE BY PRICE TO SUIT YOUR BUDGET</h3>
+  <a class="gift-guide-price-range-btn col-6 col-lg-2" href="{{ section.settings.price-range-url-1 }}">{{ section.settings.price-range-1 }}</a>
+  <a class="gift-guide-price-range-btn col-6 col-lg-2" href="{{ section.settings.price-range-url-2 }}">{{ section.settings.price-range-2 }}</a>
+  <a class="gift-guide-price-range-btn col-6 col-lg-2" href="{{ section.settings.price-range-url-3 }}">{{ section.settings.price-range-3 }}</a>
+  <a class="gift-guide-price-range-btn col-6 col-lg-2" href="{{ section.settings.price-range-url-4 }}">{{ section.settings.price-range-4 }}</a>
+  <a class="gift-guide-price-range-btn col-6 col-lg-2" href="{{ section.settings.price-range-url-5 }}">{{ section.settings.price-range-5 }}</a>
+  <a class="gift-guide-price-range-btn col-6 col-lg-2" href="{{ section.settings.price-range-url-6 }}">{{ section.settings.price-range-6 }}</a>
+</div>
+{% schema %}
+{
+    "name": "Gift Guide Price Range",
+    "settings": [
+        {
+            "type": "text",
+            "id": "price-range-1",
+            "label": "Price Range 1"
+        },
+        {
+            "type": "url",
+            "id": "price-range-url-1",
+            "label": "Price Range Url 1"
+        },
+        {
+            "type": "text",
+            "id": "price-range-2",
+            "label": "Price Range 2"
+        },
+        {
+            "type": "url",
+            "id": "price-range-url-2",
+            "label": "Price Range Url 2"
+        },
+        {
+            "type": "text",
+            "id": "price-range-3",
+            "label": "Price Range 3"
+        },
+        {
+            "type": "url",
+            "id": "price-range-url-3",
+            "label": "Price Range Url 3"
+        },
+        {
+            "type": "text",
+            "id": "price-range-4",
+            "label": "Price Range 4"
+        },
+        {
+            "type": "url",
+            "id": "price-range-url-4",
+            "label": "Price Range Url 4"
+        },
+        {
+            "type": "text",
+            "id": "price-range-5",
+            "label": "Price Range 5"
+        },
+        {
+            "type": "url",
+            "id": "price-range-url-5",
+            "label": "Price Range Url 5"
+        },
+        {
+            "type": "text",
+            "id": "price-range-6",
+            "label": "Price Range 6"
+        },
+        {
+            "type": "url",
+            "id": "price-range-url-6",
+            "label": "Price Range Url 6"
+        }
+        
+    ],
+    "presets": [
+        {
+            "name": "Gift Guide Price Range"
+        }
+    ]
+}
+{% endschema %}

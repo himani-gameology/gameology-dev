@@ -1,0 +1,59 @@
+{% include 'global-variables' %}
+{% include 'product-cart-res-variables' %}
+{%- assign image_size = '100x' -%}
+{%- assign show_title = show_title | default: true -%}
+{%- assign show_variant = show_variant | default: true -%}
+{%- assign show_price = show_price | default: true -%}
+{%- assign show_button_remove = show_button_remove | default: true -%}
+
+<div class="product-store-lists d-flex flex-row align-items-start mb-20" data-js-product data-product-handle="{{ product.handle }}" data-product-variant-id="{{ id }}">
+    <div class="product-store-lists__image mr-15">
+        <a href="{{ url }}" class="d-block">
+            <img>
+        </a>
+    </div>
+    <div class="product-store-lists__content d-flex flex-column align-items-start">
+        {%- if show_title -%}
+            <div class="product-store-lists__title mb-3">
+                <h3 class="h6 m-0">
+                    <a href="{{ url }}">{{ title }}</a>
+                </h3>
+            </div>
+        {%- endif -%}
+        {%- if show_variant -%}
+            {% capture default_variant_title %}{{ 'products.product.default_variant_title' | t }}{% endcapture %}
+            <div class="product-store-lists__variant{% if variant_title == 'Default Title' %} d-none{% endif %}">{{ variant_title | replace: 'Default Title', default_variant_title }}</div>
+        {%- endif -%}
+        {%- if show_price -%}
+            <div class="product-store-lists__price mt-10 mb-10">
+                {% render 'product-get-price' with price: price compare_at_price: compare_at_price %}
+            </div>
+        {%- endif -%}
+        {%- if show_button_remove -%}
+            <span class="product-store-lists__remove btn-link js-store-lists-remove-{{ namespace }}">{{ 'products.product.remove' | t }}</span>
+        {%- endif -%}
+
+        <!--Conversionry - Add cart button 020822-->
+        <form method="post" action="{{routes.cart_add_url}}" accept-charset="UTF-8" class="d-flex flex-column w-100 m-0" enctype="multipart/form-data" data-js-product-form="">
+            <input type="hidden" name="form_type" value="product" tabindex="0">
+            <input type="hidden" name="utf8" value="✓" tabindex="0">
+            <input type="hidden" name="id" value="{{ id }}" tabindex="0">
+
+            <div class="product-collection__buttons d-flex flex-column flex-lg-row align-items-lg-center flex-wrap">
+                <div class="col-sm-12 col-lg-10 p-0">
+                    <div class="product-collection__button-add-to-cart mb-10 w-100">
+
+                        <button type="submit" class="btn btn--status w-100 p-0 js-product-button-add-to-cart js-item-available" name="add" data-js-product-button-add-to-cart>
+                            <span class="d-flex flex-center"><span class="btn__text">{{ 'products.product.add_to_cart.title' | t }}</span></span>
+                            <span class="d-flex flex-center" data-button-content="added"><i class="mr-5 mb-4">{% render 'icon-theme-110' %}</i>{{ 'products.product.add_to_cart.added' | t }}</span>
+                        </button>
+                        
+                        <button type="submit" class="btn btn--status w-100 p-0 js-product-button-add-to-cart js-product-button-soldout js-item-unavailable" name="add" data-js-product-button-add-to-cart disabled="disabled" data-button-status="sold-out">
+                            <span class="d-flex flex-center" data-button-content="sold-out">{{ 'products.product.add_to_cart.sold_out' | t }}</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

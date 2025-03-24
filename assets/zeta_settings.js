@@ -1,0 +1,8 @@
+var include_collections = ["Magic The Gathering Zendikar Rising", "Wizards Of The Coast", "Magic The Gathering", "Preorders", "On Sale", "Strategy Games", "Board Games", "Family Games", "Ticket To Ride", "Thematic Games", "Fantasy Flight Games", "Abstract Games", "Wargames", "Role Playing Games", "Puzzles", "Toys & Collectables", "Party Games", "Magic The Gathering Core 2021", "Children's Games", "Card Sleeves", "Binders, Folders & Portfolios", "Ultra Pro", "Throne of Eldraine", "Commander Legends", "Commander Decks", "Adult Game/18+", "Arkham Horror", "Dragon Shield Sleeves", "Pandemic", "Theros Beyond Death", "YuGiOh", "Ultimate Guard", "Deck Boxes & Storage", "Sword & Shield - Vivid Voltage", "Elite Trainer Boxes", "Keyforge TCG", "Playmats", "Final Fantasy", "The Lord of the Rings: The Card Game", "Ikoria: Lair of Behemoths", "HABA", "Star Wars: Armada", "Hidden Fates", "Games workshop", "Dragon Ball Super", "7 Wonders", "Munchkin", "Sun & Moon - Unified Minds", "Sun & Moon - Burning Shadows", "Sun & Moon - Guardians Rising"];
+var custom_labels = [
+  {'tag': 'Weekly Special', 'display_name': 'Weekly Special', 'background_color': 'purple'},
+  {'tag': 'Pick-up Only', 'display_name': 'Pick-up Only', 'background_color': 'red'},
+  {'tag': 'Last chance product', 'display_name': 'Last Chance', 'background_color': 'orange'},
+  {'tag': 'Australian Indie Board Games', 'display_name': 'Aus Indie Game', 'background_color': 'blue'},
+  // {'tag': 'IMS50', 'display_name': 'Christmas in July', 'background_color': 'red', 'image': 'https://cdn.shopify.com/s/files/1/0921/7330/files/xmas-in-july-badge.png?v=1659248913', 'showOnProductPage': false},
+];

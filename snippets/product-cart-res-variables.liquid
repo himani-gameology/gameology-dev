@@ -1,0 +1,13 @@
+{%- assign title = item.product.title -%}
+{%- assign variant_title = item.variant.title -%}
+{%- assign id = item.variant_id -%}
+{%- assign url = item.url | within: collection -%}
+{%- assign quantity = item.quantity -%}
+{%- assign price = item.price -%}
+{%- assign image = item.image -%}
+{%- assign onSale = false -%}
+
+{%- if item.variant.compare_at_price > item.price -%}
+	{%- assign onSale = true -%}
+	{%- assign price_compare = item.variant.compare_at_price -%}
+{%- endif -%}

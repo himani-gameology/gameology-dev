@@ -1,0 +1,11 @@
+{%- if compare_at_price > price -%}
+    {%- assign sale_percent = price | times: 100 | divided_by: compare_at_price | minus: 100 | times: -1 -%}
+    {%- if sale_percent >= 5 -%}
+    <div class='col-6 sale-tag p-6 pl-2 label--sale text-nowrap black-friday-sale-text d-flex align-items-center justify-content-center'>
+        SAVE {{ 'products.product.label.sale' | t: percent: sale_percent | remove: "-" }}
+         </div>
+    {%- assign has_labels = true -%}
+    {%- endif -%}
+{%- else -%}
+    <div class="label label--sale mb-3 mr-3 text-nowrap d-none-important" data-js-product-label-sale></div>
+{%- endif -%}

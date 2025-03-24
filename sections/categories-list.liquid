@@ -1,0 +1,74 @@
+{% if section.blocks.size > 0 %}
+  <div class="container">
+    {% if section.settings.heading != blank %}
+      <h2 class="categories-list__heading">
+        {% include 'icon', id: 'cube-1' %}
+        <span>{{ section.settings.heading }}</span>
+        {% include 'icon', id: 'cube-2' %}
+      </h2>
+    {% endif %}
+
+    <div class="categories-list">
+      {% for block in section.blocks %}
+        <div class="categories-block">
+          {% if block.settings.url != blank %}
+            <a href="{{ block.settings.url }}">
+          {% endif %}
+          {% if block.settings.image != blank %}
+            <img src="{{ block.settings.image | img_url: '800x' }}">
+          {% endif %}
+          {% if block.settings.image != blank %}
+            <h3>{{ block.settings.title }}</h3>
+          {% endif %}
+          {% if block.settings.url != blank %}
+            </a>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+
+{% schema %}
+  {
+    "name": "Categories list",
+    "max_blocks": 8,
+    "settings": [
+      {
+        "type": "text",
+        "id": "heading",
+        "label": "Heading"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "categorie",
+        "name": "Categories",
+          "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title"
+          },
+          {
+            "type": "url",
+            "id": "url",
+            "label": "Url"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Collection list",
+        "category": "Collections"
+      }
+    ]
+  }
+{% endschema %}

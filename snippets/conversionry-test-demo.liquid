@@ -1,0 +1,47 @@
+{%- assign checkbox = "165,166,167" | split: ',' -%}
+<style>
+  .popup-form-content{
+    position: fixed;
+    top: 35%;
+    right: 0;
+    padding: 10px;
+    z-index: 10;
+    border-radius: 6px;
+    border: 1px solid #000;
+    color: #000000;
+    font-weight:  600;
+    background: #ff0000;
+    background: linear-gradient(180deg,#ff0000 0%, #e4ff00 80%);
+    background: -webkit-linear-gradient(180deg,#ff0000 0%, #e4ff00 80%);
+    background: -moz-linear-gradient(180deg,#ff0000 0%, #e4ff00 80%);
+  }
+
+  .popup-ct{
+    display: flex;
+    align-items: center;
+  }
+
+  .popup-form-content input{
+    -webkit-appearance: auto;
+  }
+  .popup-form-content label{
+    margin-left:  10px;
+  }
+</style>
+
+<div class="popup-form-content">
+  {%- for item in checkbox -%}
+    <div class="popup-ct">
+      <input type="checkbox" id="inputCheck{{forloop.index0}}" class="popup-input" value="test_{{item}}">
+      <label for="inputCheck{{forloop.index0}}">test_{{item}}</label>
+    </div>
+  {%- endfor -%}
+</div>
+
+<script>
+  document.querySelectorAll(".popup-input").forEach(cb=>{
+    cb.addEventListener('change', e=>{
+      document.body.classList.toggle(cb.value, cb.checked);
+    })
+  })
+</script>

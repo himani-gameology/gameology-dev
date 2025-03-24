@@ -1,0 +1,98 @@
+<div class="tab-active tab-container delivery-container" data-id-container="deli">
+    {% if product.available %}
+        {% if is_preorder_product %}
+            <div class="est-container">
+                <h5><i class="mr-10">{% render 'icon-theme-127' %}</i>NEXT DAY DISPATCH WHEN PREORDER ITEM ARRIVES</h5>
+                <p>Order today and your item will be dispatched when arrives</p>
+                <div id="delivery-release-date"></div>
+            </div>
+        {% elsif is_pickup_only_product %}
+            <div class="est-container">
+                <h5><i class="mr-10">{% render 'icon-theme-088' %}</i>PICK-UP / BUY IN STORE ONLY</h5>
+                <p>Please note this item is only available for local pickup from our retail store</p>
+            </div>
+        {% else %}
+
+            <div class="est-container est-dispatch" style="display:none">
+                <div class="est-header">
+        
+                    <b>Same-Day Dispatch (Business Days Only)</b>
+                    <svg width="27" height="22" viewBox="0 0 27 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 0.000154954C3.67386 0.000154954 2.4022 0.526941 1.46446 1.46462C0.526805 2.40235 0 3.67404 0 5.00015C0 6.32627 0.526786 7.59796 1.46446 8.53569C2.4022 9.47335 3.67388 10.0002 5 10.0002C6.32612 10.0002 7.5978 9.47337 8.53554 8.53569C9.47319 7.59796 10 6.32627 10 5.00015C9.99864 3.67446 9.47147 2.40351 8.53403 1.46597C7.59658 0.528529 6.32557 0.00137532 4.99985 0L5 0.000154954ZM5 9.49179C3.80878 9.49179 2.66622 9.01856 1.82398 8.17625C0.981667 7.33393 0.508442 6.19153 0.508442 5.00023C0.508442 3.80894 0.981667 2.66645 1.82398 1.82421C2.6663 0.9819 3.8087 0.508674 5 0.508674C6.1913 0.508674 7.33378 0.9819 8.17602 1.82421C9.01833 2.66653 9.49156 3.80894 9.49156 5.00023C9.4902 6.19108 9.01659 7.33266 8.17451 8.1747C7.33248 9.0168 6.19075 9.4904 5.00004 9.49175L5 9.49179Z" fill="black"/><path d="M7.07135 4.81388H5.16962L2.64581 2.28833C2.54472 2.20623 2.39792 2.21379 2.30576 2.30588C2.21367 2.39804 2.20611 2.54484 2.2882 2.64593L4.88833 5.24761C4.93585 5.29551 5.00055 5.32237 5.06796 5.32222H7.07147C7.21184 5.32222 7.32571 5.20842 7.32571 5.06798C7.32571 4.92754 7.21184 4.81374 7.07147 4.81374L7.07135 4.81388Z" fill="black"/><path d="M12.9572 10.5899H10.8009V11.9453H13.3478V13H9.42981V7.31253H13.3556V8.37112H10.8009V9.57034H12.9572V10.5899Z" fill="black"/><path d="M19.4688 19H11.5C11.2064 19 11.5 18.3453 11.5 18C11.5 16.966 10.2544 16.0932 9.37552 16.0932C8.49666 16.0932 7 17.466 7 18.5C7 18.8453 7.54359 19 7.2499 19H3.53128C3.23762 19 3 18.7203 3 18.375V4L19.4687 4.00001C19.7624 4.00001 20 4.27976 20 4.62506V18.375C19.9998 18.7202 19.7624 19 19.4688 19ZM11.9781 17.75H18.938V5.25017H9.75757L9.5 4.00001L3 4V9.50001H4L4.0631 17.75H6.77278C7.01963 16.3256 8.09255 15.2501 9.37552 15.2501C10.6585 15.2501 11.7312 16.3256 11.9781 17.75Z" fill="black"/><path d="M25.667 19H24.7781C24.5324 19 25.0002 18.3591 25.0002 18C25.0002 16.9247 23.2911 16.0001 22.5558 16.0001C21.8205 16.0001 20.778 16.9248 20.778 18.0002C20.778 18.3593 21.0237 19 20.778 19H19.4447C19.199 19 19.0002 18.7091 19.0002 18.35L19.0006 6.65009C19.0006 6.29101 19.1993 6.00003 19.445 6.00003H22.8873C23.7175 6.00003 24.4722 6.61732 24.9064 7.65114C25.3495 8.70578 25.7432 9.81342 26.0756 10.943C26.4531 12.2316 26.7604 13.5783 26.9878 14.9465C26.9959 14.9967 27.0002 15.0483 27.0002 15.1002V17.0503C27.0002 17.2227 26.9533 17.388 26.87 17.5099L25.9811 18.8099C25.8979 18.9316 25.7852 19 25.667 19ZM25.1779 17.7H25.483L26.1114 16.7809V15.1783C25.8965 13.9058 25.6101 12.6541 25.2587 11.4559C24.9432 10.3848 24.5698 9.33296 24.1489 8.33095C23.8776 7.68518 23.4062 7.29991 22.8872 7.29991H19.8894V17.7003L20.3336 17.5002C20.5402 16.0185 21.9272 15.1002 23.0005 15.1002C24.0738 15.1002 24.9714 16.2186 25.1779 17.7Z" fill="black"/><path d="M9.38538 21.2309C7.68892 21.2309 6.30835 19.8506 6.30835 18.1539C6.30835 16.4574 7.68869 15.0768 9.38538 15.0768C11.0818 15.0768 12.4624 16.4572 12.4624 18.1539C12.4624 19.8506 11.0818 21.2309 9.38538 21.2309ZM9.38538 16.3079C8.36732 16.3079 7.53915 17.136 7.53915 18.1542C7.53915 19.1722 8.36726 20.0004 9.38538 20.0004C10.4034 20.0004 11.2316 19.1723 11.2316 18.1542C11.2316 17.1361 10.4035 16.3079 9.38538 16.3079Z" fill="black"/><path d="M23.0009 21.2309C21.3044 21.2309 19.9238 19.8506 19.9238 18.1539C19.9238 16.4574 21.3042 15.0768 23.0009 15.0768C24.6973 15.0768 26.0779 16.4572 26.0779 18.1539C26.0777 19.8505 24.6973 21.2309 23.0009 21.2309ZM23.0009 16.3079C21.9828 16.3079 21.1546 17.136 21.1546 18.1542C21.1546 19.1722 21.9828 20.0004 23.0009 20.0004C24.0189 20.0004 24.8471 19.1723 24.8471 18.1542C24.8471 17.1361 24.019 16.3079 23.0009 16.3079V16.3079Z" fill="black"/><path d="M25.5737 13H19.4268C19.191 13 19.0002 12.7762 19.0002 12.5C19.0002 12.2238 19.191 12 19.4268 12H25.5737C25.8095 12 26.0002 12.2238 26.0002 12.5C26.0002 12.7762 25.8095 13 25.5739 13H25.5737Z" fill="black"/></svg>
+
+                </div>
+
+                <div class="est-body">
+                    <p class="js-msg-countdown">Order within <span dispatch-time-countdown></span> and your order will be dispatched <span dispatch-day-countdown></span></p>
+                </div>
+            </div>
+            <div>
+            <div class="est-container est-metro-block" id="estMelbourne" >
+                
+                <div class="est-header" >
+                    <b>Same-Day Delivery</b>
+                    <img src="https://cdn.shopify.com/s/files/1/0921/7330/files/star-track-logo_240x240.png?v=1700624234" class="ml-5 mr-10 mb-20" alt="startrack" width="115">
+                    
+                </div>
+
+                <div class="est-body" >
+                    <p class="js-msg-countdown">Arrives <span data-day-countdown></span> if ordered within <span data-time-countdown></span></p>
+                    <p>Melbourne Metro only:</p>
+
+                    <details class="est-form-wrapper">
+                        <summary>Click here to check postcode for eligibility +</summary>
+
+                        <div class="est-check-code-wrapper">
+                            <div class="est-form-wrapper">
+                                <form data-form-check-code>
+                                    <input placeholder="Enter your postcode" type="search" {{ action_input }} data-input-check-code/>
+                                    <button style="border-radius: 5px;" type="submit" {{ action_form }}>Go</button>
+                                </form>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+              </div>
+                <div class="est-metro">
+                    <div class="js-msg msg" style="display: none;" data-msg-success>
+                        <p class="est-heading">Estimated Delivery Time: </p>
+                        <p class="js-msg-countdown"><span data-day-countdown></span> if ordered within <span data-time-countdown></span></p>
+                    </div>
+                    <div class="msg-error" style="display: none;" data-msg-error>Sorry! Your postcode is not valid for this service.</div>
+                </div>
+            </div>
+            <div class="est-container est-express">
+                <div class="est-header">
+                     <b>Express Tracked Shipping</b>
+                     <img src="https://cdn.shopify.com/s/files/1/0921/7330/files/express-post-logo_1a25a168-e3f3-4db1-a9cb-6f6b2be44345_250x250.png?v=1700625527" class="mr-10" alt="express-post" width="100">
+                   
+                    
+                </div>
+                <div class="est-body">
+                    <div class="estimated-time-box">
+                        <span class="estimate-label">Estimated Delivery Time:&nbsp;</span>
+                        <span >1 - 4 Business Days</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="est-container est-standard">
+                <div class="est-header">
+                    <b> Standard Tracked Shipping</b>
+                    <img src="https://cdn.shopify.com/s/files/1/0921/7330/files/aus-post-logo_250x250.png?v=1700625633" class="mr-10" alt="australia-post" width="100">
+                </div>
+                <div class="est-body">
+                    <div class="estimated-time-box">
+                        <span class="estimate-label">Estimated Delivery Time:&nbsp;</span>
+                        <span>2 - 10 Business Days</span>
+                    </div>
+                </div>
+            </div>
+       {% endif %}
+
+    {% else %}
+        <div class="est-container">
+            <h5><i class="mr-10">{% render 'icon-theme-151' %}</i>OUT OF STOCK</h5>
+            <p style="margin-top:15px;">Sorry, this product is currently unavailable to order.</p>
+        </div>
+    {% endif %}
+</div>

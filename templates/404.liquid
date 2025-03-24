@@ -1,0 +1,30 @@
+{% include 'breadcrumbs' %}
+<div class="page-404">
+    <div class="container">
+        <div class="d-flex flex-column align-items-center py-40 py-md-100 my-100">
+          <h3>Redirecting to homepage in <span id="redirect-countdown">5</span> seconds</h3>
+          <h1 class="d-flex flex-column align-items-center mb-25">CRITICAL FAIL</h1>
+          <img src="https://cdn.shopify.com/s/files/1/0921/7330/files/404-icon.png?v=1601894178" width="200px"/>
+          <p class="mt-30 mb-30 text-center">You failed your dexterity check and fell into a 404<br>Quick! Click <a href="https://gameology.com.au">here</a> to escape back to the homepage</p>
+        </div>
+    </div>
+</div>
+
+{% if settings.ss_enable %}
+  <script type="searchspring/personalized-recommendations" profile="404"></script>
+{% endif %}  
+<!-- Zeta Digital - Redirect 404 Page (10/11/22) -->
+<script>
+jQuery( window ).on( "load", function() {
+  var counter = 6;
+  var interval = setInterval(function() {
+    counter--;
+    jQuery("#redirect-countdown").html(counter);
+    if (counter == 0) {
+        clearInterval(interval);
+        jQuery(location).prop('href', 'http://gameology.com.au');
+    }
+  }, 1000);
+});
+</script>
+<!-- Zeta Digital - Redirect 404 Page (10/11/22) -->

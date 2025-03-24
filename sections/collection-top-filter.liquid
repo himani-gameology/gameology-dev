@@ -1,0 +1,282 @@
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/simplebar@latest/dist/simplebar.css"
+>
+<script src="https://unpkg.com/simplebar@latest/dist/simplebar.min.js" defer></script>
+
+<noscript>
+  <style>
+    .simplebar-content-wrapper {
+      scrollbar-width: auto;
+      -ms-overflow-style: auto;
+    }
+
+    .simplebar-content-wrapper::-webkit-scrollbar,
+    .simplebar-hide-scrollbar::-webkit-scrollbar {
+      display: initial;
+      width: initial;
+      height: initial;
+    }
+  </style>
+</noscript>
+
+<div data-section-id="{{ section.id }}" data-section-type="collectiion-top-filter">
+  <div class="collection-top-filter">
+    <div class="collection-top-filter__categories">
+      <div class="wrap"></div>
+    </div>
+
+    <div class="collection-top-filter__links">
+      {%- for block in section.blocks -%}
+        {%- if block.settings.for_collection == collection.handle -%}
+          <a href="{{ block.settings.url }}" class="collection-top-filter__link">
+            {{ block.settings.icon | image_url: width: 300 | image_tag }}
+            <span>{{ block.settings.text }}</span>
+          </a>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+
+
+
+{% schema %}
+{
+  "name": "Collection Top Filter",
+  "blocks": [
+    {
+      "type": "links",
+      "name": "Links (Icon Banner)",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "for_collection",
+          "label": "For collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "URL"
+        }
+      ]
+    } 
+  ]
+}
+{% endschema %}
+
+<style>
+
+  .test_226 .show-test_226 {
+    display: block !important;
+  }
+
+
+  @media (max-width: 1024px) {
+    .test_226 .collection--toolbar .collection-title {
+      display: none !important;
+    }
+
+    .test_226 .collection--toolbar {
+      display: none !important;
+    }
+
+    body.test_226 .show-test_210-mobile-inline {
+      display: inline-block;
+    }
+
+    body.test_226 .show-test_210-mobile {
+      display: block;
+    }
+
+    body.test_226 .hide-test_210-mobile {
+      display: none !important;
+    }
+
+    body.test_226 .collection-body .collection-title {
+      margin-top: 15px;
+    }
+
+    .test_226 .collection-control .row {
+      flex-wrap: nowrap !important;
+    }
+
+    .test_226 .collection-control .col-4 {
+      display: none !important;
+    }
+
+    body.test_226 .show-test_210-mobile .collection-control__button-sidebar {
+      position: relative;
+      border: 1px solid #000000;
+      border-radius: 5px;
+      text-align: left;
+      color: black;
+      letter-spacing: 0.75px;
+      text-transform: capitalize;
+      padding: 4px 13px;
+      width: auto;
+      font-size: 12px;
+      line-height: 1;
+      font-weight: 400;
+      display: inline-flex !important;
+      height: 37px;
+      font-family: 'Roboto', sans-serif;
+      width: 100%;
+      letter-spacing: 0;
+    }
+
+    body.test_226 label[for='SortBy'] {
+      font-size: 12px;
+      font-weight: 400;
+      font-family: 'Roboto';
+      white-space: nowrap;
+      letter-spacing: 0;
+    }
+
+    body.test_226 label[for='SortBy'] span {
+      margin-left: 3px;
+    }
+
+    body.test_226 select[name='sort_by'] {
+      font-size: 12px;
+      font-weight: 400;
+      font-family: 'Roboto';
+      white-space: nowrap;
+      letter-spacing: 0;
+    }
+
+    body.test_226 .show-test_210-mobile .collection-control__button-sidebar::after {
+      content: '';
+      position: absolute;
+      right: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 7px 5px 0;
+      border-color: #000000 transparent transparent transparent;
+    }
+
+    body.test_226 .collection-control__sort-by {
+      margin-right: 0 !important;
+    }
+
+    body.test_226 .collection-control__sort-by select {
+      position: relative;
+      appearance: none;
+    }
+
+    body.test_226 .collection-control__sort-by .select::after {
+      content: '';
+      position: absolute;
+      right: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 7px 5px 0;
+      border-color: #000000 transparent transparent transparent;
+    }
+
+    body.test_226 .show-test_210-mobile .collection-control__button-sidebar i {
+      display: none;
+    }
+  }
+
+  .test_226 .collections__body .collection-control__sort-by .select {
+    border: 1px solid #000000;
+    border-radius: 5px;
+    text-align: left;
+    color: black;
+    letter-spacing: 0.75px;
+    text-transform: uppercase;
+    padding: 0px 13px;
+  }
+
+  body.test_226 .collection-control__sort-by label {
+    text-transform: capitalize;
+  }
+
+  .test_226 div[data-js-position-desktop='sidebar'] {
+    display: flex !important;
+  }
+
+  .collection-top-filter {
+  }
+
+  .collection-top-filter__categories {
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+  }
+
+  .collection-top-filter__categories,
+  .collection-top-filter__links {
+    overflow: auto;
+  }
+
+  .collection-top-filter__categories .wrap {
+    display: flex;
+    column-gap: 10px;
+  }
+
+  .collection-top-filter__links {
+    display: flex;
+    column-gap: 10px;
+  }
+
+  .collection-top-filter__link,
+  .collection-top-filter__category {
+    display: flex;
+    align-items: center;
+    background-color: #f54337;
+    color: white !important;
+    column-gap: 10px;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-align: center;
+    white-space: nowrap;
+    padding: 9px 10px;
+  }
+
+  .collection-top-filter__link {
+    position: relative;
+    padding: 9px 10px 9px 36px;
+  }
+
+  .collection-top-filter__link img {
+    position: absolute;
+    left: 9px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 15px;
+    width: auto;
+  }
+
+  .collection-top-filter__category {
+    background-color: black;
+  }
+
+  @media (min-width: 1024px) {
+    .collection-top-filter__categories,
+    .collection-top-filter__links {
+      margin-bottom: 14px;
+    }
+
+    .collection-top-filter__link,
+    .collection-top-filter__category {
+    }
+  }
+</style>

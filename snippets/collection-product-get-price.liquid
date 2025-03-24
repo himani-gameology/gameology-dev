@@ -1,0 +1,16 @@
+{%- if compare_at_price > price -%}
+  <span class="price price--sale" data-js-product-price{% if settings.price_show_sale_separator %} data-js-show-sale-separator{% endif %}><span>{{ price | money }}</span>{% if settings.price_show_sale_separator %}{{ 'products.product.price_sale_separator' | t }}{% endif %}<span class="ml-10 price-compare_at_price hide-test_188"><p>{{ compare_at_price | money }}</p><span class="price-save_price"><p>You save </p><p>{{ compare_at_price | minus: price | money }}</p></span></span><span class="ml-10 price-compare_at_price show-test_188"><p style="margin-left: 5px !important; font-size: 12px !important;">{{ compare_at_price | money }}</p></span></span>
+  <span class="show-test_188" style="align-items: center;"><img class="mr-5" src="https://cdn.shopify.com/s/files/1/0921/7330/files/noun-savings-1033169.svg?v=1669263711" style="width:20px;"><span class="mr-5" style="color: #141414;font-size:12px;">You save</span><span style="color:green;font-size:12px;">{{ compare_at_price | minus: price | money }}</span>
+    {% for tag in product.tags %}
+      {% if tag contains 'No. of Players:' %}
+        <div class="no-of-players ml-15 mt-0 mr-0 mb-0 d-none d-md-flex align-items-center">
+          {% render 'icon-person' %}
+          <span class="ml-5" style="font-size:12px; color:#141414;">{{ tag | replace: 'No. of Players:', '' | replace: ' to ', '-' }}</span>
+        </div>
+        {% break %}
+      {% endif %}
+    {% endfor %}
+  </span>
+{%- else -%}
+  <span class="price single--price" data-js-product-price{% if settings.price_show_sale_separator %} data-js-show-sale-separator{% endif %}><span>{{ price | money }}</span></span>
+{%- endif -%}

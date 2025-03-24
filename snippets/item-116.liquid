@@ -1,0 +1,7 @@
+{%- assign productSelected = product.selected_or_first_available_variant -%}
+{%- assign discountAmount = productSelected.compare_at_price | minus: productSelected.price | times: 100.0 | divided_by: productSelected.compare_at_price -%}
+<!--{{discountAmount}}-->
+{%- if discountAmount < 30 -%}{%- break -%}{%- endif -%}
+<div class="greate_price hidden_task show-test_116">
+	<span>{{- 'products.product.label.great_price' | t -}}</span>
+</div>

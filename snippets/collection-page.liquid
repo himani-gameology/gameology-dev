@@ -1,0 +1,543 @@
+{% include 'global-variables' %}
+<!-- Zeta Digital - SEO Description (25/09/2020) -->
+{% assign collection_description = collection.description | split:"<!-- split -->"%}
+<!-- Zeta Digital - SEO Description (25/09/2020) -->
+<script>
+  Loader.require({type: "style", name: "plugin_slick"});
+  Loader.require({type: "script", name: "plugin_slick"});
+</script>
+{% assign check_show_fiter_type = false %}
+{% if collection.handle == 'board-game' or collection.handle == 'best-sellers' or collection.handle == 'sale' %}
+    {% assign check_show_fiter_type = true %}
+{% endif %}
+{% if collection.handle == 'pokemon' %}
+  <div id="pokemon-collection-page">
+    <div class="container">
+      {% section 'home-builder' %}
+    </div>
+    {% section 'pokemon-background' %}
+    {% section 'pokemon-navigation' %}
+    {% section 'carousel-products-pokemon-1' %}
+    {% section 'carousel-products-pokemon-2' %}
+    {% section 'carousel-products-pokemon-3' %}
+    {% section 'carousel-products-pokemon-4' %}
+  </div>
+{% elsif collection.handle == 'yugioh' %}
+  <div id="yugioh-collection-page">
+    <div class="container">
+      {% section 'home-builder-yugioh' %}
+    </div>
+    {% section 'yugioh-background' %}
+    {% section 'yugioh-navigation' %}
+    {% section 'carousel-products-yugioh-1' %}
+    {% section 'carousel-products-yugioh-2' %}
+    {% section 'carousel-products-yugioh-3' %}
+    {% section 'carousel-products-yugioh-4' %}
+  </div>
+{% elsif collection.handle == 'dragon-ball-super' %}
+  <div id="dragonball-collection-page">
+    <div class="container">
+      {% section 'home-builder-dragonball' %}
+    </div>
+    {% section 'dragonball-background' %}
+    {% section 'dragonball-navigation' %}
+    {% section 'carousel-products-dragonball-1' %}
+    {% section 'carousel-products-dragonball-2' %}
+    {% section 'carousel-products-dragonball-3' %}
+    {% section 'carousel-products-dragonball-4' %}
+  </div>
+{% elsif collection.handle == 'paints-tools' %}
+  <div id="paint-and-tools-collection-page">
+    <div class="container">
+      {% section 'home-builder-paint-and-tools' %}
+    </div>
+    {% section 'paint-and-tools-navigation' %}
+    {% section 'carousel-products-paint-and-tools-1' %}
+    {% section 'carousel-products-paint-and-tools-2' %}
+    {% section 'carousel-products-paint-and-tools-3' %}
+    {% section 'carousel-products-paint-and-tools-4' %}
+  </div>
+{% endif %}
+
+<div class="collections js-collections pb-10{% if check_show_fiter_type %} collection-show-fiter-type{% endif %}" data-handle="{{collection.handle}}">
+  	<!-- Zeta Digital - Pay in 4 Mobile Banner (21/04/2022) -->
+  	<img id="paypal-mobile-banner" src="https://cdn.shopify.com/s/files/1/0921/7330/files/Pay-in-4-header-for-mobile-v3.jpg?v=1650429728" alt="PayPal Pay in 4" style="display: none;">
+  	<!-- Zeta Digital - Pay in 4 Mobile Banner (21/04/2022) -->
+
+    {%- if settings.collection_enable_fullwidth_head_section -%}
+        {% section 'collection-fullwidth-head' %}
+    {%- endif -%}
+    {% capture collection_head_html %}
+		{% section 'collection-head' %}
+    {% endcapture %}
+
+    {% section 'conversionry-collection-banner-board-game' %} <!-- Collection Banner (31/10/2022) -->
+    {% section 'conversionry-collection-banner-magic-tcg' %} <!-- Collection Banner (31/10/2022) -->
+    {% section 'conversionry-collection-banner-tcg' %} <!-- Collection Banner (31/10/2022) -->
+    {% section 'conversionry-collection' %} <!-- Conversionry - Item 173 (10/08/2022) -->
+
+    <div class="container mt-10 mt-lg-{{ offset_collection_page_content_margin_top_d }}">
+        <div class="row mb-40 mb-lg-{{ offset_collection_page_pagination_margin_bottom_d }}">
+            {%- if settings.collection_sidebar_position == 'dropdown' -%}
+                <div class="collections__sidebar d-none">
+                    {% section 'collection-sidebar' %}
+                </div>
+            {%- elsif settings.collection_sidebar_position == 'top' -%}
+                {%- if content_for_header contains 'Shopify.designMode' -%}
+                    {%- assign is_design_mode = true -%}
+                {%- endif -%}
+                <div class="collections__sidebar {% if is_design_mode %}w-100 mt-20{% else %}d-none{% endif %}">
+                    {% section 'collection-sidebar' %}
+                </div>
+            {%- elsif settings.collection_show_sidebar != 'hide' -%}
+                <div class="collections__sidebar collections__sidebar--width-md d-none col-auto d-lg-block{% if settings.collection_sidebar_position == 'right' %} order-2{% endif %}{% if settings.collection_enable_sticky %} sticky-sidebar js-sticky-sidebar{% endif %}">
+                    {%- if settings.collection_enable_sticky -%}
+                        <div data-js-sticky-sidebar-body>
+                    {%- endif -%}
+                            <div data-js-position-desktop="sidebar">
+                                {% section 'collection-sidebar' %}
+                            </div>
+                    {%- if settings.collection_enable_sticky -%}
+                        </div>
+                    {%- endif -%}
+                </div>
+            {%- endif -%}
+            <div class="collections__body col pb-25" {% if settings.ss_enable == false %} data-js-collections-body{% endif %}>
+                <div class="test_226 product-results-container">
+                <div id="product-results"></div>
+                <!-- Conversionry - Banner top (1/09/2021) -->
+                {% section 'banner-top' %}
+                {{collection_head_html}}
+                {%- assign collection_builder_mode_handle = settings.collection_builder_mode | replace: '|', '___' | handleize | split: '___' -%}
+                {%- if collection_builder_mode_handle contains collection.handle -%}
+                    {%- assign builder_mode = true -%}
+                {%- endif -%}
+                <div data-js-collection-replace="banner-builder" data-js-collection-replace-only-full{% unless builder_mode %} class="d-none-important"{% endunless %}>
+                    {%- if builder_mode -%}
+                        {% section 'collection-builder' %}
+                    {%- endif -%}
+                </div>
+                </div>
+
+
+                <!----- Test 226 ------>
+
+        
+              
+
+                <div class="scroll-container allTagsColls">
+                  {% assign predefined_categories = "Trading Card Games, Living Card Games, Family Games, Party Games, Strategy Games, Children's Games, Abstract Games" | split: ", " %}
+                  {% for category in predefined_categories %}
+                    <a href="{{ category | handleize }}" class="category-item">{{ category }}</a>
+                  {% endfor %}
+             
+                  {% for tag in collection.all_tags %}
+                    {% unless predefined_categories contains tag %}
+                      <a href="{{ tag | handleize }}" class="category-item">{{ tag }}</a>
+                    {% endunless %}
+                  {% endfor %}
+                </div>
+                
+                <!----- Test 226 ------>
+
+              
+                <div class="show-test_259 desktop-only">
+                  <div class="showcase-badges-container">
+                    <a href="/collections/gameology-clearance-up-to-50-off-sale">{% render 'icon-fire-flame' %} UP TO 50% OFF</a>
+                    <a href="/collections/trading-card-games-up-to-75-off-clearance">{% render 'icon-discount-badge' %} UP TO 75% OFF</a>
+                    <a href="/collections/trading-card-game">{% render 'icon-discount-badge' %} TRADING CARD GAME CLEARANCE</a>
+                  </div>
+                </div>
+
+              
+                <div class="show-test_226">
+                {% section 'collection-top-filter' %}
+                </div>
+
+                {% if check_show_fiter_type %}
+                    <div class="show-test_106">
+                        <div class="filter-by-game-type">
+                            <h5>Filter by game type</h5>
+
+                            {%- assign clear_canonical_url = canonical_url | split: '?' | first | url_decode -%}
+                            {%- assign page_url = content_for_header | split:'"pageurl":"' | last | split:'"' | first | replace: '+', '%2B' | replace: '%26', '&#38;' | url_decode | replace: '&#38;', '%26' | replace:'\/','/' | prepend: 'https://' | remove: clear_canonical_url | replace:'\u0026', '&#38;' | replace:'%20', ' ' -%}
+
+                            {%- if page_url contains '?q=' -%}
+                                {%- assign filter_names = 'tg_:|vd_:|tp_:|opt_:|tt_:|prf_:|prt_:|oa_:|lo_:' | split: '|' -%}
+                                {%- assign filter_params = page_url | remove: '?q=' | split: '&' -%}
+                                {%- assign filter_params = filter_params[0] | split: '+' -%}
+
+                                {%- for filter_param in filter_params -%}
+                                    {%- assign filter_name_n_value = filter_param | split: '_:' -%}
+                                    {%- assign filter_name = filter_name_n_value[0] -%}
+                                    {%- assign filter_value = filter_name_n_value[1] -%}
+                                    {%- assign filter_name_n_separator = filter_param | remove: filter_value -%}
+
+                                    {%- case filter_name_n_separator -%}
+                                        {% when filter_names[2] %}
+                                            {% capture filter_by_types %}{{ filter_by_types }}{% if filter_by_types != blank %}___{% endif %}{{ filter_value | url_decode | remove: '"' }}{% endcapture %}
+                                    {%- endcase -%}
+                                {%- endfor -%}
+                                {%- assign filter_by_types = filter_by_types | split: '___' -%}
+                            {%- endif -%}
+
+                            {% capture no_content_message %}{{ 'collections.sidebar.no_product_types' | t }}{% endcapture %}
+                            {% capture input_name %}filter_by_type{% endcapture %}
+                            {%- assign current_type_filters = filter_by_types -%}
+                            {%- assign all_items = collection.all_types -%}
+
+                            {%- assign all_items_handle = all_items | join: '___' | remove: '"' | split: '___' -%}
+                            {%- assign filters = all_items -%}
+                            {%- assign has_content = false -%}
+
+                            <div class="filter-type-wrap">
+                                <span class="js-clear-all-type{% if filter_by_types == blank %} active{% endif %}">All</span>
+                                {%- for filter in filters -%}
+                                    {%- if filter == blank -%}
+                                        {%- continue -%}
+                                    {%- endif -%}
+
+                                    {%- assign filter_handle = filter | remove: '"' -%}
+                                    {%- if all_items_handle contains filter_handle -%}
+                                        {% if filter_handle == "Abstract Games" or filter_handle == "Board Games" or filter_handle == "Children's Games" or filter_handle == "Family Games" or filter_handle == "Party Games" or filter_handle == "Role Playing Games" or filter_handle == "Strategy Games" or filter_handle == "Thematic Games" %}
+                                            {%- assign has_content = true -%}
+                                            {%- if filter == 'Board Games' -%}
+                                                <span class="filter-type-trigger{% if current_type_filters contains filter_handle %} active{% endif %}" data-value="{{ filter_handle }}">{{ filter }}</span>
+                                            {%- else -%}
+                                              <span class="filter-type-trigger{% if current_type_filters contains filter_handle %} active{% endif %}" data-value="{{ filter_handle }}">{{ filter | replace: ' Games', '' }}</span>
+                                            {%- endif -%}
+                                        {% endif %}
+                                    {%- endif -%}
+                                {%- endfor -%}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {% section 'collection-body' %}
+				<!-- Zeta Digital - SEO Description (25/09/2020) -->
+                {% if collection_description[1] != blank and collection_description[1].size > 20 %}
+                <div class="mt-50">
+                  {{ collection_description[1] }}
+                  <button class="btn" id="read-more-btn" onclick="expendReadMore()">Read More</button>
+                </div>
+                <script>
+                  document.getElementById("read-more").style.display = "none";
+                jQuery('#read-more').css('display', 'none');
+                function expendReadMore() {
+                  var dots = document.getElementById("dots");
+                  var moreText = document.getElementById("read-more");
+                  var btnText = document.getElementById("read-more-btn");
+
+                  if (dots.style.display === "none") {
+                    dots.style.display = "inline";
+                    btnText.innerHTML = "Read more";
+                    moreText.style.display = "none";
+                  } else {
+                    dots.style.display = "none";
+                    btnText.innerHTML = "Read less";
+                    moreText.style.display = "inline";
+                  }
+                }
+                </script>
+              	{% else %}
+                  <!--Conversionry - Change position of collection description 12/07/2021 -->
+                  {%- if collection.description != blank -%}
+                    <br>
+                    <div class="collection-des rte fs">{{collection.description}}</div>
+                  {%- endif -%}
+                {% endif %}
+                <!-- Zeta Digital - SEO Description (25/09/2020) -->
+            </div>
+        </div>
+    </div>
+  {% section 'conversionry-collection-2' %} <!-- Conversionry - Item 210 (25/05/2023) -->
+    {%- if settings.collection_enable_product_carousel_section -%}
+        <div class="pb-60">
+            {% section 'carousel-products' %}
+        </div>
+    {%- endif -%}
+</div>
+
+{%- if settings.collection_enable_sticky -%}
+    <script>
+        Loader.require({type: "script", name: "sticky_sidebar"});
+    </script>
+{%- endif -%}
+
+<style>
+  #shopify-section-header {
+    margin: 0 !important;
+  }
+  .home-builder-block-id-home-builder-2 .slick-initialized .slick-slide {
+    padding: 0 !important;
+  }
+  .carousel__header {
+    background-color: #141414;
+    height: 40px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    padding: 0 75px;
+  }
+  .carousel__title {
+    background-color: #141414;
+    color: white;
+    letter-spacing: 0px;
+    font-size: 20px;
+  }
+  .carousel__title.active {
+    background-color: #141414;
+    color: white;
+    letter-spacing: 0px;
+    font-size: 20px;
+  }
+  .carousel__footer {
+    background-color: #141414;
+    height: 15px;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+  }
+  .carousel__item .btn__text {
+    font-size: 14px;
+  }
+  .carousel__item .product-collection__title {
+    height: 84px;
+  }
+  .product-release-date {
+    background-color: #ff414d;
+    color: white;
+    padding: 5px;
+    margin: 5px 0;
+  }
+  .preorder-carousel .product-collection-bottom {
+    height: 72px;
+  }
+  .carousel__slider_wrapper {
+      background-color: white;
+  }
+  .carousel__header__view__more {
+    color: white !important;
+    font-size: 20px;
+  }
+  .product-collection__reviews {
+    display: none;
+  }
+  .carousel__prev {
+    left: -5%;
+  }
+  .carousel__next {
+    right: -5%;
+  }
+  @media only screen and (max-width: 767px) {
+    .carousel__header {
+      height: 100px;
+      justify-content: center !important;
+      flex-direction: column;
+    }
+    .carousel__header__view__more {
+      font-size: 12px;
+    }
+    .carousel__slider_wrapper {
+      padding: 10px !important;
+    }
+    .carousel__title.active {
+      font-size: 20px;
+    }
+    .price-save_price {
+      font-size: 10px !important;
+    }
+    .product-collection__price {
+      height: 25px;
+    }
+    .product-collection {
+      margin-bottom: 0 !important;
+    }
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var targetNode = document.getElementById('searchspring-content');
+    if (!targetNode) {
+        console.error('SearchSpring content area not found.');
+        return;
+    }
+
+    var observer;
+
+    function updateButtonText() {
+        try {
+            document.querySelectorAll('.product-collection').forEach(function(product) {
+                const soldOutButton = product.querySelector('.js-product-button-soldout[data-button-status="sold-out"]');
+                const soldOutLabel = product.querySelector('[data-button-content="sold-out"]');
+                if (soldOutButton) {
+                    const buyNowLabel = product.querySelector('.label--buy-now');
+                    if (buyNowLabel) {
+                        buyNowLabel.textContent = 'GET IT SOON!';
+                    }
+                    if (soldOutLabel) {
+                        if (window.innerWidth <= 768) {
+                            soldOutLabel.textContent = 'Notify me when Available';
+                        } else {
+                            soldOutLabel.textContent = 'Notify when Available';
+                        }
+                    }
+                }
+            });
+        } catch (error) {
+            console.error('Error updating button text:', error);
+        }
+    }
+
+    function updateProductResults() {
+        var infoElement = document.querySelector('.collection-control__information');
+        if (infoElement) {
+            var infoText = infoElement.textContent;
+            var match = infoText.match(/of\s+(\d+)\s+results/i);
+            if (match && match.length > 1) {
+                var numberOfResults = match[1];
+                
+                var resultElementDesktop = document.getElementById('product-results');
+                var resultElementMobile = document.getElementById('product-results-mobile');
+                
+                if (resultElementDesktop) {
+                    resultElementDesktop.textContent = numberOfResults;
+                }
+                if (resultElementMobile) {
+                    resultElementMobile.textContent = numberOfResults;
+                }
+            }
+        }
+    }
+
+    function handleMutations(mutations) {
+        observer.disconnect();
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList' || mutation.type === 'attributes') {
+                updateButtonText();
+                updateProductResults();
+            }
+
+            mutation.addedNodes.forEach(function(node) {
+                if (node.nodeType === Node.ELEMENT_NODE) {
+                    var buttons = node.querySelectorAll('.btn--animated .btn__text');
+                    buttons.forEach(function(button) {
+                        var buttonText = button.textContent.trim().toLowerCase();
+                        var buyNowLabel = button.closest('.product-collection').querySelector('.label--buy-now');
+                        if (!buyNowLabel) return;
+
+                        if (buttonText === 'pre-order') {
+                            buyNowLabel.innerHTML = 'PRE-ORDER';
+                        } else if (buttonText === 'add to cart') {
+                            buyNowLabel.innerHTML = '<span style="font-weight: 400;">BUY</span>&nbsp;NOW!';
+                        }
+                    });
+                }
+            });
+        });
+        observer.observe(targetNode, config);
+    }
+
+    const config = { childList: true, subtree: true, attributes: true, attributeFilter: ['data-button-status'] };
+
+    observer = new MutationObserver(handleMutations);
+
+    if (targetNode) {
+        observer.observe(targetNode, config);
+    } else {
+        console.error('The target element #searchspring-content does not exist.');
+    }
+
+    updateButtonText();
+    updateProductResults();
+    window.addEventListener('resize', debounce(updateButtonText, 200));
+
+    document.addEventListener('click', debounce(function() {
+        setTimeout(updateButtonText, 500);
+    }, 200));
+
+    function debounce(func, delay) {
+        let debounceTimer;
+        return function() {
+            const context = this;
+            const args = arguments;
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => func.apply(context, args), delay);
+        };
+    }
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    function insertPreOrderLabel() {
+        try {
+            document.querySelectorAll('.product-collection').forEach(function(productCollection) {
+                const imageContainer = productCollection.querySelector('.product-collection__image.product-image');
+                if (!imageContainer) return;
+                if (!imageContainer.querySelector('.label--preorder-container')) {
+                    const descriptionDiv = productCollection.querySelector('.product-collection__description');
+                    if (!descriptionDiv) return;
+
+                    const releaseDateMatch = descriptionDiv.textContent.match(/Release Date:\s*([\d]{1,2}\s[\w]+\s[\d]{4}|Q[1-4]-[\d]{4}|[\d]{1,2}-[\w]+-[\d]{4})/);
+                    if (!releaseDateMatch || !releaseDateMatch[1]) return;
+
+                    let dateText = releaseDateMatch[1].trim();
+                    dateText = dateText.replace(/(\d{1,2})-(\w+)-(\d{4})/, '$1 $2 $3');
+                    dateText = dateText.replace(/-/g, ' ');
+
+                    const labelDiv = document.createElement('div');
+                    labelDiv.className = 'label label--preorder text-nowrap label--preorder-container';
+                    labelDiv.setAttribute('data-js-product-label-in-stock', '');
+                    const svgIcon = `
+                        <svg aria-hidden="true" focusable="false" role="presentation" class="icon icon-theme-142" viewBox="0 0 24 24">
+                            <g>
+                                <path d="M21.953,3.975c0.124,0.124,0.186,0.271,0.186,0.439V21.29c0,0.169-0.062,0.315-0.186,0.439
+                                    c-0.124,0.124-0.271,0.186-0.439,0.186H2.764c-0.169,0-0.316-0.062-0.439-0.186C2.2,21.605,2.139,21.458,2.139,21.29V4.415
+                                    c0-0.169,0.062-0.315,0.186-0.439C2.448,3.852,2.594,3.79,2.764,3.79h3.125V2.54c0-0.169,0.062-0.315,0.186-0.439
+                                    c0.124-0.124,0.27-0.186,0.439-0.186h2.5c0.169,0,0.315,0.062,0.439,0.186C9.577,2.224,9.639,2.371,9.639,2.54v1.25h5V2.54
+                                    c0-0.169,0.062-0.315,0.186-0.439c0.124-0.124,0.27-0.186,0.439-0.186h2.5c0.169,0,0.315,0.062,0.439,0.186
+                                    c0.124,0.124,0.186,0.271,0.186,0.439v1.25h3.125C21.683,3.79,21.829,3.852,21.953,3.975z M3.389,5.04v3.125h17.5V5.04h-2.5v1.25
+                                    c0,0.169-0.062,0.316-0.186,0.439c-0.124,0.124-0.271,0.186-0.439,0.186h-2.5c-0.169,0-0.316-0.062-0.439-0.186
+                                    c-0.124-0.124-0.186-0.27-0.186-0.439V5.04h-5v1.25c0,0.169-0.062,0.316-0.186,0.439C9.329,6.853,9.183,6.915,9.014,6.915h-2.5
+                                    c-0.169,0-0.316-0.062-0.439-0.186C5.95,6.605,5.889,6.459,5.889,6.29V5.04H3.389z M20.889,20.665V9.415h-17.5v11.25H20.889z
+                                    M7.139,5.665h1.25v-2.5h-1.25V5.665z M15.889,11.915c0.169,0,0.319,0.059,0.449,0.176c0.117,0.13,0.176,0.28,0.176,0.449
+                                    c0,0.169-0.059,0.319-0.176,0.449l-5,5c-0.065,0.052-0.137,0.095-0.215,0.127c-0.078,0.033-0.156,0.049-0.234,0.049
+                                    s-0.156-0.016-0.234-0.049c-0.078-0.032-0.15-0.075-0.215-0.127l-2.5-2.5c-0.117-0.13-0.176-0.28-0.176-0.449
+                                    c0-0.169,0.059-0.319,0.176-0.449c0.13-0.117,0.28-0.176,0.449-0.176c0.169,0,0.319,0.059,0.449,0.176l2.051,2.07l4.551-4.57
+                                    C15.569,11.973,15.719,11.915,15.889,11.915z M15.889,5.665h1.25v-2.5h-1.25V5.665z"/>
+                            </g>
+                        </svg>
+                    `;
+
+                    labelDiv.innerHTML = `${svgIcon} ${dateText}`;
+                    imageContainer.appendChild(labelDiv);
+                }
+            });
+        } catch (error) {
+            console.error('Error inserting preorder label:', error);
+        }
+    }
+
+    insertPreOrderLabel();
+    const targetNode = document.getElementById('searchspring-content');
+    if (targetNode) {
+        const observer = new MutationObserver(function(mutations) {
+            try {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'childList') {
+                        insertPreOrderLabel();
+                    }
+                });
+            } catch (error) {
+                console.error('Error observing mutations for preorder label:', error);
+            }
+        });
+
+        const config = { childList: true, subtree: true };
+        observer.observe(targetNode, config);
+    } else {
+        console.error('The target element #searchspring-content does not exist.');
+    }
+});
+</script>

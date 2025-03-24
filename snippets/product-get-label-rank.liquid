@@ -1,0 +1,7 @@
+{% for tag in product.tags %}
+  {% if tag contains 'BGG Rank: ' %}
+	<div class="label label--hot mb-3 mr-3 text-nowrap" data-js-product-label-rank>{{ tag | replace: "BGG Rank: ", "BGG Rank: "}}</div>
+    <div class="label label--best-seller" data-js-product-label-rank>Best Seller</div>
+    {% break %}
+  {% endif %}
+{% endfor %}

@@ -1,0 +1,2466 @@
+<!-- Zeta Digital - Large Item Shipping Calculator Start -->
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<!-- Zeta Digital - Large Item Shipping Calculator End -->
+
+<!-- Zeta Digital - Product Payment Options Start -->
+<style>
+    .payment-tooltip {
+    visibility: hidden;
+    color: #fff;
+    background-color: #bbbbbbbf;
+    text-align: center;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+    }
+    .tooltip-text-zip {
+    width: 200px;
+    padding: 10px;
+    }
+    .tooltip-text-afterpay {
+    width: 200px;
+    padding: 10px;
+    }
+    .tooltip-text-laybuy {
+    width: 250px;
+    padding: 0px 5px;
+    }
+    .zip-tooltip:hover
+    .tooltip-text-zip {
+    visibility: visible !important;
+    }
+    .afterpay-tooltip:hover
+    .tooltip-text-afterpay {
+    visibility: visible !important;
+    }
+
+    .laybuy-tooltip:hover
+    .tooltip-text-laybuy {
+    visibility: visible !important;
+    }
+</style>
+<!-- Zeta Digital - Product Payment Options End -->
+
+<!-- Zeta Digital - Apply In Stock Label, Count Down and Dispatch (+ Line 32-36, 53-57, 112) -->
+{% assign product_collection = collection.handle %}
+{%- assign is_preorder_product = false -%}
+{%- assign is_pickup_only_product = false -%}
+{% for tag in product.tags %}
+  {% if tag contains 'preorder' %}
+      {%- assign is_preorder_product = true -%}
+  {% elsif tag contains 'Pick-up Only' %}
+      {%- assign is_pickup_only_product = true -%}
+  {% endif %}
+{% endfor %}
+<!-- Zeta Digital - Apply In Stock Label, Count Down and Dispatch (+ Line 32-36, 53-57, 112) -->
+
+{%- if template_layout == '5' -%}
+    {%- assign centered = true -%}
+{%- else -%}
+    {%- assign centered = false -%}
+{%- endif -%}
+{%- if is_product_page -%}
+    {%- assign change_history = true -%}
+{%- endif -%}
+{%- if product.metafields.sizeguide.html == 'hide' -%}
+    {%- assign show_size_guide = false -%}
+{%- endif -%}
+{% capture cart_icon_name %}{{ settings.cart_icon | default: 'icon-theme-109' }}{% endcapture %}
+{% capture description_html %}
+    {%- if metafields.description.content != blank -%}
+        <div class="product-page-info__description mb-30 text-center{% unless template_layout == '5' %} text-lg-left{% endunless %}">
+            <div class="rte">
+                {{ metafields.description.content }}
+            </div>
+        </div>
+    {%- elsif description_place == 'info' and description != blank -%}
+        <div class="product-page-info__description mb-30 text-center{% unless template_layout == '5' %} text-lg-left{% endunless %}">
+            <div class="rte">
+                {{ description }}
+            </div>
+        </div>
+    {%- endif -%}
+{% endcapture %}
+{% capture countdown_html %}
+    {%- if show_countdown -%}
+        <div class="product-page-info__countdown mb-10">
+            {% capture countdown_title %}{{ 'products.product.countdown.title' | t }}{% endcapture %}
+            {% render 'product-get-countdown' with countdown_date: countdown_date, countdown_type: 2, countdown_title: countdown_title, centered: centered %}
+        </div>
+    {%- endif -%}
+{% endcapture %}
+{% capture stock_countdown_html %}
+    {%- if show_stock_countdown -%}
+        <div class="product-page-info__stock-countdown mb-20">
+            <div class="stock-countdown{% unless quantity > 0 and quantity <= stock_countdown_min %} d-none-important{% endunless %}" data-js-product-stock-countdown data-min="{{ stock_countdown_min }}">
+                {% capture quantity_html %}<span class="stock-countdown__counter">{{ quantity }}</span>{% endcapture %}
+                {% if is_preorder_product %}
+                  <p class="stock-countdown__title h5 ls-0 mb-5 text-center{% if template_layout != '5' %} text-lg-left{% endif %}" data-js-product-stock-countdown-title>Hurry! Only {{ quantity_html }} Available to Preorder!</p>
+                {% else %}
+                  <p class="stock-countdown__title h5 ls-0 mb-5 text-center{% if template_layout != '5' %} text-lg-left{% endif %}" data-js-product-stock-countdown-title>{{ 'products.product.stock_countdown_html' | t: quantity: quantity_html }}</p>
+                {% endif %}
+                {%- if show_stock_countdown_range -%}
+                    <div class="stock-countdown__range">
+                        {%- assign countdown_range_quotient = stock_countdown_min | times: 1.0 | divided_by: 100 -%}
+                        {%- assign countdown_range_procent = quantity | divided_by: countdown_range_quotient -%}
+                        <div class="stock-countdown__progress" data-js-product-stock-countdown-progress style="width: {{ countdown_range_procent }}%;"></div>
+                    </div>
+                {%- endif -%}
+            </div>
+        </div>
+    {%- endif -%}
+{% endcapture %}
+{% capture text_countdown_html %}
+    {% if is_preorder_product %}
+        <div class="show-test_109">
+            <div class="product-page-info__pre-order-notice">
+                <h5><i>{% render 'svg', type: 'pre-order-notice' %}</i>This item is a pre-order</h5>
+                <p class="text">Please note: We will hold the entire order until all pre-order products are stocked in to our warehouse.</p>
+            </div>
+        </div>
+    {% endif %}
+    {%  assign currentDateTime = 'now' | date: "%Y-%m-%d %H:%M"  %}
+  {% assign delivery_dispatch_style = '' %}
+    {% if currentDateTime >= '2024-11-28 12:00' and  currentDateTime <= '2025-01-06 12:00' %}
+    {% assign delivery_dispatch_style = 'display: none !important;' %}
+      {% endif %}
+   
+    {%- if show_text_countdown and type != 'Gift Cards' -%}
+        <!-- HTML test_107  -->
+          {% if product.available %}
+              {% assign class_type = 'product_available' %}
+          {% else %}
+              {% assign class_type = 'product_unavailable' %}
+              {% assign action_input = 'readonly' %}
+              {% assign action_form = 'disabled' %}
+              
+          {% endif %}
+
+          <!-- Chriate – Mas Item #199 - Checkout Page Update (03/04/23) - START -->
+          {% if product.available and is_preorder_product == false and is_pickup_only_product == false %}
+          <div class="show-test_199-flex delivery-dispatch" style="{{ delivery_dispatch_style  }}" date='{{ currentDateTime }}'>
+            <div class="icon">
+              <svg width="46" height="24" viewBox="0 0 46 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8.05495 0.0995789C7.84873 0.100393 7.6513 0.182749 7.50545 0.32842C7.35978 0.474253 7.27742 0.671682 7.2766 0.87792C7.27742 1.08397 7.35978 1.2814 7.50545 1.42725C7.65128 1.57309 7.84871 1.65528 8.05495 1.65609H29.5941V19.454H19.7674C19.4951 17.5925 17.8996 16.1443 15.9787 16.1443C14.0578 16.1443 12.4622 17.5925 12.1899 19.4538L8.83903 19.454V16.0681C8.83984 15.8598 8.75749 15.6599 8.61019 15.5126C8.46305 15.3653 8.26302 15.2829 8.05485 15.2838C7.84766 15.2846 7.64925 15.3676 7.50327 15.5147C7.35729 15.6618 7.27573 15.8609 7.27655 16.0681V20.2385C7.27736 20.4446 7.35972 20.642 7.50539 20.7878C7.65122 20.9335 7.84865 21.0159 8.05489 21.0167H12.2799C12.7172 22.6669 14.2093 23.9006 15.9786 23.9006C17.748 23.9006 19.24 22.6669 19.6774 21.0167H33.9291C34.3664 22.6669 35.8584 23.9006 37.6278 23.9006C39.3972 23.9006 40.8859 22.6669 41.322 21.0167H44.8773H44.8771C45.0834 21.0159 45.2808 20.9335 45.4265 20.7878C45.5723 20.642 45.6545 20.4446 45.6553 20.2385V12.9827C45.6555 12.8824 45.6364 12.783 45.5988 12.6897L42.6737 5.44012L42.6739 5.44028C42.6159 5.2964 42.5165 5.17286 42.3882 5.08562C42.26 4.99838 42.1088 4.95135 41.9536 4.95037H31.1578V0.877954C31.157 0.671412 31.0746 0.47382 30.9285 0.327995C30.7825 0.182162 30.5846 0.100129 30.3782 0.0996412L8.05495 0.0995789ZM4.65211 5.04208C4.44492 5.04289 4.24651 5.1259 4.1007 5.27304C3.9547 5.42017 3.87316 5.61923 3.87397 5.82641C3.87478 6.03247 3.95698 6.23006 4.10281 6.37575C4.24865 6.52158 4.44608 6.60377 4.65215 6.60459H16.4396C16.6468 6.6054 16.8459 6.52386 16.993 6.37786C17.14 6.23203 17.2232 6.03362 17.224 5.82645C17.2248 5.61811 17.1424 5.41824 16.9951 5.27095C16.8478 5.12365 16.648 5.04129 16.4396 5.0421L4.65211 5.04208ZM31.1579 6.51312H41.4225L43.7174 12.2048L31.1579 12.2046L31.1579 6.51312ZM1.12878 10.024C0.921421 10.0232 0.722042 10.1051 0.575071 10.2512C0.427938 10.3976 0.344929 10.5963 0.344604 10.8038C0.345418 11.011 0.428425 11.2094 0.575563 11.3554C0.722696 11.5012 0.921592 11.5828 1.12877 11.582H16.4396C16.6468 11.5828 16.8459 11.5012 16.993 11.3554C17.1401 11.2094 17.2231 11.011 17.2239 10.8038C17.2234 10.5963 17.1406 10.3976 16.9935 10.2512C16.8463 10.1051 16.6471 10.0232 16.4396 10.024H1.12878ZM31.1579 13.767H44.0929V19.4541H41.4105C41.139 17.5926 39.5487 16.1445 37.6278 16.1445C35.7069 16.1445 34.113 17.5928 33.8405 19.4541H31.158L31.1579 13.767ZM15.9204 17.7068C15.94 17.7063 15.9589 17.7068 15.9784 17.7068C17.2318 17.7068 18.2443 18.7247 18.2443 20.0185C18.2443 21.3123 17.2318 22.3378 15.9784 22.3378C14.725 22.3378 13.7124 21.3123 13.7124 20.0185C13.7124 18.7449 14.6941 17.7379 15.9204 17.7068ZM37.5696 17.7068C37.5891 17.7063 37.608 17.7068 37.6276 17.7068C38.881 17.7068 39.895 18.7247 39.895 20.0185C39.895 21.3123 38.881 22.3378 37.6276 22.3378C36.3741 22.3378 35.3616 21.3123 35.3616 20.0185C35.3616 18.7449 36.3432 17.7379 37.5696 17.7068Z" fill="#858585"/>
+              </svg>
+            </div>
+
+            <div class="text">
+              <h5>DISPATCHED <span id="today_span"> Today </span> IF ORDERED WITHIN <br/><span class="time js-msg-countdown"><span dispatch-time-countdown></span></span></h5
+
+              <p>It’s even faster to <a class="show-pickup">pick up in store</a> or <a class="show-cc">click and collect</a> to get playing immediately and skip the shipping costs</p>
+            </div>
+          </div>
+          <hr class="delivery-dispatch-bar" style="margin-top: 15px; margin-bottom: -5px; display: none;">
+          {% endif %}
+
+
+          <!-- Chriate – Mas Item #199 - Checkout Page Update (03/04/23) - END -->
+          {% if settings.enable_test_300 %}
+            <div class="test_300 cro-variation-only">
+              {% include 'product-point-earned' with product: product, current_variant: current_variant %}
+              <hr>
+            </div>
+          {% endif %}
+          <!--Conversionry - Update estimate shipping style 010722 -->
+          <h3 class="shipping-estimate-title">SHIPPING ESTIMATES</h3>
+          <div class="product-page-info__option-buy {{ class_type }}">
+              <b class="option-buy__title">SHIPPING ESTIMATES</b>
+              <div class="ShippingEstimatesOrg">
+                  <div id="only-available-block" class="d-none">
+                    <p id="only-available-msg">Buy in store only available at <b><span id="only-available-branch"></span></b></p>
+                    <div id="only-available-arrow-block">
+                      <div></div>
+                      <div></div>
+                      <div id="only-available-arrow">▼</div>
+                    </div>
+                  </div>
+                  <div class="list-btn">
+                    <button data-id-btn="deli" class="tab-active">
+                        {% if product.available %}
+                        {% if is_preorder_product %}
+                        {% render 'icon-coming' %}
+                        {% elsif is_pickup_only_product %}
+                        {% render 'icon-unchecked' %}
+                        {% else %}
+                        {% render 'icon-checked' %}
+                        {% endif %}
+                        {% else %}
+                        {% render 'icon-unchecked' %}
+                        {% endif %}
+                        <span>Delivery</span>
+                    </button>
+                    <button data-id-btn="clcl">
+                        {% if product.available %}
+                            {% if is_preorder_product %}
+                                {% render 'icon-coming' %}
+                            {% else %}
+                                {% render 'icon-checked' %}
+                            {% endif %}
+                        {% else %}
+                            {% render 'icon-unchecked' %}
+                        {% endif %}
+                        <span>Click & Collect</span>
+                      	<span id="clcl-tooltips" class="tooltip">
+                           <!-- <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="15" height="15" viewBox="0 0 172 172" style=" margin-left: 5px; fill:#000000;">
+                              <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal">
+                                 <path d="M0,172v-172h172v172z" fill="none"></path>
+                                 <g fill="black">
+                                    <path d="M86,6.88c-43.65603,0 -79.12,35.46397 -79.12,79.12c0,43.65603 35.46397,79.12 79.12,79.12c43.65603,0 79.12,-35.46397 79.12,-79.12c0,-43.65603 -35.46397,-79.12 -79.12,-79.12zM86,13.76c39.93779,0 72.24,32.30221 72.24,72.24c0,39.93779 -32.30221,72.24 -72.24,72.24c-39.93779,0 -72.24,-32.30221 -72.24,-72.24c0,-39.93779 32.30221,-72.24 72.24,-72.24zM86.99437,43.02687c-12.8312,0 -21.33896,7.77483 -23.19312,19.61875c-0.1204,0.74304 0.24461,1.23335 0.98765,1.35719l7.7736,1.3639c0.74304,0.12384 1.23335,-0.24805 1.35719,-0.98765c1.4792,-7.52672 5.91858,-11.72422 12.8261,-11.72422c7.0348,0 11.96609,4.44426 11.96609,11.47562c0,4.1968 -1.4778,7.03351 -5.79156,12.95375l-8.27078,11.34797c-2.59032,3.58104 -3.69531,6.17297 -3.69531,11.11281v5.0525c0,0.7396 0.48993,1.23657 1.22953,1.22281h8.14312c0.7396,0 1.22953,-0.48993 1.22953,-1.22953v-3.94391c0,-4.19336 0.74508,-5.9218 3.21156,-9.25172l8.26406,-11.35469c4.1968,-5.79984 6.28875,-10.11397 6.28875,-16.03765c0,-12.21544 -9.00673,-20.97594 -22.32641,-20.97594zM81.57235,115.21313c-0.74304,0 -1.23625,0.49665 -1.23625,1.23625v10.60891c0,0.7396 0.48977,1.22953 1.23625,1.22953h9.37937c0.73616,0 1.22953,-0.48649 1.22953,-1.22953v-10.60891c0,-0.73616 -0.48993,-1.23625 -1.22953,-1.23625z"></path>
+                                 </g>
+                              </g>
+                           </svg> -->
+                            {% render 'icon-theme-174' %}
+                           <span id="clcl-tooltip-text" class="tooltiptext">All Click and Collect orders are prepared at our Distribution Centre</span>
+                        </span>
+                        <span class="show_test-250">Free</span>
+                    </button>
+
+                    {% if is_preorder_product == false %}
+                        <button data-id-btn="buys">
+                            <span>Buy in Store</span>
+                        </button>
+                    {% endif %}
+                  </div>
+
+
+
+                <!-- Converionry - Update Shipping estimate layout 070722-->
+                {%- liquid
+                    assign currentTime = 'now' | date: '%s'
+                -%}
+
+                <div class="list-tab">
+                    {%- include 'product-estimate-shipping--delivery-tab' -%}   
+                    {%- include 'product-estimate-shipping--click-collect-tab' -%}   
+                    {%- include 'product-estimate-shipping--available-in-store-tab' -%}   
+
+
+                </div>
+              </div>
+
+              <!------- test 282 ------->
+
+              {% assign image_url = 'plusIcon.png' | asset_url %}
+              {% assign image_url_minus = 'minusIcon.png' | asset_url %}
+              <script>
+                document.documentElement.style.setProperty('--icon-img', 'url({{ image_url }}');
+                document.documentElement.style.setProperty('--iconn-imgg', 'url({{ image_url_minus }}');
+             </script>
+          
+
+              <div class="show-test-282">
+                <div id="only-available-block" class="d-none">
+                  <p id="only-available-msg">Buy in store only available at <b><span id="only-available-branch"></span></b></p>
+                  <div id="only-available-arrow-block">
+                    <div></div>
+                    <div></div>
+                    <div id="only-available-arrow">▼</div>
+                  </div>
+                </div>
+                {%- liquid
+                   assign currentTime = 'now' | date: '%s'
+                -%}
+
+                <div class="list-btn">
+                  <button data-id-btn="deli" id="DeliveryBTN">
+                      {% if product.available %}
+                      {% if is_preorder_product %}
+                      {% render 'icon-coming' %}
+                      {% elsif is_pickup_only_product %}
+                      {% render 'icon-unchecked' %}
+                      {% else %}
+                      {% render 'icon-checked' %}
+                      {% endif %}
+                      {% else %}
+                      {% render 'icon-unchecked' %}
+                      {% endif %}
+                      <span>Delivery</span>
+                      <img src="{{ 'infodelivery.png' | asset_url }}" alt="Delivery">
+
+                  </button>
+
+                  <div class="list-tab">
+                    {%- include 'product-estimate-shipping--delivery-tab-test-282' -%}   
+                </div>
+
+                  
+                  <button data-id-btn="clcl" id="clickUpcollect">
+                      {% if product.available %}
+                          {% if is_preorder_product %}
+                              {% render 'icon-coming' %}
+                          {% else %}
+                              {% render 'icon-checked' %}
+                          {% endif %}
+                      {% else %}
+                          {% render 'icon-unchecked' %}
+                      {% endif %}
+                      <span clas="clickcollect">Click & Collect</span>
+                      </span>
+                      <span class="show_test-250">Free</span>
+                     
+
+                  </button>
+
+                  <div class="list-tab">
+                      {%- include 'product-estimate-shipping--click-collect-tab' -%}   
+                  </div>
+
+                
+                  {% if is_preorder_product == false %}
+                      <button data-id-btn="buys" id="IdStoreBuy">
+                          <span>Buy in Store</span>
+                      </button>
+                  {% endif %}
+
+                  <div class="list-tab">
+                      {%- include 'product-estimate-shipping--available-in-store-tab' -%} 
+                  </div>
+
+                  
+                </div>
+
+
+            </div>
+
+              <!------- test 282 ------->
+
+
+
+
+              {% assign collection_target = "not-tcg" %}
+              {% assign is_not_tcg_product = false %}
+
+              {% for collection in product.collections %}
+                {% if collection.handle == collection_target %}
+                  {% assign is_not_tcg_product = true %}
+                {% endif %}
+              {% endfor %}
+
+              {% if settings.product_returns_info and is_not_tcg_product %}
+              <div class="returns-policy">
+                <div class="returns-policy__icon">
+                  <svg width="28" height="27" viewBox="0 0 28 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15.8608 17.5775V16.0775H27.25C27.6642 16.0775 28 16.4133 28 16.8275V26.1021C28 26.5163 27.6642 26.8521 27.25 26.8521H1.25C0.835775 26.8521 0.5 26.5163 0.5 26.1021V7.86835H2V25.3521H26.5V17.5775H15.8608Z" fill="#F0F0F0"/>
+                    <path d="M16.4192 13.7092V19.965C16.4192 20.5749 15.7297 20.9298 15.2333 20.5753L10.8529 17.4472C10.4341 17.1483 10.4341 16.5257 10.8529 16.2265L15.2333 13.0986C15.7297 12.7441 16.4192 13.0989 16.4192 13.709V13.7092Z" fill="#F0F0F0"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M27.25 7.25C27.6642 7.25 28 7.66422 28 8V12.5C28 12.9142 27.6642 13.25 27.25 13.25C26.8358 13.25 26.5 12.8358 26.5 12.5V8C26.5 7.58578 26.8358 7.25 27.25 7.25Z" fill="#F0F0F0"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M14.25 1.5C14.6642 1.5 15 1.91422 15 2.25V7.75C15 8.16423 14.6642 8.5 14.25 8.5C13.8358 8.5 13.5 8.08578 13.5 7.75V2.25C13.5 1.83578 13.8358 1.5 14.25 1.5Z" fill="#F0F0F0"/>
+                    <path d="M1.25365 8.64875C0.749735 8.64875 0.389235 8.16175 0.53636 7.67983L2.52611 1.16066C2.6223 0.845069 2.91348 0.629578 3.2434 0.629578H25.2605C25.5902 0.629578 25.8814 0.844911 25.9778 1.16033L27.9711 7.6795C28.1184 8.16141 27.7579 8.64875 27.2538 8.64875H1.25365ZM26.2403 7.14875L24.7057 2.12958H3.79857L2.26682 7.14875H26.2403Z" fill="#F0F0F0"/>
+                  </svg>
+                </div>
+
+
+                <p class="returns-policy__text">
+                 {{ settings.product_returns_info }}
+                </p>
+              </div>
+              {% endif %}
+          </div>
+
+        <!-- end test_107 -->
+    {%- endif -%}
+{% endcapture %}
+{% capture visitors_html %}
+    {%- if show_visitors -%}
+        <div class="product-page-info__visitors mt-25 mb-25">
+            <div class="visitors ls-0 text-center{% if template_layout != '5' %} text-lg-left{% endif %} js-visitors" data-min="{{ settings.product_visitors_min }}" data-max="{{ settings.product_visitors_max }}" data-interval-min="{{ settings.product_visitors_interval_min }}" data-interval-max="{{ settings.product_visitors_interval_max }}" data-stroke="{{ settings.product_visitors_stroke }}">
+                {%- assign visitors_random_diff = settings.product_visitors_max | minus: settings.product_visitors_min -%}
+                {%- assign visitors_random = "now" | date: "%N" | modulo: visitors_random_diff | plus: settings.product_visitors_min -%}
+                {% capture visitors_counter_html %}<span class="visitors__counter d-inline-block px-8" data-js-counter>{{ visitors_random }}</span>{% endcapture %}
+                {{ 'products.product.visitors_html' | t: counter: visitors_counter_html }}
+            </div>
+        </div>
+    {%- endif -%}
+{% endcapture %}
+{% capture free_shipping_html %}
+    {%- if show_free_shipping and settings.cart_show_free_shipping -%}
+        <div class="product-page-info__free-shipping mt-10 mb-15">
+            {% render 'free-shipping' with mobile_centered: true centered: centered %}
+        </div>
+    {%- endif -%}
+{% endcapture %}
+{% capture payments_html %}
+    {%- if show_payments -%}
+        <div class="product-page-info__payments product-page-info__field d-flex flex-column align-items-start{% if template_layout == '5' %} align-items-lg-center{% endif %} mt-20 mb-10">
+            <label class="mb-6">{{ 'products.product.payments' | t }}:</label>
+            {% include 'payments' with payments_sequence: settings.payment_sequence_product %}
+        </div>
+    {%- endif -%}
+{% endcapture %}
+{%- if show_reviews -%}
+    {% capture reviews_html %}
+        {%- if settings.reviews_type == 'default' -%}
+            {% render 'product-get-review' with id: id hide_empty: hide_empty_reviews hide_counter: hide_reviews_counter hide_mobile_counter: hide_reviews_mobile_counter %}
+        {%- elsif settings.reviews_type == 'growave' and settings.app_growave_enable == true -%}
+            {% capture the_snippet_review_avg %}{% render 'ssw-widget-avg-rate-profile' %}{% endcapture %}
+            {%- if hide_empty_reviews and product.metafields.ssw['review'].avg == 0 -%}
+                {%- assign hide_growave_review = true -%}
+            {%- endif -%}
+            {%- unless the_snippet_review_avg contains 'Liquid error' or hide_growave_review -%}
+                <div class="mb-5">
+                    {{ the_snippet_review_avg }}
+                </div>
+            {%- endunless -%}
+        {%- endif -%}
+    {% endcapture %}
+{%- endif -%}
+
+{%- case template_layout -%}
+{%- when '1' -%}
+    <div class="product-page-info" data-js-sticky-sidebar-body>
+        {%- if show_label_in_stock or show_label_pre_order or show_label_out_stock or show_label_sale or show_label_new or show_label_hot -%}
+            <div class="product-page-info__labels d-flex justify-content-start">
+                {%- if show_label_hot -%}
+                    {% include 'product-get-label-hot' %}
+                {%- endif -%}
+                {%- if show_label_new -%}
+                    {% include 'product-get-label-new' %}
+                {%- endif -%}
+                {%- if show_label_sale -%}
+                    {% include 'product-get-label-save' %}
+                {%- endif -%}
+                {%- if show_label_in_stock -%}
+                    {% include 'product-get-label-in-stock' %}
+                {%- endif -%}
+                {%- if show_label_pre_order -%}
+                    {% include 'product-get-label-pre-order' %}
+                {%- endif -%}
+                {%- if show_label_out_stock -%}
+                    {% include 'product-get-label-out-stock' %}
+                {%- endif -%}
+                {% if is_preorder_product %}
+                  <div id="preorder-date-block"></div>
+                {% endif %}
+				{% include 'product-get-label-custom' %} <!-- Zeta Digital - Display Custom Badge (08/10/2020) -->
+            </div>
+        {%- endif -%}
+        {%- if show_collections and product.collections.size > 0 -%}
+            <div class="product-page-info__collections mb-3 text-center text-lg-left">
+                {% render 'product-get-collections' with product: product %}
+            </div>
+        {%- endif -%}
+        <div class="product-page-info__title text-left">
+            {%- if is_quick_view -%}
+                <a href="{{ url }}">{{ title }}</a>
+            {%- else -%}
+                <h1 class="m-0">{{ title }}</h1>
+            {%- endif -%}
+        </div>
+		<!-- Zeta Digital - Display Judge Me Stars Widget Start -->
+        <div class="product-page-info__reviews mb-15 text-left">
+          {% render 'judgeme_widgets', widget_type: 'judgeme_preview_badge', jm_style: '', concierge_install: false, product: product %}
+        </div>
+        <!-- Zeta Digital - Display Judge Me Stars Widget End -->
+        {%- if show_reviews -%}
+            <div class="product-page-info__reviews text-center text-lg-left">
+                {{ reviews_html }}
+            </div>
+        {%- endif -%}
+        {%- if show_sku or show_barcode or show_availability or show_type or show_vendor -%}
+            <div class="product-page-info__details mb-25 text-left">
+                {%- if show_sku -%}
+                    <div class="product-page-info__sku{% if sku == blank %} d-none-important{% endif %} mb-5">
+                        <p class="m-0" data-js-product-sku>{{ 'products.product.sku' | t }}: <span>{{ sku }}</span></p>
+                    </div>
+                {%- endif -%}
+                {%- if show_barcode -%}
+                    <div class="product-page-info__barcode{% if barcode == blank %} d-none-important{% endif %} mb-5">
+                        <p class="m-0" data-js-product-barcode>{{ 'products.product.barcode' | t }}: <span>{{ barcode }}</span></p>
+                    </div>
+                {%- endif -%}
+                {%- if show_availability -%}
+                    <div class="product-page-info__availability mb-5">
+                        {%- if quantity == 1 -%}
+                            {%- capture item -%}{{ 'layout.cart.items_count.one' | t }}{%- endcapture -%}
+                        {%- else -%}
+                            {%- capture item -%}{{ 'layout.cart.items_count.other' | t }}{%- endcapture -%}
+                        {%- endif -%}
+                        <p class="m-0" data-js-product-availability data-availability="{% if available %}true{% else %}false{% endif %}">{{ 'products.product.availability' | t }}: <span>{% if available %}{% if quantity > 0 %}{{ 'products.product.availability_value_in_stock' | t: count: quantity, item: item }}{% else %}{{ 'products.product.availability_value_in_stock_without_counter' | t }}{% endif %}{% else %}{{ 'products.product.availability_value_out_stock' | t }}{% endif %}</span></p>
+                    </div>
+                {%- endif -%}
+                {%- if show_type -%}
+                    <div class="product-page-info__type{% if type == blank %} d-none-important{% endif %} mb-5">
+                        <p class="m-0" data-js-product-type>{{ 'products.product.type' | t }}: <span>{{ type }}</span></p>
+                    </div>
+                {%- endif -%}
+                {%- if show_vendor -%}
+                    <div class="product-page-info__vendor{% if vendor == blank %} d-none-important{% endif %} mb-5">
+                        <p class="m-0" data-js-product-vendor>{{ 'products.product.vendor' | t }}: <span>{{ vendor }}</span></p>
+                    </div>
+                {%- endif -%}
+            </div>
+        {%- endif -%}
+        
+        <!--Conversionry - Add product detail table 020822-->
+        {%- render 'product-detail-table', type: 'short' -%}
+
+        {%- if show_price -%}
+            <div class="mb-25 mt-15">
+                <div class="product-page-info__price text-left">
+                    <div class="product-price-wrapper for-desktop">
+                        {% assign device = 'desktop' %}
+                        {% render 'product-get-price' with price: price compare_at_price: compare_at_price device:device %}
+                        {%- assign show_price_match = true -%}
+                      	{% for tag in product.tags %}
+                    		{% if tag contains 'preorder' %}
+                      			{%- assign show_price_match = false -%}
+							{% endif %}
+						{% endfor %}
+                    	{% if type == 'Trading Card Games' or type == 'Gift Cards' or type == 'Sports Cards' or type == 'Single Cards' %}
+                      		{%- assign show_price_match = false -%}
+                        {% endif %}
+
+                        <!--Conversionry – Great Price Guaranteed (26/10/21) -->
+                        {%- render 'item-116' -%}
+                      	{% if show_price_match and product_collection != 'sports-collectables' %}
+                          <div class="show-test_42">
+                              <div class="price-match-btn js">
+                                  {% render 'icon-noun-price' %}
+                                  <span>{{ 'products.product.price_match' | t }}</span>
+                              </div>
+                          </div>
+                          <!--Conversionry – Best Price (03/24) -->
+                          <div class="random-price-wrapper">
+                              <div class="price-match-btn js">
+                                  {% render 'icon-best-price' %}
+                                  <div class="random-price-container">
+                                    <span class="random-price-match-text">{{ 'products.product.price_match' | t }}</span>
+                                    <small>For Guaranteed Savings</small>
+                                  </div>
+                              </div>
+                          </div>
+                     	{% endif %}
+                  	</div>
+
+                    <div class="product-price-wrapper for-mobile">
+                        {% assign device = 'mobile' %}
+                        {% if show_price_match and product_collection != 'sports-collectables' %}
+                          {% assign show_price_match = true %} 
+                     	{% endif %}
+                        {% render 'product-get-price' with price: price compare_at_price: compare_at_price device:device show_price_match:show_price_match %}
+                        <!--Conversionry – Great Price Guaranteed (26/10/21) -->
+                        {%- render 'item-116' -%}
+                      	
+                  	</div>
+
+                    {%- render 'fomo-product', viewNumber: randomView, soldNumber: randomSold -%}
+
+					<!-- Zeta Digital - Product Payment Options -->
+                  	
+                    <div id="product-payment-option-desktop">
+                      <hr style="margin-top: 15px; margin-bottom: 15px;">
+                        {%- render 'product-payment-option', price: price -%}
+                      <hr style="margin-top: 15px; margin-bottom: -5px;">
+                    </div> 
+                </div>
+                {%- if show_sale_details -%}
+                    <p class="product-page-info__price-sale-details mt-5 mt-lg-10 text-center text-lg-left{% unless compare_at_price > price %} d-none-important{% endunless %}"
+                       data-js-product-price-sale-details>
+                        {%- if compare_at_price > price -%}
+                            {%- assign price_save = compare_at_price | minus: price -%}
+                            {%- assign price_save_money = price_save | money -%}
+                            {%- assign price_save_procent = price | times: 100 | divided_by: compare_at_price | minus: 100 | times: -1 -%}
+                            {{ 'products.product.price_sale_details_html' | t: price: price_save_money, procent: price_save_procent }}
+                        {%- endif -%}
+                    </p>
+                {%- endif -%}
+                {%- if show_taxes -%}
+                    {%- if shop.taxes_included or shop.shipping_policy.body != blank -%}
+                        <div class="product__policies">
+                            {%- if shop.taxes_included -%}
+                                {{ 'products.product.include_taxes' | t }}
+                            {%- endif -%}
+                            {%- if shop.shipping_policy.body != blank -%}
+                                {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+                            {%- endif -%}
+                        </div>
+                    {%- endif -%}
+                {%- endif -%}
+                {%- if settings.app_klarna_enable -%}
+                    <div class="klarna-message-info"></div>
+                {%- endif -%}
+            </div>
+        {%- endif -%}
+      <div class="price-match-popup-bg hide"></div>
+      <div class="price-match-popup hide">
+          <div class="close-price-match-popup-btn js js-close-price">
+              {% render 'icon-close' %}
+          </div>
+          <div class="price-match-step-1">
+              <p>{{ 'products.product.popup_text_1' | t }}</p>
+              <h3>
+                  {{ 'products.product.popup_heading' | t }}
+                  {% render 'icon-noun-price' %}
+              </h3>
+              <p>{{ 'products.product.popup_text_2' | t }}</p>
+              <div class="price-match-popup-btn js">
+                 {{ 'products.product.price_match_btn' | t }}
+              </div>
+              <a href="/pages/competitive-pricing-policy">{{ 'products.product.popup_policy' | t }}</a>
+          </div>
+          <div class="price-match-step-2 hide">
+              <div style="margin:0 auto;" class="pxFormGenerator" id="F3SCD78_9zP4qwhgfIFTvA"></div>
+          </div>
+      </div>
+        {{ description_html }}
+        {{ countdown_html }}
+        {{ stock_countdown_html }}
+        {{ visitors_html }}
+        <div class="show-test_199" style="display: none!important;">
+          <hr style="margin-top: 15px; margin-bottom: 15px;">
+            {%- render 'product-payment-option', price: price -%}
+        </div> 
+  
+        {% include 'product-point-earned' with product: product, current_variant: current_variant %}
+  
+        <div id="product-payment-option-mobile" class="show-test_199">
+          <button type="submit" data-product-quantity='{{ quantity }}' class="btn{% if settings.product_button_addtocart_size == 'large' %} btn--size-large{% endif %} btn--full btn--status{% if settings.buttons_animation_icon_enable %} btn--animated{% endif %}{% if settings.cart_ajax %} js-product-button-add-to-cart{% endif %}" name="add"{% unless is_quick_view %} data-js-trigger-id="add-to-cart" data-js-button-add-to-cart-clone-id="footbar"{% endunless %} data-js-product-button-add-to-cart{% unless current_variant.available %} disabled="disabled" data-button-status="sold-out"{% else %}{% if enable_select_variant_button %} data-button-status="select" data-button-select-disable{% endif %}{% endunless %}>
+              <span class="d-flex flex-center"><i class="btn__icon mr-5 mb-4">{% include cart_icon_name %}</i><span class="btn__text">{{ 'products.product.add_to_cart.title' | t }}</span></span>
+              <span class="d-flex flex-center" data-button-content="added"><i class="mr-5 mb-4">{% render 'icon-theme-110' %}</i>{{ 'products.product.add_to_cart.added' | t }}</span>
+              <span class="d-flex flex-center" data-button-content="sold-out">{% if is_preorder_product == false %}{{ 'products.product.add_to_cart.sold_out' | t }}{% else %}{%- if is_coming_soon_product == false -%}PRE ORDER LIMIT REACHED{%- else -%}COMING SOON{%- endif -%}{% endif %}</span>
+              {%- if enable_select_variant_button -%}
+                  <span class="d-flex flex-center" data-button-content="select"><i class="btn__icon mr-5 mb-4">{% include cart_icon_name %}</i><span class="btn__text">{{ 'products.product.add_to_cart.select_options' | t }}</span></span>
+              {%- endif -%}
+          </button>
+        </div>
+      
+        <div id="add-to-cart-block">
+            {% form "product", product, id: null, class: "d-flex flex-column w-100 m-0", data-js-product-form: '' %}
+
+                {%- if type == 'Gift Cards' -%}
+              
+                <div class="customer mb-10"><script src="//cdn.shopify.com/s/files/1/0761/3844/7136/t/59/assets/recipient-form.js?v=180479878202402657901720594353" defer="defer"></script>
+                    <recipient-form class="recipient-form" data-section-id="template--23074066071840__main" data-product-variant-id="45228422463776">
+                      <input id="Recipient-checkbox-template--23074066071840__main" type="checkbox" onclick='openRecipient();' class='mb-10' name="properties[__shopify_send_gift_card_to_recipient]">
+                      <label class="recipient-checkbox mb-10" for="Recipient-checkbox-template--23074066071840__main">
+                        
+                        <span>I want to send this as a gift</span>
+                      </label>
+                      <div class="recipient-fields" style='display:none;'>
+                        <hr>
+                        <div class="recipient-fields__field">
+                          <div class="field">
+                            <input class="field__input mt-20" id="Recipient-email-template--23074066071840__main" type="email" placeholder="Recipient Email" name="properties[Recipient email]" value="" aria-invalid="false">
+                          </div>
+                        </div>
+                  
+                        <div class="recipient-fields__field">
+                          <div class="field">
+                            <input class="field__input" autocomplete="name" type="text" id="Recipient-name-template--23074066071840__main" name="properties[Recipient name]" placeholder="Recipient Name" value="" aria-invalid="false">
+                          </div>
+                        </div>
+                  
+                  
+                        <div class="recipient-fields__field">
+                          <div class="field">
+                            <textarea rows="2" id="Recipient-message-template--23074066071840__main" class="text-area field__input" name="properties[Message]" maxlength="200" placeholder="Message for Recipient *(200 characters max)" aria-label="Message (optional) 200 characters max" aria-invalid="false"></textarea>
+                          </div>
+                        </div>
+                  
+                        <div class="recipient-fields__field">
+                          <div class="field">
+                            <label class="form__label recipient-form-field-label recipient-form-field-label--space-between mb-10"><span>Send on date : </span></label>
+                            <input class="field__input text-body mb-10" autocomplete="send_on" type="date" id="Recipient-send-on-template--23074066071840__main" name="properties[Send on]" placeholder="YYYY-MM-DD" pattern="\d{4}-\d{2}-\d{2}" value="" aria-invalid="false">
+                          </div>
+                        </div>
+                      </div>
+                      <input type="hidden" name="properties[__shopify_send_gift_card_to_recipient]" value="if_present" id="Recipient-control-template--23074066071840__main" disabled="">
+                      <input type="hidden" name="properties[__shopify_offset]" value="-600" id="Recipient-timezone-offset-template--23074066071840__main">
+                    </recipient-form>
+                  <hr>
+                  </div>
+                {%- endif -%}
+              
+                <input type="hidden" name="variant_id" value="{{ current_variant.id }}" data-js-product-variant-input>
+                {%- if show_options and show_custom_options -%}
+                    {%- unless product.has_only_default_variant -%}
+                        <div class="product-page-info__options mb-15">
+                            {%- unless is_quick_view -%}
+                                {%- assign trigger_id = 'footbar' -%}
+                            {%- endunless -%}
+                            {% include 'product-get-options' with options_type: 2 options_show_title: true change_history: change_history %}
+                        </div>
+                    {%- endunless -%}
+                {%- endif -%}
+                {%- if show_button_add_to_cart or show_options -%}
+                    <div class="product-page-info__variants mb-15{% if show_options == false or show_custom_options %} d-none{% endif %}">
+                        {% render 'product-get-variants' with product: product current_variant: current_variant show_options: show_options show_custom_options: show_custom_options %}
+                    </div>
+                {%- endif -%}
+
+
+                <!--Conversionry - Update estimate shipping style 010722 -->
+                <div class="est-sameday est-container est-dispatch hidden_task show-test_131">
+                  <p class="js-msg-countdown">Order within <span dispatch-time-countdown></span> for <span dispatch-day-countdown></span> dispatched</p>
+                </div>
+
+
+                {%- if show_quantity and settings.product_info_button_layout != '3' -%}
+                    <div class="product-page-info__field product-page-info__quantity mb-20">
+                        {%- unless is_quick_view -%}
+                            {%- assign quantity_connect = 'footbar' -%}
+                        {%- endunless -%}
+                    </div>
+                {%- endif -%}
+                {%- if show_notes -%}
+                    <div class="product-page-info__field product-page-info__notes mb-20">
+                        <label for="notes">{{ 'products.product.notes_label' | t }}</label>
+                        <textarea id="notes" name="properties[{{ 'products.product.notes_label' | t }}]" placeholder="{{ 'products.product.notes_placeholder' | t }}" class="mb-0"></textarea>
+                    </div>
+                {%- endif -%}
+
+
+
+                {% include 'product-page-get-buttons' %}
+                {%- if settings.app_klarna_enable -%}
+                    <div class="klarna-message-info2"></div>
+                {%- endif -%}
+                {{ free_shipping_html }}
+                {{ payments_html }}
+                {%- if show_social_share_buttons -%}
+                    <div class="product-page-info__share product-page-info__field mt-20 mb-10">
+                        <label class="mb-6">{{ 'products.product.share' | t }}</label>
+                        {% render 'social-share' share_type: social_share_buttons_type share_title: title share_permalink: url share_image: product.featured_media %}
+                    </div>
+                {%- endif -%}
+                <!-- Zeta Digital - Large Item Shipping Calculator Start -->
+          		{% if product.id == 4430014087283 or product.id == 4646969737331 or product.id == 4646968295539 or product.id == 6834612895859 %}
+          		<div class="large-size-shipping-calculator">
+            		<div class="product-page-info__text-countdown text-center">
+                		<div class="text-countdown px-8 py-3 text-center">
+                    		<h5 class="mb-5"><i class="mr-4">{% render 'icon-theme-127' %}</i>Large Item Shipping Calculator</h5>
+                    		<label>Please enter the postcode</label>
+                          	<input type="text" id="postcode-check" />
+                          	<a id="get-delivery-options-btn">Check</a>
+                          	<div class="shipping_result">
+                              <ul></ul>
+                            </div>
+                		</div>
+
+            		</div>
+        		</div>
+                <input type="hidden" id="productId" value="{{ product.id }}">
+          		<input type="hidden" id="productWeight" value="{% for variant in product.variants %}{{ variant.weight }}{% endfor %}">
+          		{%- endif -%}
+          		<!-- Zeta Digital - Large Item Shipping Calculator End -->
+                {%- if full_details -%}
+                    <div class="product-page-info__full-details d-flex justify-content-center justify-content-lg-start mt-15">
+                        <a href="{{ url }}" class="btn-link h6">{{ 'products.product.button_full_details' | t }}</a>
+                    </div>
+                {%- endif -%}
+            {% endform %}
+        </div>
+        {% if is_preorder_product %}
+        <div id="preorder-date-block">
+        </div>
+        {% endif %}
+        <div id="product-payment-option-mobile" class="hide-test_199-mobile">
+          <hr style="margin-top: 15px; margin-bottom: 15px;">
+            {%- render 'product-payment-option', price: price -%}
+          <hr style="margin-top: 15px; margin-bottom: -5px;">
+        </div> 
+      	{{ text_countdown_html }}
+    </div>
+{%- when '2' -%}
+    <div class="product-page-info" data-js-sticky-sidebar-body>
+        {%- if show_label_in_stock or show_label_pre_order or show_label_out_stock or show_label_sale or show_label_new or show_label_hot -%}
+            <div class="product-page-info__labels d-flex justify-content-start">
+                {%- if show_label_hot -%}
+                    {% include 'product-get-label-hot' %}
+                {%- endif -%}
+                {%- if show_label_new -%}
+                    {% include 'product-get-label-new' %}
+                {%- endif -%}
+                {%- if show_label_sale -%}
+                    {% include 'product-get-label-save' %}
+                {%- endif -%}
+                {%- if show_label_in_stock -%}
+                    {% include 'product-get-label-in-stock' %}
+                {%- endif -%}
+                {%- if show_label_pre_order -%}
+                    {% include 'product-get-label-pre-order' %}
+                {%- endif -%}
+                {%- if show_label_out_stock -%}
+                    {% include 'product-get-label-out-stock' %}
+                {%- endif -%}
+                {% if is_preorder_product %}
+                  <div id="preorder-date-block"></div>
+                {% endif %}
+				{% include 'product-get-label-custom' %} <!-- Zeta Digital - Display Custom Badge (08/10/2020) -->
+            </div>
+        {%- endif -%}
+        {%- if show_collections and product.collections.size > 0 -%}
+            <div class="product-page-info__collections mb-3 text-center text-lg-left">
+                {% render 'product-get-collections' with product: product %}
+            </div>
+        {%- endif -%}
+        <div class="product-page-info__title text-left">
+            {%- if is_quick_view -%}
+                <a href="{{ url }}">{{ title }}</a>
+            {%- else -%}
+                <h1 class="m-0">{{ title }}</h1>
+            {%- endif -%}
+        </div>
+		<!-- Zeta Digital - Display Judge Me Stars Widget Start -->
+        <div class="product-page-info__reviews mb-15 text-left">
+          {% render 'judgeme_widgets', widget_type: 'judgeme_preview_badge', jm_style: '', concierge_install: false, product: product %}
+        </div>
+        <!-- Zeta Digital - Display Judge Me Stars Widget End -->
+        {%- if show_reviews -%}
+            <div class="product-page-info__reviews text-center text-lg-left">
+                {{ reviews_html }}
+            </div>
+        {%- endif -%}
+        {%- if show_sku or show_barcode or show_availability or show_type or show_vendor -%}
+            <div class="product-page-info__details mb-25 text-left">
+                {%- if show_sku -%}
+                    <div class="product-page-info__sku{% if sku == blank %} d-none-important{% endif %} mb-5">
+                        <p class="m-0" data-js-product-sku>{{ 'products.product.sku' | t }}: <span>{{ sku }}</span></p>
+                    </div>
+                {%- endif -%}
+                {%- if show_barcode -%}
+                    <div class="product-page-info__barcode{% if barcode == blank %} d-none-important{% endif %} mb-5">
+                        <p class="m-0" data-js-product-barcode>{{ 'products.product.barcode' | t }}: <span>{{ barcode }}</span></p>
+                    </div>
+                {%- endif -%}
+                {%- if show_availability -%}
+                    <div class="product-page-info__availability mb-5">
+                        {%- if quantity == 1 -%}
+                            {%- capture item -%}{{ 'layout.cart.items_count.one' | t }}{%- endcapture -%}
+                        {%- else -%}
+                            {%- capture item -%}{{ 'layout.cart.items_count.other' | t }}{%- endcapture -%}
+                        {%- endif -%}
+                        <p class="m-0" data-js-product-availability data-availability="{% if available %}true{% else %}false{% endif %}">{{ 'products.product.availability' | t }}: <span>{% if available %}{% if quantity > 0 %}{{ 'products.product.availability_value_in_stock' | t: count: quantity, item: item }}{% else %}{{ 'products.product.availability_value_in_stock_without_counter' | t }}{% endif %}{% else %}{{ 'products.product.availability_value_out_stock' | t }}{% endif %}</span></p>
+                    </div>
+                {%- endif -%}
+                {%- if show_type -%}
+                    <div class="product-page-info__type{% if type == blank %} d-none-important{% endif %} mb-5">
+                        <p class="m-0" data-js-product-type>{{ 'products.product.type' | t }}: <span>{{ type }}</span></p>
+                    </div>
+                {%- endif -%}
+                {%- if show_vendor -%}
+                    <div class="product-page-info__vendor{% if vendor == blank %} d-none-important{% endif %} mb-5">
+                        <p class="m-0" data-js-product-vendor>{{ 'products.product.vendor' | t }}: <span>{{ vendor }}</span></p>
+                    </div>
+                {%- endif -%}
+            </div>
+        {%- endif -%}
+        
+        <!--Conversionry - Add product detail table 020822-->
+        {%- render 'product-detail-table', type: 'short' -%}
+
+        {%- if show_price -%}
+            <div class="mb-25 mt-15">
+                <div class="product-page-info__price text-left">
+                    <div class="product-price-wrapper for-desktop">
+                        {% assign device = 'desktop' %}
+                        {% render 'product-get-price' with price: price compare_at_price: compare_at_price device:device %}
+                        {%- assign show_price_match = true -%}
+                      	{% for tag in product.tags %}
+                    		{% if tag contains 'preorder' %}
+                      			{%- assign show_price_match = false -%}
+							{% endif %}
+						{% endfor %}
+                    	{% if type == 'Trading Card Games' or type == 'Gift Cards' or type == 'Sports Cards' or type == 'Single Cards' %}
+                      		{%- assign show_price_match = false -%}
+                        {% endif %}
+
+                        <!--Conversionry – Great Price Guaranteed (26/10/21) -->
+                        {%- render 'item-116' -%}
+                      	{% if show_price_match and product_collection != 'sports-collectables' %}
+                          <div class="show-test_42">
+                              <div class="price-match-btn js">
+                                  {% render 'icon-noun-price' %}
+                                  <span>{{ 'products.product.price_match' | t }}</span>
+                              </div>
+                          </div>
+                          <!--Conversionry – Best Price (03/24) -->
+                          <div class="random-price-wrapper">
+                              <div class="price-match-btn js">
+                                  {% render 'icon-best-price' %}
+                                  <div class="random-price-container">
+                                    <span class="random-price-match-text">{{ 'products.product.price_match' | t }}</span>
+                                    <small>For Guaranteed Savings</small>
+                                  </div>
+                              </div>
+                          </div>
+                     	{% endif %}
+                  	</div>
+
+                    <div class="product-price-wrapper for-mobile">
+                        {% assign device = 'mobile' %}
+                        {% if show_price_match and product_collection != 'sports-collectables' %}
+                          {% assign show_price_match = true %} 
+                     	{% endif %}
+                        {% render 'product-get-price' with price: price compare_at_price: compare_at_price device:device show_price_match:show_price_match %}
+                        <!--Conversionry – Great Price Guaranteed (26/10/21) -->
+                        {%- render 'item-116' -%}
+                      	
+                  	</div>
+
+                    {%- render 'fomo-product', viewNumber: randomView, soldNumber: randomSold -%}
+
+					<!-- Zeta Digital - Product Payment Options -->
+                  	
+                    <div id="product-payment-option-desktop">
+                      <hr style="margin-top: 15px; margin-bottom: 15px;">
+                        {%- render 'product-payment-option', price: price -%}
+                      <hr style="margin-top: 15px; margin-bottom: -5px;">
+                    </div> 
+                </div>
+                {%- if show_sale_details -%}
+                    <p class="product-page-info__price-sale-details mt-5 mt-lg-10 text-center text-lg-left{% unless compare_at_price > price %} d-none-important{% endunless %}"
+                       data-js-product-price-sale-details>
+                        {%- if compare_at_price > price -%}
+                            {%- assign price_save = compare_at_price | minus: price -%}
+                            {%- assign price_save_money = price_save | money -%}
+                            {%- assign price_save_procent = price | times: 100 | divided_by: compare_at_price | minus: 100 | times: -1 -%}
+                            {{ 'products.product.price_sale_details_html' | t: price: price_save_money, procent: price_save_procent }}
+                        {%- endif -%}
+                    </p>
+                {%- endif -%}
+                {%- if show_taxes -%}
+                    {%- if shop.taxes_included or shop.shipping_policy.body != blank -%}
+                        <div class="product__policies">
+                            {%- if shop.taxes_included -%}
+                                {{ 'products.product.include_taxes' | t }}
+                            {%- endif -%}
+                            {%- if shop.shipping_policy.body != blank -%}
+                                {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+                            {%- endif -%}
+                        </div>
+                    {%- endif -%}
+                {%- endif -%}
+                {%- if settings.app_klarna_enable -%}
+                    <div class="klarna-message-info"></div>
+                {%- endif -%}
+            </div>
+        {%- endif -%}
+      <div class="price-match-popup-bg hide"></div>
+      <div class="price-match-popup hide">
+          <div class="close-price-match-popup-btn js js-close-price">
+              {% render 'icon-close' %}
+          </div>
+          <div class="price-match-step-1">
+              <p>{{ 'products.product.popup_text_1' | t }}</p>
+              <h3>
+                  {{ 'products.product.popup_heading' | t }}
+                  {% render 'icon-noun-price' %}
+              </h3>
+              <p>{{ 'products.product.popup_text_2' | t }}</p>
+              <div class="price-match-popup-btn js">
+                 {{ 'products.product.price_match_btn' | t }}
+              </div>
+              <a href="/pages/competitive-pricing-policy">{{ 'products.product.popup_policy' | t }}</a>
+          </div>
+          <div class="price-match-step-2 hide">
+              <div style="margin:0 auto;" class="pxFormGenerator" id="F3SCD78_9zP4qwhgfIFTvA"></div>
+          </div>
+      </div>
+        {{ description_html }}
+        {{ countdown_html }}
+        {{ stock_countdown_html }}
+        {{ visitors_html }}
+        <div class="show-test_199" style="display: none!important;">
+          <hr style="margin-top: 15px; margin-bottom: 15px;">
+            {%- render 'product-payment-option', price: price -%}
+        </div> 
+  
+        {% include 'product-point-earned' with product: product, current_variant: current_variant %}
+  
+        <div id="product-payment-option-mobile" class="show-test_199">
+          <button type="submit" data-product-quantity='{{ quantity }}' class="btn{% if settings.product_button_addtocart_size == 'large' %} btn--size-large{% endif %} btn--full btn--status{% if settings.buttons_animation_icon_enable %} btn--animated{% endif %}{% if settings.cart_ajax %} js-product-button-add-to-cart{% endif %}" name="add"{% unless is_quick_view %} data-js-trigger-id="add-to-cart" data-js-button-add-to-cart-clone-id="footbar"{% endunless %} data-js-product-button-add-to-cart{% unless current_variant.available %} disabled="disabled" data-button-status="sold-out"{% else %}{% if enable_select_variant_button %} data-button-status="select" data-button-select-disable{% endif %}{% endunless %}>
+              <span class="d-flex flex-center"><i class="btn__icon mr-5 mb-4">{% include cart_icon_name %}</i><span class="btn__text">{{ 'products.product.add_to_cart.title' | t }}</span></span>
+              <span class="d-flex flex-center" data-button-content="added"><i class="mr-5 mb-4">{% render 'icon-theme-110' %}</i>{{ 'products.product.add_to_cart.added' | t }}</span>
+              <span class="d-flex flex-center" data-button-content="sold-out">{% if is_preorder_product == false %}{{ 'products.product.add_to_cart.sold_out' | t }}{% else %}{%- if is_coming_soon_product == false -%}PRE ORDER LIMIT REACHED{%- else -%}COMING SOON{%- endif -%}{% endif %}</span>
+              {%- if enable_select_variant_button -%}
+                  <span class="d-flex flex-center" data-button-content="select"><i class="btn__icon mr-5 mb-4">{% include cart_icon_name %}</i><span class="btn__text">{{ 'products.product.add_to_cart.select_options' | t }}</span></span>
+              {%- endif -%}
+          </button>
+        </div>
+      
+        <div id="add-to-cart-block">
+            {% form "product", product, id: null, class: "d-flex flex-column w-100 m-0", data-js-product-form: '' %}
+
+                {%- if type == 'Gift Cards' -%}
+              
+                <div class="customer mb-10"><script src="//cdn.shopify.com/s/files/1/0761/3844/7136/t/59/assets/recipient-form.js?v=180479878202402657901720594353" defer="defer"></script>
+                    <recipient-form class="recipient-form" data-section-id="template--23074066071840__main" data-product-variant-id="45228422463776">
+                      <input id="Recipient-checkbox-template--23074066071840__main" type="checkbox" onclick='openRecipient();' class='mb-10' name="properties[__shopify_send_gift_card_to_recipient]">
+                      <label class="recipient-checkbox mb-10" for="Recipient-checkbox-template--23074066071840__main">
+                        
+                        <span>I want to send this as a gift</span>
+                      </label>
+                      <div class="recipient-fields" style='display:none;'>
+                        <hr>
+                        <div class="recipient-fields__field">
+                          <div class="field">
+                            <input class="field__input mt-20" id="Recipient-email-template--23074066071840__main" type="email" placeholder="Recipient Email" name="properties[Recipient email]" value="" aria-invalid="false">
+                          </div>
+                        </div>
+                  
+                        <div class="recipient-fields__field">
+                          <div class="field">
+                            <input class="field__input" autocomplete="name" type="text" id="Recipient-name-template--23074066071840__main" name="properties[Recipient name]" placeholder="Recipient Name" value="" aria-invalid="false">
+                          </div>
+                        </div>
+                  
+                  
+                        <div class="recipient-fields__field">
+                          <div class="field">
+                            <textarea rows="2" id="Recipient-message-template--23074066071840__main" class="text-area field__input" name="properties[Message]" maxlength="200" placeholder="Message for Recipient *(200 characters max)" aria-label="Message (optional) 200 characters max" aria-invalid="false"></textarea>
+                          </div>
+                        </div>
+                  
+                        <div class="recipient-fields__field">
+                          <div class="field">
+                            <label class="form__label recipient-form-field-label recipient-form-field-label--space-between mb-10"><span>Send on date : </span></label>
+                            <input class="field__input text-body mb-10" autocomplete="send_on" type="date" id="Recipient-send-on-template--23074066071840__main" name="properties[Send on]" placeholder="YYYY-MM-DD" pattern="\d{4}-\d{2}-\d{2}" value="" aria-invalid="false">
+                          </div>
+                        </div>
+                      </div>
+                      <input type="hidden" name="properties[__shopify_send_gift_card_to_recipient]" value="if_present" id="Recipient-control-template--23074066071840__main" disabled="">
+                      <input type="hidden" name="properties[__shopify_offset]" value="-600" id="Recipient-timezone-offset-template--23074066071840__main">
+                    </recipient-form>
+                  <hr>
+                  </div>
+                {%- endif -%}
+              
+                <input type="hidden" name="variant_id" value="{{ current_variant.id }}" data-js-product-variant-input>
+                {%- if show_options and show_custom_options -%}
+                    {%- unless product.has_only_default_variant -%}
+                        <div class="product-page-info__options mb-15">
+                            {%- unless is_quick_view -%}
+                                {%- assign trigger_id = 'footbar' -%}
+                            {%- endunless -%}
+                            {% include 'product-get-options' with options_type: 2 options_show_title: true change_history: change_history %}
+                        </div>
+                    {%- endunless -%}
+                {%- endif -%}
+                {%- if show_button_add_to_cart or show_options -%}
+                    <div class="product-page-info__variants mb-15{% if show_options == false or show_custom_options %} d-none{% endif %}">
+                        {% render 'product-get-variants' with product: product current_variant: current_variant show_options: show_options show_custom_options: show_custom_options %}
+                    </div>
+                {%- endif -%}
+
+
+                <!--Conversionry - Update estimate shipping style 010722 -->
+                <div class="est-sameday est-container est-dispatch hidden_task show-test_131">
+                  <p class="js-msg-countdown">Order within <span dispatch-time-countdown></span> for <span dispatch-day-countdown></span> dispatched</p>
+                </div>
+
+
+                {%- if show_quantity and settings.product_info_button_layout != '3' -%}
+                    <div class="product-page-info__field product-page-info__quantity mb-20">
+                        {%- unless is_quick_view -%}
+                            {%- assign quantity_connect = 'footbar' -%}
+                        {%- endunless -%}
+                    </div>
+                {%- endif -%}
+                {%- if show_notes -%}
+                    <div class="product-page-info__field product-page-info__notes mb-20">
+                        <label for="notes">{{ 'products.product.notes_label' | t }}</label>
+                        <textarea id="notes" name="properties[{{ 'products.product.notes_label' | t }}]" placeholder="{{ 'products.product.notes_placeholder' | t }}" class="mb-0"></textarea>
+                    </div>
+                {%- endif -%}
+
+
+
+                {% include 'product-page-get-buttons' %}
+                {%- if settings.app_klarna_enable -%}
+                    <div class="klarna-message-info2"></div>
+                {%- endif -%}
+                {{ free_shipping_html }}
+                {{ payments_html }}
+                {%- if show_social_share_buttons -%}
+                    <div class="product-page-info__share product-page-info__field mt-20 mb-10">
+                        <label class="mb-6">{{ 'products.product.share' | t }}</label>
+                        {% render 'social-share' share_type: social_share_buttons_type share_title: title share_permalink: url share_image: product.featured_media %}
+                    </div>
+                {%- endif -%}
+                <!-- Zeta Digital - Large Item Shipping Calculator Start -->
+          		{% if product.id == 4430014087283 or product.id == 4646969737331 or product.id == 4646968295539 or product.id == 6834612895859 %}
+          		<div class="large-size-shipping-calculator">
+            		<div class="product-page-info__text-countdown text-center">
+                		<div class="text-countdown px-8 py-3 text-center">
+                    		<h5 class="mb-5"><i class="mr-4">{% render 'icon-theme-127' %}</i>Large Item Shipping Calculator</h5>
+                    		<label>Please enter the postcode</label>
+                          	<input type="text" id="postcode-check" />
+                          	<a id="get-delivery-options-btn">Check</a>
+                          	<div class="shipping_result">
+                              <ul></ul>
+                            </div>
+                		</div>
+
+            		</div>
+        		</div>
+                <input type="hidden" id="productId" value="{{ product.id }}">
+          		<input type="hidden" id="productWeight" value="{% for variant in product.variants %}{{ variant.weight }}{% endfor %}">
+          		{%- endif -%}
+          		<!-- Zeta Digital - Large Item Shipping Calculator End -->
+                {%- if full_details -%}
+                    <div class="product-page-info__full-details d-flex justify-content-center justify-content-lg-start mt-15">
+                        <a href="{{ url }}" class="btn-link h6">{{ 'products.product.button_full_details' | t }}</a>
+                    </div>
+                {%- endif -%}
+            {% endform %}
+        </div>
+        {% if is_preorder_product %}
+        <div id="preorder-date-block">
+        </div>
+        {% endif %}
+        <div id="product-payment-option-mobile" class="hide-test_199-mobile">
+          <hr style="margin-top: 15px; margin-bottom: 15px;">
+            {%- render 'product-payment-option', price: price -%}
+          <hr style="margin-top: 15px; margin-bottom: -5px;">
+        </div> 
+      	{{ text_countdown_html }}
+    </div>
+    {% comment %}
+    <div class="product-page-info">
+        {%- if show_label_in_stock or show_label_pre_order or show_label_out_stock or show_label_sale or show_label_new or show_label_hot -%}
+            <div class="product-page-info__labels d-flex justify-content-center justify-content-lg-start">
+                {%- if show_label_hot -%}
+                    {% include 'product-get-label-hot' %}
+                {%- endif -%}
+                {%- if show_label_new -%}
+                    {% include 'product-get-label-new' %}
+                {%- endif -%}
+                {%- if show_label_sale -%}
+                    {% include 'product-get-label-save' %}
+                {%- endif -%}
+                {%- if show_label_in_stock -%}
+                    {% include 'product-get-label-in-stock' %}
+                {%- endif -%}
+                {%- if show_label_pre_order -%}
+                    {% include 'product-get-label-pre-order' %}
+                {%- endif -%}
+                {%- if show_label_out_stock -%}
+                    {% include 'product-get-label-out-stock' %}
+                {%- endif -%}
+            </div>
+        {%- endif -%}
+        {%- if show_collections and product.collections.size > 0 -%}
+            <div class="product-page-info__collections mb-3 text-center text-lg-left">
+                {% render 'product-get-collections' with product: product %}
+            </div>
+        {%- endif -%}
+        <div class="product-page-info__title text-left">
+            {%- if is_quick_view -%}
+                <a href="{{ url }}">{{ title }}</a>
+            {%- else -%}
+                <h1 class="m-0">{{ title }}</h1>
+            {%- endif -%}
+        </div>
+        {%- if show_reviews -%}
+            <div class="product-page-info__reviews text-left">
+                {{ reviews_html }}
+            </div>
+        {%- endif -%}
+        {%- if show_sku or show_barcode or show_availability or show_type or show_vendor -%}
+            <div class="product-page-info__details mb-25 text-center text-lg-left">
+                {%- if show_sku -%}
+                    <div class="product-page-info__sku{% if sku == blank %} d-none-important{% endif %} mb-5">
+                        <p class="m-0" data-js-product-sku>{{ 'products.product.sku' | t }}: <span>{{ sku }}</span></p>
+                    </div>
+                {%- endif -%}
+                {%- if show_barcode -%}
+                    <div class="product-page-info__barcode{% if barcode == blank %} d-none-important{% endif %} mb-5">
+                        <p class="m-0" data-js-product-barcode>{{ 'products.product.barcode' | t }}: <span>{{ barcode }}</span></p>
+                    </div>
+                {%- endif -%}
+                {%- if show_availability -%}
+                    <div class="product-page-info__availability mb-5">
+                        {%- if quantity == 1 -%}
+                            {%- capture item -%}{{ 'layout.cart.items_count.one' | t }}{%- endcapture -%}
+                        {%- else -%}
+                            {%- capture item -%}{{ 'layout.cart.items_count.other' | t }}{%- endcapture -%}
+                        {%- endif -%}
+                        <p class="m-0" data-js-product-availability data-availability="{% if available %}true{% else %}false{% endif %}">{{ 'products.product.availability' | t }}: <span>{% if available %}{% if quantity > 0 %}{{ 'products.product.availability_value_in_stock' | t: count: quantity, item: item }}{% else %}{{ 'products.product.availability_value_in_stock_without_counter' | t }}{% endif %}{% else %}{{ 'products.product.availability_value_out_stock' | t }}{% endif %}</span></p>
+                    </div>
+                {%- endif -%}
+                {%- if show_type -%}
+                    <div class="product-page-info__type{% if type == blank %} d-none-important{% endif %} mb-5">
+                        <p class="m-0" data-js-product-type>{{ 'products.product.type' | t }}: <span>{{ type }}</span></p>
+                    </div>
+                {%- endif -%}
+                {%- if show_vendor -%}
+                    <div class="product-page-info__vendor{% if vendor == blank %} d-none-important{% endif %} mb-5">
+                        <p class="m-0" data-js-product-vendor>{{ 'products.product.vendor' | t }}: <span>{{ vendor }}</span></p>
+                    </div>
+                {%- endif -%}
+            </div>
+        {%- endif -%}
+        {%- if show_price -%}
+            <div class="mb-25 mt-25">
+                <div class="product-page-info__price text-left">
+                 	<div class="product-price-wrapper">
+                    {% render 'product-get-price' with price: price compare_at_price: compare_at_price %}
+                      {%- assign show_price_match = true -%}
+                      	{% for tag in product.tags %}
+                      		{% if tag contains 'preorder' %}
+                      			{%- assign show_price_match = false -%}
+							{% endif %}
+						{% endfor %}
+                      	{% if type == 'Trading Card Games'  or type == 'Sports Cards' %}
+                      		{%- assign show_price_match = false -%}
+                        {% endif %}
+
+                        <!--Conversionry – Great Price Guaranteed (26/10/21) -->
+                        {%- render 'item-116' -%}
+                      	{% if show_price_match and product_collection != 'sports-collectables' %}
+                          <div class="show-test_42">
+                              <div class="price-match-btn js">
+                                  {% render 'icon-noun-price' %}
+                                  <span>{{ 'products.product.price_match' | t }}</span>
+                              </div>
+                          </div>
+                     	{% endif %}
+                  	</div>
+
+					<!-- Zeta Digital - Product Payment Options -->
+                  	<hr style="margin-top: 15px; margin-bottom: 15px;">
+                    {%- render 'product-payment-option', price: price  -%}
+                  	<hr style="margin-top: 15px; margin-bottom: -5px;">
+                </div>
+                {%- if show_sale_details -%}
+                    <p class="product-page-info__price-sale-details mt-5 mt-lg-10 text-center text-lg-left{% unless compare_at_price > price %} d-none-important{% endunless %}"
+                       data-js-product-price-sale-details>
+                        {%- if compare_at_price > price -%}
+                            {%- assign price_save = compare_at_price | minus: price -%}
+                            {%- assign price_save_money = price_save | money -%}
+                            {%- assign price_save_procent = price | times: 100 | divided_by: compare_at_price | minus: 100 | times: -1 -%}
+                            {{ 'products.product.price_sale_details_html' | t: price: price_save_money, procent: price_save_procent }}
+                        {%- endif -%}
+                    </p>
+                {%- endif -%}
+                {%- if show_taxes -%}
+                    {%- if shop.taxes_included or shop.shipping_policy.body != blank -%}
+                        <div class="product__policies">
+                            {%- if shop.taxes_included -%}
+                                {{ 'products.product.include_taxes' | t }}
+                            {%- endif -%}
+                            {%- if shop.shipping_policy.body != blank -%}
+                                {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+                            {%- endif -%}
+                        </div>
+                    {%- endif -%}
+                {%- endif -%}
+                {%- if settings.app_klarna_enable -%}
+                    <div class="klarna-message-info"></div>
+                {%- endif -%}
+            </div>
+        {%- endif -%}
+      <div class="price-match-popup-bg hide"></div>
+        <div class="price-match-popup hide">
+            <div class="close-price-match-popup-btn js js-close-price">
+                {% render 'icon-close' %}
+            </div>
+            <div class="price-match-step-1">
+                <p>{{ 'products.product.popup_text_1' | t }}</p>
+                <h3>
+                    {{ 'products.product.popup_heading' | t }}
+                    {% render 'icon-noun-price' %}
+                </h3>
+                <p>{{ 'products.product.popup_text_2' | t }}</p>
+                <div class="price-match-popup-btn js">
+                   {{ 'products.product.price_match_btn' | t }}
+                </div>
+                <a href="/pages/competitive-pricing-policy">{{ 'products.product.popup_policy' | t }}</a>
+            </div>
+            <div class="price-match-step-2 hide">
+                <div style="margin:0 auto;" class="pxFormGenerator" id="F3SCD78_9zP4qwhgfIFTvA"></div>
+            </div>
+        </div>
+        {{ description_html }}
+        {{ countdown_html }}
+        {{ stock_countdown_html }}
+        {{ visitors_html }}
+        {%- if product_page_show_border -%}
+            <div class="product-page-info__border border-top border--dashed my-25"></div>
+        {%- endif -%}
+        <div>
+            {% form "product", product, id: null, class: "d-flex flex-column w-100 m-0", data-js-product-form: '' %}
+                <input type="hidden" name="variant_id" value="{{ current_variant.id }}" data-js-product-variant-input>
+                {%- if show_options and show_custom_options -%}
+                    {%- unless product.has_only_default_variant -%}
+                        <div class="product-page-info__options mb-15">
+                            {%- unless is_quick_view -%}
+                                {%- assign trigger_id = 'footbar' -%}
+                            {%- endunless -%}
+                            {% include 'product-get-options' with options_type: 2 options_show_title: true change_history: change_history %}
+                        </div>
+                    {%- endunless -%}
+                {%- endif -%}
+                {%- if show_button_add_to_cart or show_options -%}
+                    <div class="product-page-info__variants mb-15{% if show_options == false or show_custom_options %} d-none{% endif %}">
+                        {% render 'product-get-variants' with product: product current_variant: current_variant show_options: show_options show_custom_options: show_custom_options %}
+                    </div>
+                {%- endif -%}
+
+                {%- if show_quantity and settings.product_info_button_layout != '3' -%}
+                    <div class="product-page-info__field product-page-info__quantity mb-20">
+                        {%- unless is_quick_view -%}
+                            {%- assign quantity_connect = 'footbar' -%}
+                        {%- endunless -%}
+                        {% render 'product-get-quantity' with quantity_show_title: true quantity_connect: quantity_connect %}
+                    </div>
+                {%- endif -%}
+                {%- if show_notes -%}
+                    <div class="product-page-info__field product-page-info__notes mb-20">
+                        <label>{{ 'products.product.notes_label' | t }}</label>
+                        <textarea name="" placeholder="{{ 'products.product.notes_placeholder' | t }}" class="mb-0"></textarea>
+                    </div>
+                {%- endif -%}
+                {% include 'product-page-get-buttons' %}
+                {%- if settings.app_klarna_enable -%}
+                    <div class="klarna-message-info2"></div>
+                {%- endif -%}
+                {{ free_shipping_html }}
+                {{ payments_html }}
+                {%- if show_social_share_buttons -%}
+                    <div class="product-page-info__share product-page-info__field mt-20 mb-10">
+                        <label class="mb-6">{{ 'products.product.share' | t }}</label>
+                        {% render 'social-share' share_type: social_share_buttons_type share_title: title share_permalink: url share_image: product.featured_media %}
+                    </div>
+                {%- endif -%}
+                {%- if full_details -%}
+                    <div class="product-page-info__full-details d-flex justify-content-center justify-content-lg-start mt-15">
+                        <a href="{{ url }}" class="btn-link h6">{{ 'products.product.button_full_details' | t }}</a>
+                    </div>
+                {%- endif -%}
+            {% endform %}
+        </div>
+        {{ text_countdown_html }}
+    </div>
+    {% endcomment %}
+{%- when '3' -%}
+    <div class="product-page-info">
+        {%- if show_label_in_stoc or show_label_pre_order or show_label_out_stock or show_label_sale or show_label_new or show_label_hot -%}
+            <div class="product-page-info__labels d-flex justify-content-center justify-content-lg-start">
+                {%- if show_label_hot -%}
+                    {% include 'product-get-label-hot' %}
+                {%- endif -%}
+                {%- if show_label_new -%}
+                    {% include 'product-get-label-new' %}
+                {%- endif -%}
+                {%- if show_label_sale -%}
+                    {% include 'product-get-label-save' %}
+                {%- endif -%}
+                {%- if show_label_in_stock -%}
+                    {% include 'product-get-label-in-stock' %}
+                {%- endif -%}
+                {%- if show_label_pre_order -%}
+                    {% include 'product-get-label-pre-order' %}
+                {%- endif -%}
+                {%- if show_label_out_stock -%}
+                    {% include 'product-get-label-out-stock' %}
+                {%- endif -%}
+            </div>
+        {%- endif -%}
+        {%- if show_collections and product.collections.size > 0 -%}
+            <div class="product-page-info__collections mb-3 text-center text-lg-left">
+                {% render 'product-get-collections' with product: product %}
+            </div>
+        {%- endif -%}
+        <div class="product-page-info__title mb-15 text-center text-lg-left">
+            {%- if is_quick_view -%}
+                <a href="{{ url }}">{{ title }}</a>
+            {%- else -%}
+                <h1 class="m-0">{{ title }}</h1>
+            {%- endif -%}
+        </div>
+        {%- if show_reviews -%}
+            <div class="product-page-info__reviews text-center text-lg-left">
+                {{ reviews_html }}
+            </div>
+        {%- endif -%}
+        {%- if show_sku or show_barcode or show_availability or show_type or show_vendor -%}
+            <div class="product-page-info__details mb-25 text-center text-lg-left">
+                {%- if show_sku -%}
+                    <div class="product-page-info__sku{% if sku == blank %} d-none-important{% endif %} mb-5">
+                        <p class="m-0" data-js-product-sku>{{ 'products.product.sku' | t }}: <span>{{ sku }}</span></p>
+                    </div>
+                {%- endif -%}
+                {%- if show_barcode -%}
+                    <div class="product-page-info__barcode{% if barcode == blank %} d-none-important{% endif %} mb-5">
+                        <p class="m-0" data-js-product-barcode>{{ 'products.product.barcode' | t }}: <span>{{ barcode }}</span></p>
+                    </div>
+                {%- endif -%}
+                {%- if show_availability -%}
+                    <div class="product-page-info__availability mb-5">
+                        {%- if quantity == 1 -%}
+                            {%- capture item -%}{{ 'layout.cart.items_count.one' | t }}{%- endcapture -%}
+                        {%- else -%}
+                            {%- capture item -%}{{ 'layout.cart.items_count.other' | t }}{%- endcapture -%}
+                        {%- endif -%}
+                        <p class="m-0" data-js-product-availability data-availability="{% if available %}true{% else %}false{% endif %}">{{ 'products.product.availability' | t }}: <span>{% if available %}{% if quantity > 0 %}{{ 'products.product.availability_value_in_stock' | t: count: quantity, item: item }}{% else %}{{ 'products.product.availability_value_in_stock_without_counter' | t }}{% endif %}{% else %}{{ 'products.product.availability_value_out_stock' | t }}{% endif %}</span></p>
+                    </div>
+                {%- endif -%}
+                {%- if show_type -%}
+                    <div class="product-page-info__type{% if type == blank %} d-none-important{% endif %} mb-5">
+                        <p class="m-0" data-js-product-type>{{ 'products.product.type' | t }}: <span>{{ type }}</span></p>
+                    </div>
+                {%- endif -%}
+                {%- if show_vendor -%}
+                    <div class="product-page-info__vendor{% if vendor == blank %} d-none-important{% endif %} mb-5">
+                        <p class="m-0" data-js-product-vendor>{{ 'products.product.vendor' | t }}: <span>{{ vendor }}</span></p>
+                    </div>
+                {%- endif -%}
+            </div>
+        {%- endif -%}
+        {%- if show_price -%}
+            <div class="mb-25">
+                <div class="product-page-info__price text-center text-lg-left">
+                    {% render 'product-get-price' with price: price compare_at_price: compare_at_price %}
+                </div>
+                {%- if show_sale_details -%}
+                    <p class="product-page-info__price-sale-details mt-5 mt-lg-10 text-center text-lg-left{% unless compare_at_price > price %} d-none-important{% endunless %}"
+                       data-js-product-price-sale-details>
+                        {%- if compare_at_price > price -%}
+                            {%- assign price_save = compare_at_price | minus: price -%}
+                            {%- assign price_save_money = price_save | money -%}
+                            {%- assign price_save_procent = price | times: 100 | divided_by: compare_at_price | minus: 100 | times: -1 -%}
+                            {{ 'products.product.price_sale_details_html' | t: price: price_save_money, procent: price_save_procent }}
+                        {%- endif -%}
+                    </p>
+                {%- endif -%}
+                {%- if show_taxes -%}
+                    {%- if shop.taxes_included or shop.shipping_policy.body != blank -%}
+                        <div class="product__policies">
+                            {%- if shop.taxes_included -%}
+                                {{ 'products.product.include_taxes' | t }}
+                            {%- endif -%}
+                            {%- if shop.shipping_policy.body != blank -%}
+                                {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+                            {%- endif -%}
+                        </div>
+                    {%- endif -%}
+                {%- endif -%}
+                {%- if settings.app_klarna_enable -%}
+                    <div class="klarna-message-info"></div>
+                {%- endif -%}
+            </div>
+        {%- endif -%}
+      <div class="price-match-popup-bg hide"></div>
+      <div class="price-match-popup hide">
+          <div class="close-price-match-popup-btn js js-close-price">
+              {% render 'icon-close' %}
+          </div>
+          <div class="price-match-step-1">
+              <p>{{ 'products.product.popup_text_1' | t }}</p>
+              <h3>
+                  {{ 'products.product.popup_heading' | t }}
+                  {% render 'icon-noun-price' %}
+              </h3>
+              <p>{{ 'products.product.popup_text_2' | t }}</p>
+              <div class="price-match-popup-btn js">
+                 {{ 'products.product.price_match_btn' | t }}
+              </div>
+              <a href="/pages/competitive-pricing-policy">{{ 'products.product.popup_policy' | t }}</a>
+          </div>
+          <div class="price-match-step-2 hide">
+              <div style="margin:0 auto;" class="pxFormGenerator" id="F3SCD78_9zP4qwhgfIFTvA"></div>
+          </div>
+      </div>
+        {{ description_html }}
+        {{ countdown_html }}
+        {{ stock_countdown_html }}
+        {{ visitors_html }}
+        {%- if product_page_show_border -%}
+            <div class="product-page-info__border border-top border--dashed my-25"></div>
+        {%- endif -%}
+        <div>
+            {% form "product", product, id: null, class: "d-flex flex-column w-100 m-0", data-js-product-form: '' %}
+                <input type="hidden" name="variant_id" value="{{ current_variant.id }}" data-js-product-variant-input>
+                {%- if show_options and show_custom_options -%}
+                    {%- unless product.has_only_default_variant -%}
+                        <div class="product-page-info__options mb-15">
+                            {%- unless is_quick_view -%}
+                                {%- assign trigger_id = 'footbar' -%}
+                            {%- endunless -%}
+                            {% include 'product-get-options' with options_type: 2 options_show_title: true change_history: change_history %}
+                        </div>
+                    {%- endunless -%}
+                {%- endif -%}
+                {%- if show_button_add_to_cart or show_options -%}
+                    <div class="product-page-info__variants mb-15{% if show_options == false or show_custom_options %} d-none{% endif %}">
+                        {% render 'product-get-variants' with product: product current_variant: current_variant show_options: show_options show_custom_options: show_custom_options %}
+                    </div>
+                {%- endif -%}
+
+                {%- if show_quantity and settings.product_info_button_layout != '3' -%}
+                    <div class="product-page-info__field product-page-info__quantity mb-20">
+                        {%- unless is_quick_view -%}
+                            {%- assign quantity_connect = 'footbar' -%}
+                        {%- endunless -%}
+                        {% render 'product-get-quantity' with quantity_show_title: true quantity_connect: quantity_connect %}
+                    </div>
+                {%- endif -%}
+                {%- if show_notes -%}
+                    <div class="product-page-info__field product-page-info__notes mb-20">
+                        <label>{{ 'products.product.notes_label' | t }}</label>
+                        <textarea name="" placeholder="{{ 'products.product.notes_placeholder' | t }}" class="mb-0"></textarea>
+                    </div>
+                {%- endif -%}
+                {% include 'product-page-get-buttons' %}
+                {%- if settings.app_klarna_enable -%}
+                    <div class="klarna-message-info2"></div>
+                {%- endif -%}
+                {{ free_shipping_html }}
+                {{ payments_html }}
+                {%- if show_social_share_buttons -%}
+                    <div class="product-page-info__share product-page-info__field mt-20 mb-10">
+                        <label class="mb-6">{{ 'products.product.share' | t }}</label>
+                        {% render 'social-share' share_type: social_share_buttons_type share_title: title share_permalink: url share_image: product.featured_media %}
+                    </div>
+                {%- endif -%}
+                {%- if full_details -%}
+                    <div class="product-page-info__full-details d-flex justify-content-center justify-content-lg-start mt-15">
+                        <a href="{{ url }}" class="btn-link h6">{{ 'products.product.button_full_details' | t }}</a>
+                    </div>
+                {%- endif -%}
+            {% endform %}
+        </div>
+        {{ text_countdown_html }}
+    </div>
+{%- when '4' -%}
+    <div class="product-page-info">
+        {%- if show_label_in_stock or show_label_pre_order or show_label_out_stock or show_label_sale or show_label_new or show_label_hot -%}
+            <div class="product-page-info__labels d-flex justify-content-center justify-content-lg-start">
+                {%- if show_label_hot -%}
+                    {% include 'product-get-label-hot' %}
+                {%- endif -%}
+                {%- if show_label_new -%}
+                    {% include 'product-get-label-new' %}
+                {%- endif -%}
+                {%- if show_label_sale -%}
+                    {% include 'product-get-label-save' %}
+                {%- endif -%}
+                {%- if show_label_in_stock -%}
+                    {% include 'product-get-label-in-stock' %}
+                {%- endif -%}
+                {%- if show_label_pre_order -%}
+                    {% include 'product-get-label-pre-order' %}
+                {%- endif -%}
+                {%- if show_label_out_stock -%}
+                    {% include 'product-get-label-out-stock' %}
+                {%- endif -%}
+            </div>
+        {%- endif -%}
+        {%- if show_collections and product.collections.size > 0 -%}
+            <div class="product-page-info__collections mb-3 text-center text-lg-left">
+                {% render 'product-get-collections' with product: product %}
+            </div>
+        {%- endif -%}
+        <div class="product-page-info__title mb-15 text-center text-lg-left">
+            {%- if is_quick_view -%}
+                <a href="{{ url }}">{{ title }}</a>
+            {%- else -%}
+                <h1 class="m-0">{{ title }}</h1>
+            {%- endif -%}
+        </div>
+        {%- if show_reviews -%}
+            <div class="product-page-info__reviews text-center text-lg-left">
+                {{ reviews_html }}
+            </div>
+        {%- endif -%}
+        {%- if show_sku or show_barcode or show_availability or show_type or show_vendor -%}
+            <div class="product-page-info__details mb-25 text-center text-lg-left">
+                {%- if show_sku -%}
+                    <div class="product-page-info__sku{% if sku == blank %} d-none-important{% endif %} mb-5">
+                        <p class="m-0" data-js-product-sku>{{ 'products.product.sku' | t }}: <span>{{ sku }}</span></p>
+                    </div>
+                {%- endif -%}
+                {%- if show_barcode -%}
+                    <div class="product-page-info__barcode{% if barcode == blank %} d-none-important{% endif %} mb-5">
+                        <p class="m-0" data-js-product-barcode>{{ 'products.product.barcode' | t }}: <span>{{ barcode }}</span></p>
+                    </div>
+                {%- endif -%}
+                {%- if show_availability -%}
+                    <div class="product-page-info__availability mb-5">
+                        {%- if quantity == 1 -%}
+                            {%- capture item -%}{{ 'layout.cart.items_count.one' | t }}{%- endcapture -%}
+                        {%- else -%}
+                            {%- capture item -%}{{ 'layout.cart.items_count.other' | t }}{%- endcapture -%}
+                        {%- endif -%}
+                        <p class="m-0" data-js-product-availability data-availability="{% if available %}true{% else %}false{% endif %}">{{ 'products.product.availability' | t }}: <span>{% if available %}{% if quantity > 0 %}{{ 'products.product.availability_value_in_stock' | t: count: quantity, item: item }}{% else %}{{ 'products.product.availability_value_in_stock_without_counter' | t }}{% endif %}{% else %}{{ 'products.product.availability_value_out_stock' | t }}{% endif %}</span></p>
+                    </div>
+                {%- endif -%}
+                {%- if show_type -%}
+                    <div class="product-page-info__type{% if type == blank %} d-none-important{% endif %} mb-5">
+                        <p class="m-0" data-js-product-type>{{ 'products.product.type' | t }}: <span>{{ type }}</span></p>
+                    </div>
+                {%- endif -%}
+                {%- if show_vendor -%}
+                    <div class="product-page-info__vendor{% if vendor == blank %} d-none-important{% endif %} mb-5">
+                        <p class="m-0" data-js-product-vendor>{{ 'products.product.vendor' | t }}: <span>{{ vendor }}</span></p>
+                    </div>
+                {%- endif -%}
+            </div>
+        {%- endif -%}
+        {%- if show_price -%}
+            <div class="mb-25">
+                <div class="product-page-info__price text-center text-lg-left">
+                    {% render 'product-get-price' with price: price compare_at_price: compare_at_price %}
+                </div>
+                {%- if show_sale_details -%}
+                    <p class="product-page-info__price-sale-details mt-5 mt-lg-10 text-center text-lg-left{% unless compare_at_price > price %} d-none-important{% endunless %}"
+                       data-js-product-price-sale-details>
+                        {%- if compare_at_price > price -%}
+                            {%- assign price_save = compare_at_price | minus: price -%}
+                            {%- assign price_save_money = price_save | money -%}
+                            {%- assign price_save_procent = price | times: 100 | divided_by: compare_at_price | minus: 100 | times: -1 -%}
+                            {{ 'products.product.price_sale_details_html' | t: price: price_save_money, procent: price_save_procent }}
+                        {%- endif -%}
+                    </p>
+                {%- endif -%}
+                {%- if show_taxes -%}
+                    {%- if shop.taxes_included or shop.shipping_policy.body != blank -%}
+                        <div class="product__policies">
+                            {%- if shop.taxes_included -%}
+                                {{ 'products.product.include_taxes' | t }}
+                            {%- endif -%}
+                            {%- if shop.shipping_policy.body != blank -%}
+                                {{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}
+                            {%- endif -%}
+                        </div>
+                    {%- endif -%}
+                {%- endif -%}
+                {%- if settings.app_klarna_enable -%}
+                    <div class="klarna-message-info"></div>
+                {%- endif -%}
+            </div>
+        {%- endif -%}
+      <div class="price-match-popup-bg hide"></div>
+      <div class="price-match-popup hide">
+          <div class="close-price-match-popup-btn js js-close-price">
+              {% render 'icon-close' %}
+          </div>
+          <div class="price-match-step-1">
+              <p>{{ 'products.product.popup_text_1' | t }}</p>
+              <h3>
+                  {{ 'products.product.popup_heading' | t }}
+                  {% render 'icon-noun-price' %}
+              </h3>
+              <p>{{ 'products.product.popup_text_2' | t }}</p>
+              <div class="price-match-popup-btn js">
+                 {{ 'products.product.price_match_btn' | t }}
+              </div>
+              <a href="/pages/competitive-pricing-policy">{{ 'products.product.popup_policy' | t }}</a>
+          </div>
+          <div class="price-match-step-2 hide">
+              <div style="margin:0 auto;" class="pxFormGenerator" id="F3SCD78_9zP4qwhgfIFTvA"></div>
+          </div>
+      </div>
+        {{ description_html }}
+        {{ countdown_html }}
+        {{ stock_countdown_html }}
+        {{ visitors_html }}
+        {%- if product_page_show_border -%}
+            <div class="product-page-info__border border-top border--dashed my-25"></div>
+        {%- endif -%}
+        <div>
+            {% form "product", product, id: null, class: "d-flex flex-column w-100 m-0", data-js-product-form: '' %}
+                <input type="hidden" name="variant_id" value="{{ current_variant.id }}" data-js-product-variant-input>
+                {%- if show_options and show_custom_options -%}
+                    {%- unless product.has_only_default_variant -%}
+                    <div class="product-page-info__options mb-15">
+                        {%- unless is_quick_view -%}
+                        {%- assign trigger_id = 'footbar' -%}
+                        {%- endunless -%}
+                        {% include 'product-get-options' with options_type: 2 options_show_title: true change_history: change_history %}
+                    </div>
+                    {%- endunless -%}
+                {%- endif -%}
+                {%- if show_button_add_to_cart or show_options -%}
+                    <div class="product-page-info__variants mb-15{% if show_options == false or show_custom_options %} d-none{% endif %}">
+                        {% render 'product-get-variants' with product: product current_variant: current_variant show_options: show_options show_custom_options: show_custom_options %}
+                    </div>
+                {%- endif -%}
+
+                {%- if show_quantity and settings.product_info_button_layout != '3' -%}
+                    <div class="product-page-info__field product-page-info__quantity mb-20">
+                        {%- unless is_quick_view -%}
+                        {%- assign quantity_connect = 'footbar' -%}
+                        {%- endunless -%}
+                        {% render 'product-get-quantity' with quantity_show_title: true quantity_connect: quantity_connect %}
+                    </div>
+                {%- endif -%}
+                {%- if show_notes -%}
+                    <div class="product-page-info__field product-page-info__notes mb-20">
+                        <label>{{ 'products.product.notes_label' | t }}</label>
+                        <textarea name="" placeholder="{{ 'products.product.notes_placeholder' | t }}" class="mb-0"></textarea>
+                    </div>
+                {%- endif -%}
+                {% include 'product-page-get-buttons' %}
+                {%- if settings.app_klarna_enable -%}
+                    <div class="klarna-message-info2"></div>
+                {%- endif -%}
+                {{ free_shipping_html }}
+                {{ payments_html }}
+                {%- if show_social_share_buttons -%}
+                    <div class="product-page-info__share product-page-info__field mt-20 mb-10">
+                        <label class="mb-6">{{ 'products.product.share' | t }}</label>
+                        {% render 'social-share' share_type: social_share_buttons_type share_title: title share_permalink: url share_image: product.featured_media %}
+                    </div>
+                {%- endif -%}
+                {%- if full_details -%}
+                    <div class="product-page-info__full-details d-flex justify-content-center justify-content-lg-start mt-15">
+                        <a href="{{ url }}" class="btn-link h6">{{ 'products.product.button_full_details' | t }}</a>
+                    </div>
+                {%- endif -%}
+            {% endform %}
+        </div>
+      	{{ text_countdown_html }}
+    </div>
+{%- when '5' -%}
+    <div class="product-page-info product-page-info--max-width mx-auto">
+        {%- if show_label_in_stock or show_label_pre_order or show_label_out_stock or show_label_sale or show_label_new or show_label_hot -%}
+            <div class="product-page-info__labels d-flex justify-content-center">
+                {%- if show_label_hot -%}
+                    {% include 'product-get-label-hot' %}
+                {%- endif -%}
+                {%- if show_label_new -%}
+                    {% include 'product-get-label-new' %}
+                {%- endif -%}
+                {%- if show_label_sale -%}
+                    {% include 'product-get-label-save' %}
+                {%- endif -%}
+                {%- if show_label_in_stock -%}
+                    {% include 'product-get-label-in-stock' %}
+                {%- endif -%}
+                {%- if show_label_pre_order -%}
+                    {% include 'product-get-label-pre-order' %}
+                {%- endif -%}
+                {%- if show_label_out_stock -%}
+                    {% include 'product-get-label-out-stock' %}
+                {%- endif -%}
+            </div>
+        {%- endif -%}
+        {%- if show_collections and product.collections.size > 0 -%}
+            <div class="product-page-info__collections mb-3 text-center">
+                {% render 'product-get-collections' with product: product %}
+            </div>
+        {%- endif -%}
+        <div class="product-page-info__title mb-15 text-center">
+            {%- if is_quick_view -%}
+                <a href="{{ url }}">{{ title }}</a>
+            {%- else -%}
+                <h1 class="m-0">{{ title }}</h1>
+            {%- endif -%}
+        </div>
+        {%- if show_reviews -%}
+            <div class="product-page-info__reviews product-page-info__reviews--center text-center">
+                {{ reviews_html }}
+            </div>
+        {%- endif -%}
+        {%- if show_sku or show_barcode or show_availability or show_type or show_vendor -%}
+            <div class="product-page-info__details mb-25 text-center">
+                {%- if show_sku -%}
+                    <div class="product-page-info__sku{% if sku == blank %} d-none-important{% endif %} mb-5">
+                        <p class="m-0" data-js-product-sku>{{ 'products.product.sku' | t }}: <span>{{ sku }}</span></p>
+                    </div>
+                {%- endif -%}
+                {%- if show_barcode -%}
+                    <div class="product-page-info__barcode{% if barcode == blank %} d-none-important{% endif %} mb-5">
+                        <p class="m-0" data-js-product-barcode>{{ 'products.product.barcode' | t }}: <span>{{ barcode }}</span></p>
+                    </div>
+                {%- endif -%}
+                {%- if show_availability -%}
+                    <div class="product-page-info__availability mb-5">
+                        {%- if quantity == 1 -%}
+                            {%- capture item -%}{{ 'layout.cart.items_count.one' | t }}{%- endcapture -%}
+                        {%- else -%}
+                            {%- capture item -%}{{ 'layout.cart.items_count.other' | t }}{%- endcapture -%}
+                        {%- endif -%}
+                        <p class="m-0" data-js-product-availability data-availability="{% if available %}true{% else %}false{% endif %}">{{ 'products.product.availability' | t }}: <span>{% if available %}{% if quantity > 0 %}{{ 'products.product.availability_value_in_stock' | t: count: quantity, item: item }}{% else %}{{ 'products.product.availability_value_in_stock_without_counter' | t }}{% endif %}{% else %}{{ 'products.product.availability_value_out_stock' | t }}{% endif %}</span></p>
+                    </div>
+                {%- endif -%}
+                {%- if show_type -%}
+                    <div class="product-page-info__type{% if type == blank %} d-none-important{% endif %} mb-5">
+                        <p class="m-0" data-js-product-type>{{ 'products.product.type' | t }}: <span>{{ type }}</span></p>
+                    </div>
+                {%- endif -%}
+                {%- if show_vendor -%}
+                    <div class="product-page-info__vendor{% if vendor == blank %} d-none-important{% endif %} mb-5">
+                        <p class="m-0" data-js-product-vendor>{{ 'products.product.vendor' | t }}: <span>{{ vendor }}</span></p>
+                    </div>
+                {%- endif -%}
+            </div>
+        {%- endif -%}
+        <div class="mb-25">
+            <div class="product-page-info__price text-center">
+                {% render 'product-get-price' with price: price compare_at_price: compare_at_price %}
+            </div>
+            <p class="product-page-info__price-sale-details mt-5 mt-lg-10 text-center{% unless compare_at_price > price %} d-none-important{% endunless %}" data-js-product-price-sale-details>
+                {%- if compare_at_price > price -%}
+                    {%- assign price_save = compare_at_price | minus: price -%}
+                    {%- assign price_save_money = price_save | money -%}
+                    {%- assign price_save_procent = price | times: 100 | divided_by: compare_at_price | minus: 100 | times: -1 -%}
+                    {{ 'products.product.price_sale_details_html' | t: price: price_save_money, procent: price_save_procent }}
+                {%- endif -%}
+            </p>
+            {%- if settings.app_klarna_enable -%}
+                <div class="klarna-message-info"></div>
+            {%- endif -%}
+        </div>
+      <div class="price-match-popup-bg hide"></div>
+      <div class="price-match-popup hide">
+          <div class="close-price-match-popup-btn js js-close-price">
+              {% render 'icon-close' %}
+          </div>
+          <div class="price-match-step-1">
+              <p>{{ 'products.product.popup_text_1' | t }}</p>
+              <h3>
+                  {{ 'products.product.popup_heading' | t }}
+                  {% render 'icon-noun-price' %}
+              </h3>
+              <p>{{ 'products.product.popup_text_2' | t }}</p>
+              <div class="price-match-popup-btn js">
+                 {{ 'products.product.price_match_btn' | t }}
+              </div>
+              <a href="/pages/competitive-pricing-policy">{{ 'products.product.popup_policy' | t }}</a>
+          </div>
+          <div class="price-match-step-2 hide">
+              <div style="margin:0 auto;" class="pxFormGenerator" id="F3SCD78_9zP4qwhgfIFTvA"></div>
+          </div>
+      </div>
+        {{ description_html }}
+        {{ countdown_html }}
+        {{ stock_countdown_html }}
+        {{ visitors_html }}
+        {%- if product_page_show_border -%}
+            <div class="product-page-info__border border-top border--dashed my-25"></div>
+        {%- endif -%}
+        <div>
+            {% form "product", product, id: null, class: "d-flex flex-column w-100 m-0", data-js-product-form: '' %}
+                <input type="hidden" name="variant_id" value="{{ current_variant.id }}" data-js-product-variant-input>
+                {%- if show_options and show_custom_options -%}
+                    {%- unless product.has_only_default_variant -%}
+                        <div class="product-page-info__options mb-15">
+                            {%- unless is_quick_view -%}
+                                {%- assign trigger_id = 'footbar' -%}
+                            {%- endunless -%}
+                            {% include 'product-get-options' with options_type: 2 centered: true options_show_title: true change_history: change_history %}
+                        </div>
+                    {%- endunless -%}
+                {%- endif -%}
+                {%- if show_button_add_to_cart or show_options -%}
+                    <div class="product-page-info__variants mb-15{% if show_options == false or show_custom_options %} d-none{% endif %}">
+                        {% render 'product-get-variants' with product: product show_options: show_options show_custom_options: show_custom_options %}
+                    </div>
+                {%- endif -%}
+
+                {%- if show_quantity and settings.product_info_button_layout != '3' -%}
+                    <div class="product-page-info__field product-page-info__quantity product-page-info__section--max-width mx-lg-auto mb-20">
+                        {%- unless is_quick_view -%}
+                            {%- assign quantity_connect = 'footbar' -%}
+                        {%- endunless -%}
+                        {% render 'product-get-quantity' with quantity_show_title: true quantity_connect: quantity_connect %}
+                    </div>
+                {%- endif -%}
+                {%- if show_notes -%}
+                    <div class="product-page-info__field product-page-info__notes product-page-info__section--max-width mx-lg-auto mb-20">
+                        <label>{{ 'products.product.notes_label' | t }}</label>
+                        <textarea name="" placeholder="{{ 'products.product.notes_placeholder' | t }}" class="mb-0"></textarea>
+                    </div>
+                {%- endif -%}
+                {% include 'product-page-get-buttons' %}
+                {%- if settings.app_klarna_enable -%}
+                    <div class="klarna-message-info2"></div>
+                {%- endif -%}
+                {{ free_shipping_html }}
+                {{ payments_html }}
+                {%- if show_social_share_buttons -%}
+                    <div class="product-page-info__share product-page-info__field mt-20 mb-10">
+                        <label class="mb-6">{{ 'products.product.share' | t }}</label>
+                        {% render 'social-share' share_type: social_share_buttons_type share_title: title share_permalink: url share_image: product.featured_media %}
+                    </div>
+                {%- endif -%}
+                {%- if full_details -%}
+                    <div class="product-page-info__full-details d-flex justify-content-center justify-content-lg-start mt-15">
+                        <a href="{{ url }}" class="btn-link h6">{{ 'products.product.button_full_details' | t }}</a>
+                    </div>
+                {%- endif -%}
+            {% endform %}
+        </div>
+        {{ text_countdown_html }}
+    </div>
+{%- endcase -%}
+
+
+
+<style>
+    .product-page-info__price .price--sale > span:first-child, .one-product-info__price .price--sale > span:first-child {
+        font-size: 24px;
+    }
+    .product-page-info__price .price--sale > span:last-child {
+        font-size: 17px;
+    }
+</style>
+
+<!-- Zeta Digital - Same Day Delivery Information Start -->
+<script src="//cdn.shopify.com/s/files/1/0921/7330/t/75/assets/plugin.jquery.min.js?v=13551709397840719780"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+{{ 'au_suburb_postcode.js' | asset_url | script_tag }}
+{{ 'public_holiday.js' | asset_url | script_tag }}
+<!-- Zeta Digital - Same Day Delivery Information End -->
+
+<!-- Zeta Digital - Large Item Shipping Calculator Start -->
+{{ 'au_suburb_postcode.js' | asset_url | script_tag }}
+<script>
+  jQuery('#postcode-check').autocomplete({
+    source: ausPostcode,
+    minLength: 3
+  });
+  jQuery('#get-delivery-options-btn').on('click', function(){
+  	if(jQuery('#postcode-check').val() == null || jQuery('#postcode-check').val() == ''){
+      alert("Please input your postcode");
+      return false;
+    } ;
+
+    var selectedSuburb = jQuery('#postcode-check').val().split(',');
+    var productWeight = parseInt(jQuery('#productWeight').val()) * 0.01;
+    var productId = jQuery('#productId').val();
+
+    if (productId == '4646968295539'){
+		var productLength = 140;
+        var productHeight = 140;
+        var productWidth = 60;
+    }
+    else if (productId == '4430014087283'){
+    	var productLength = 197;
+        var productHeight = 140;
+        var productWidth = 60;
+    }
+    else if (productId == '4646969737331'){
+    	var productLength = 250;
+        var productHeight = 140;
+        var productWidth = 60;
+    }
+    else {
+        var productLength = 0;
+        var productHeight = 0;
+        var productWidth = 0;
+    }
+
+    jQuery.ajax({
+      dataType: "json",
+      type: "GET",
+      async: false,
+      url: "https://api.gameology.com.au/api/shipping/quote/get?weight="+ productWeight + "&length=" + productLength + "&height=" + productHeight + "&width=" + productWidth + "&suburb=" + selectedSuburb[0] + "&postcode=" + selectedSuburb[1].trim(),
+      success: function(response)
+      {
+		  var outputText = '';
+          jQuery.each(response.data.availableQuotes, function(index, itemData) {
+            if(itemData.amount > 0){
+              if (true){
+                if (itemData.serviceProvider == 'TNT' || itemData.serviceProvider == 'Allied Express'){
+                  var divHtml = '<li>'+ itemData.serviceProvider + ' ' + itemData.displayName + ' - $'+itemData.amount+'</li>';
+                  if (itemData.displayName.includes('Pallet')){
+                  	outputText += divHtml;
+                  }
+                }
+              }
+            }
+          });
+          jQuery('.shipping_result ul').html(outputText);
+
+      },
+      error: function(){
+      }
+    });
+  });
+</script>
+<!-- Zeta Digital - Large Item Shipping Calculator End -->
+
+<!-- Zeta Digital - Max Quantity Check Start -->
+{{ 'product_qty_limit.js' | asset_url | script_tag }}
+<script>
+  jQuery('.input-quantity input').on('change', function(){
+    var productId = "{{ product.id }}";
+    var qtyInput = jQuery(this);
+    if (productQuantityLimit[productId]){
+      if (parseInt(qtyInput.val()) > parseInt(productQuantityLimit[productId])){
+        qtyInput.val(1);
+        alert('Product not added. Product cannot exceed maximum purchase quantity!');
+      }
+    }
+  });
+</script>
+<!-- Zeta Digital - Max Quantity Check End -->
+
+<!-- JS test_107 -->
+<script>
+var productId = jQuery('#productId').val();
+
+let elm = {
+  	dispatchDayCountDown: "[dispatch-day-countdown]",
+	dispatchTimeCountDown: "[dispatch-time-countdown]",
+	dayCountDown: "[data-day-countdown]",
+	timeCountDown: "[data-time-countdown]",
+	standardEst: "[data-standard-estimated]",
+	expressEst: "[data-express-estimated]",
+	metroEst: "[data-metro-estimated]",
+	formCheckCode: "[data-form-check-code]",
+	inputCheckCode: "[data-input-check-code]",
+	tabDelivery: ".delivery-container",
+	msgMetro: ".js-msg",
+	msgMetroCountdown: ".js-msg-countdown",
+	msgSuccess: "[data-msg-success]",
+	msgError: "[data-msg-error]",
+	btnTab: "[data-id-btn]",
+	containerTab: "[data-id-container]",
+	clclClay: "[data-status-clcl-clayton]",
+	clclBrun: "[data-status-clcl-brun]",
+ 	buysClay: "[data-status-buys-clayton]",
+	buysBrun: "[data-status-buys-brun]"
+};
+
+let code = {
+	sunday: 0,
+	monday: 1,
+	tuesday: 2,
+	wednesday: 3,
+	thursday: 4,
+	friday: 5,
+	saturday: 6,
+};
+
+let toniteShippingZone = [3000, 3002, 3003, 3004, 3006, 3006, 3008, 3010, 3011, 3012, 3013, 3015, 3016, 3018, 3019, 3020, 3021, 3022, 3023, 3025, 3026, 3027, 3028, 3029, 3031, 3032, 3033, 3034, 3036, 3037, 3038, 3039, 3040, 3041, 3042, 3043, 3044, 3045, 3046, 3047, 3048, 3049, 3050, 3051, 3052, 3053, 3054, 3055, 3056, 3057, 3058, 3059, 3060, 3061, 3065, 3066, 3067, 3068, 3070, 3071, 3072, 3073, 3074, 3075, 3076, 3078, 3079, 3081, 3082, 3083, 3084, 3085, 3087, 3088, 3090, 3093, 3094, 3095, 3101, 3102, 3103, 3104, 3105, 3106, 3107, 3108, 3109, 3111, 3121, 3122, 3123, 3124, 3125, 3126, 3127, 3128, 3129, 3130, 3131, 3132, 3133, 3135, 3141, 3142, 3143, 3144, 3145, 3146, 3147, 3148, 3149, 3150, 3151, 3152, 3153, 3154, 3155, 3156, 3161, 3162, 3163, 3165, 3166, 3167, 3168, 3169, 3170, 3171, 3172, 3173, 3174, 3175, 3177, 3178, 3179, 3180, 3181, 3182, 3183, 3184, 3185, 3186, 3187, 3188, 3189, 3190, 3191, 3192, 3193, 3194, 3195, 3196, 3197, 3198, 3201, 3202, 3204, 3205, 3206, 3207, 3802];
+
+function getMonthDate(dayIn) {
+	let month = estimatedTime(dayIn, 13).toLocaleString("default", {
+		month: "long"
+	});
+	let day = estimatedTime(dayIn, 13).getDate();
+	return `${month} ${day}`;
+}
+
+function estimatedTime(dayPlus, cutoffHour) {
+	let estDay = new Date();
+	let now = new Date();
+	let dayNow = now.getDay();
+	let hourNow = now.getHours();
+	let z = 0;
+
+	if (dayPlus) {
+		while (z < dayPlus) {
+			let newDay = estDay.getDay();
+			estDay.setDate(estDay.getDate() + 1);
+			newDay = estDay.getDay();
+
+			if (newDay == code.saturday) {
+				estDay.setDate(estDay.getDate() + 1);
+				newDay = estDay.getDay();
+			}
+			if (newDay == code.sunday) {
+				estDay.setDate(estDay.getDate() + 1);
+				newDay = estDay.getDay();
+			}
+			while (isPublicHoliday(estDay)) {
+				estDay.setDate(estDay.getDate() + 1);
+				newDay = estDay.getDay();
+			}
+			z++;
+		}
+	} else {
+		let deliveryDay;
+		var isPublicHolidayToday = isPublicHoliday(estDay);
+		while (isPublicHoliday(estDay)) {
+			estDay.setDate(estDay.getDate() + 1);
+		}
+
+		if (estDay.getDay() == 0 || estDay.getDay() == 6 || (estDay.getDay() == 5 && estDay.getHours() >= cutoffHour) || isPublicHolidayToday) {
+			estDay.getDay() == 0 && estDay.setDate(estDay.getDate() + 1);
+			estDay.getDay() == 6 && estDay.setDate(estDay.getDate() + 2);
+			estDay.getDay() == 5 && hourNow >= cutoffHour && estDay.setDate(estDay.getDate() + 3);
+			deliveryDay = "Next Business Day";
+		} else {
+			if (estDay.getHours() >= cutoffHour) {
+				estDay.setDate(estDay.getDate() + 1);
+				deliveryDay = "Tomorrow";
+			} else if (estDay.getHours() >= 0) {
+				deliveryDay = "Tonight";
+			}
+		}
+
+		while (isPublicHoliday(estDay)) {
+			estDay.setDate(estDay.getDate() + 1);
+			estDay.getDay() == 0 && estDay.setDate(estDay.getDate() + 1);
+			estDay.getDay() == 6 && estDay.setDate(estDay.getDate() + 2);
+			estDay.getDay() == 5 && hourNow >= cutoffHour && estDay.setDate(estDay.getDate() + 3);
+			deliveryDay = "Next Business Day";
+		}
+
+
+		estDay.setHours(cutoffHour);
+		estDay.setMinutes(0);
+		estDay.setSeconds(0);
+
+
+		return {
+			deliveryDay,
+			deliveryDate: estDay
+		};
+	};
+
+	estDay.setHours(cutoffHour);
+	estDay.setMinutes(0);
+	estDay.setSeconds(0);
+
+	return estDay;
+}
+
+jQuery.ajax({
+    dataType: "json",
+    type: "GET",
+    url: "https://api.gameology.com.au/api/shopify-listing/product/inventory/get/" + "{{product.id}}",
+    success: function(response) {
+        let inv = response[0].inventory;
+        let warehouseHasStock = false;
+        var warehouseStock = 0;
+        let buysStatus = false;
+        inv.forEach(function(store) {
+          console.log(store);
+            if (store.location_id == 31213648) {
+              jQuery('.stock-countdown__counter').text(store.stock);
+                let clcl = [document.querySelectorAll(elm.clclClay), document.querySelectorAll(elm.clclBrun)];
+                clcl.forEach(function(dom) {
+                    if (store.stock > 0) {
+                        warehouseHasStock = true;
+                        warehouseStock = store.stock;
+                        dom.forEach(function(el) {
+                            el.classList.add('avai');
+                        });
+                    } else {
+                        dom.forEach(function(el) {
+                            el.classList.add('unva');
+                        });
+                    }
+                });
+            }
+            if (store.location_id == 60906963059) {
+                let dom = document.querySelectorAll(elm.buysClay);
+                if (store.stock > 0 || warehouseHasStock) {
+                    buysStatus = true;
+                    dom.forEach(function(el) {
+                      {% if is_preorder_product == false %}
+                        el.classList.add('avai');
+                      {% endif %}
+                    });
+                } else {
+                  	{% if is_preorder_product == false %}
+                    dom.forEach(function(el) {
+                        el.classList.add('unva');
+                    });
+                    if(store.stock > 0){
+                  	jQuery('#only-available-block').removeClass('d-none');
+                  	jQuery('#only-available-branch').html('Brunswick');
+                    }
+                  	{% endif %}
+                }
+                var claytonStock = store.stock + warehouseStock;
+                if (claytonStock > 10){
+                  jQuery(".clayton-stock").html("10+ Available");	
+                }
+                else if (claytonStock > 0){
+                  jQuery(".clayton-stock").html(claytonStock + " Available");	
+                }
+                else {
+                  jQuery(".clayton-stock").parent().remove();	
+                }              
+            }
+            if (store.location_id == 60915286131) {
+                let dom = document.querySelectorAll(elm.buysBrun);
+                if (store.stock > 0) {
+                    buysStatus = true;
+                    dom.forEach(function(el) {
+                        el.classList.add('avai');
+                    });
+                } else {
+                  	{% if is_preorder_product == false %}
+                    dom.forEach(function(el) {
+                        el.classList.add('unva');
+                    });
+                    if (store.stock > 0) {
+                  	jQuery('#only-available-block').removeClass('d-none');
+                  	jQuery('#only-available-branch').html('Clayton South');
+                  	}
+                    {% endif %}
+                }
+                if (store.stock > 10){
+                  jQuery(".brunswick-stock").html("10+ Available");	
+                }
+                else if (store.stock > 0){
+                  jQuery(".brunswick-stock").html(store.stock + " Available");	
+                }
+                else {
+                  jQuery(".brunswick-stock").parent().remove();	
+                }
+            }
+        });
+        if (buysStatus == true && warehouseHasStock == false){
+          document.querySelectorAll('[data-button-content="sold-out"]').forEach(function(soldoutBtn) {
+            soldoutBtn.innerHTML = 'SOLD OUT ONLINE';
+          });
+        }
+        document.querySelectorAll(elm.btnTab).forEach(function(btn) {
+          let id = btn.dataset.idBtn;
+          if (id == 'buys'){
+            if (buysStatus){
+              btn.innerHTML = `{% render 'icon-checked' %}` + btn.innerHTML;
+            }
+            else {
+              btn.innerHTML = `{% render 'icon-unchecked' %}` + btn.innerHTML;
+              jQuery('#only-available-block').addClass('d-none');
+            }
+          }
+        });
+    },
+});
+
+{% if product.available and is_preorder_product == false and is_pickup_only_product == false %}
+document.querySelectorAll(elm.standardEst).forEach(function(elmEst) {
+	elmEst.innerHTML = `${getMonthDate(2)} - ${getMonthDate(7)}`;
+});
+document.querySelectorAll(elm.expressEst).forEach(function(elmEst) {
+	elmEst.innerHTML = `${getMonthDate(1)} - ${getMonthDate(2)}`;
+});
+
+let y = setInterval(function() {
+	let now = new Date();
+	let {deliveryDay, deliveryDate} = estimatedTime(null, 12);
+	let distance = deliveryDate.getTime() - now.getTime();
+
+	if (!{{product.available}} || distance < 0 || !deliveryDay) {
+		jQuery('.est-dispatch').css('display', 'none');
+		clearInterval(y);
+		return;
+	}
+	let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+	let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+	let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+	let seconds = Math.floor((distance / 1000) % 60);
+
+	let textDay = "";
+	textHours = "";
+	textMinutes = "";
+	textSeconds = "";
+
+	if (days > 0) textDay = `${days} day${days >= 2 ? "s" : ""}`;
+	if (hours > 0) textHours = `${hours} hr${hours >= 2 ? "s" : ""}`;
+	if (minutes > 0) textMinutes = `${minutes} min${minutes >= 2 ? "s" : ""}`;
+	if (seconds > 0) textSeconds = ` ${seconds} sec${seconds >= 2 ? "s" : ""}`;
+	let textCountDown = `${textDay} ${textHours} ${textMinutes}${textSeconds}`;
+
+	document.querySelectorAll(elm.dispatchDayCountDown).forEach(function(elmDay) {
+        if (deliveryDay == "Tonight"){
+         deliveryDay = 'Today';
+        }
+		elmDay.innerHTML = deliveryDay;
+	});
+
+	document.querySelectorAll(elm.dispatchTimeCountDown).forEach(function(elmTime) {
+		elmTime.innerHTML = textCountDown;
+	});
+
+    
+    let AuDate = new Date().toLocaleString("en-US", {timeZone: "Australia/Sydney"});
+    AuDateArry = AuDate.split(/(\s+)/);
+    var daysArray = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    var d = new Date(AuDate);
+    var dayName = daysArray[d.getDay()];
+    if(AuDateArry[AuDateArry.length - 1] == 'PM' || (dayName == 'Friday' || dayName == 'Saturday' || dayName == 'Sunday') ){
+      document.getElementById('today_span').innerHTML = 'Next Business Day';
+    }
+      
+	return;
+
+}, 1000);
+
+let x = setInterval(function() {
+	let now = new Date();
+	let {deliveryDay, deliveryDate} = estimatedTime(null, 13);
+	let distance = deliveryDate.getTime() - now.getTime();
+
+	if (!{{product.available}} || distance < 0 || !deliveryDay) {
+		document.querySelector(elm.msgMetroCountdown).style.display = 'none';
+		clearInterval(x);
+		return;
+	}
+	let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+	let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+	let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+	let seconds = Math.floor((distance / 1000) % 60);
+
+	let textDay = "";
+	textHours = "";
+	textMinutes = "";
+	textSeconds = "";
+
+	if (days > 0) textDay = `${days} day${days >= 2 ? "s" : ""}`;
+	if (hours > 0) textHours = `${hours} hr${hours >= 2 ? "s" : ""}`;
+	if (minutes > 0) textMinutes = `${minutes} min${minutes >= 2 ? "s" : ""}`;
+	if (seconds > 0) textSeconds = ` ${seconds} sec${seconds >= 2 ? "s" : ""}`;
+	let textCountDown = `${textDay} ${textHours} ${textMinutes}${textSeconds}`;
+
+	document.querySelectorAll(elm.dayCountDown).forEach(function(elmDay) {
+		elmDay.innerHTML = deliveryDay;
+	});
+
+	deliveryDay == "Tonight" ? document.querySelector(elm.msgMetro).classList.add('msg-tonight') : document.querySelector(elm.msgMetro).classList.remove('msg-tonight');
+
+	document.querySelectorAll(elm.timeCountDown).forEach(function(elmTime) {
+		elmTime.innerHTML = textCountDown;
+	});
+	return;
+
+}, 1000);
+
+jQuery(elm.inputCheckCode).autocomplete({
+	source: ausPostcode,
+	minLength: 3
+});
+jQuery(elm.formCheckCode).submit(function(e) {
+	e.preventDefault();
+	let inputVal = jQuery(this).find('input').val();
+	let arrVal = inputVal.split(',');
+	let code = arrVal[arrVal.length - 1].trim();
+
+	if (toniteShippingZone.includes(parseInt(code))) {
+		document.querySelector(elm.msgSuccess).style.display = "";
+		document.querySelector(elm.msgError).style.display = "none";
+		document.querySelector('.js-cl-cl-cl').classList.add('avai');
+		document.querySelector('.js-cl-cl-cl').classList.remove('unva');
+	} else {
+		document.querySelector(elm.msgSuccess).style.display = "none";
+		document.querySelector(elm.msgError).style.display = "block";
+		document.querySelector('.js-cl-cl-cl').classList.add('unva');
+		document.querySelector('.js-cl-cl-cl').classList.remove('avai');
+	}
+  
+  	/*Conversionry - Update estimate shipping style 010722*/
+  if(document.body.classList.contains('test_131')){
+    jQuery('.show-test_131.estimated-time-box').css('display', 'flex');
+  }else{
+    jQuery('.est-metro .estimated-time-box').css('display', 'block');
+  }
+});
+{% endif %}
+
+document.querySelectorAll(elm.btnTab).forEach(function(btn) {
+	btn.addEventListener('click', function() {
+		document.querySelectorAll(elm.btnTab).forEach(function(all) {
+			all.classList.remove('tab-active');
+		});
+		btn.classList.add('tab-active');
+		let id = btn.dataset.idBtn;
+		document.querySelectorAll(elm.containerTab).forEach(function(all) {
+			all.classList.remove('tab-active');
+			if (id == all.dataset.idContainer) all.classList.add('tab-active');
+		});
+	});
+});
+</script>
+<!-- JS test_107 End -->
+
+<!-- JS test_180 Start -->
+<script>
+{% assign board_games = false %}
+{% for collection in product.collections %}
+  {% if collection.title contains "Board Games" %}
+    {% assign board_games = true %}
+  {% endif %}
+{% endfor %}
+const attrObserver = new MutationObserver((mutations) => {
+  mutations.forEach(mu => {
+    if (mu.type !== "attributes" && mu.attributeName !== "class") return;
+    {% if board_games == false %}
+      jQuery('body').removeClass('test_180');
+    {% endif %}
+    if(jQuery('body').hasClass('test_180')) {
+      jQuery(".show-test_180").prependTo(".product-page-info__option-buy");
+    }
+  });
+});
+const bodyEle = document.querySelectorAll(".template-product");
+bodyEle.forEach(el => attrObserver.observe(el, {attributes: true}));
+</script>
+<!-- JS test_180 End -->
+
+<!-- CRY Update 4-2024 -->
+<script>
+  jQuery(document).ready(function() {
+    if (jQuery("#preorder-release-date").html().trim() != '') {
+      var releaseDate = jQuery("#preorder-release-date").html().trim();
+      
+      function dateToQuarter(dateStr) {
+        const quarterMap = {
+          'January': 'Q1', 'February': 'Q1', 'March': 'Q1',
+          'April': 'Q2', 'May': 'Q2', 'June': 'Q2',
+          'July': 'Q3', 'August': 'Q3', 'September': 'Q3',
+          'October': 'Q4', 'November': 'Q4', 'December': 'Q4'
+        };
+        const dateParts = dateStr.split('-');
+        if (dateParts.length === 3) {
+          const day = dateParts[0].trim();
+          const month = dateParts[1].trim();
+          const year = dateParts[2].trim();
+          const quarter = quarterMap[month];
+          if (quarter) {
+            return `${quarter}-${year}`;
+          } else {
+            console.error("Month parsing error, check month input: " + month);
+            return dateStr;
+          }
+        }
+        return dateStr;
+      }
+
+      releaseDate = dateToQuarter(releaseDate);
+
+      jQuery("#preorder-date-block").html(`<span style="display: flex;justify-content: center;padding-top:2px;">` + `Release ` + releaseDate + `</span>`);
+    } else {
+      jQuery("#preorder-date-block").hide();
+    }
+  });
+</script>
+
+<script>
+  jQuery(document).ready(function() {
+    if (jQuery("#preorder-release-date").html() != '') {
+      var releaseDate = jQuery("#preorder-release-date").html();
+      var releaseDateHtml = `<b>Release Date:</b><span>` + releaseDate + `</span>`;
+      jQuery("#delivery-release-date").html(releaseDateHtml);
+      jQuery("#click-collect-release-date").html(releaseDateHtml);
+    } else {
+      jQuery("#delivery-release-date").hide();
+      jQuery("#click-collect-release-date").hide();
+    }
+  });
+</script>
+
+<script>
+
+function openRecipient(){
+    jQuery(".recipient-fields").toggle();
+}
+  
+document.addEventListener("DOMContentLoaded", function() {
+    var randomTexts = [
+        "Best Price Assurance",
+        "Price Match Promise",
+        "Unbeatable Prices",
+        "Lowest Price Commitment"
+    ];
+
+    var elements = document.querySelectorAll('.random-price-match-text');
+
+    elements.forEach(function(element) {
+        var randomIndex = Math.floor(Math.random() * randomTexts.length);
+        element.innerHTML = randomTexts[randomIndex];
+    });
+});
+</script>

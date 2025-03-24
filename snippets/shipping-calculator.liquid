@@ -1,0 +1,15 @@
+<div class="dynamic-postcode-form">
+    <p>{% render 'icon-truck' %}<span>{{ 'products.product.estimated_delivery' | t }}</span></p>
+    <div class="field" style="display: none;">
+      <label for="address_country">Country</label>
+      <select id="address_country" name="address[country]" data-default="{{ settings.shipping_calculator_default_country }}">{{ country_option_tags }}</select>
+    </div>
+    <div class="field" id="address_province_container">
+      <select id="address_province" name="address[province]" data-default="{% if shop.customer_accounts_enabled and customer and customer.default_address.province != '' %}{{ customer.default_address.province }}{% endif %}"></select>
+    </div>  
+    <div class="postcode-field">
+      <input type="text" id="address_zip" name="address[zip]"{% if shop.customer_accounts_enabled and customer %} value="{{ customer.default_address.zip }}"{% endif %} placeholder="{{ 'products.product.postcode_input' | t }}" />
+      <div class="btn get-rates-js">{{ 'products.product.postcode_button' | t }}</div>
+    </div>
+    <div id="postcode-response"></div>
+</div>

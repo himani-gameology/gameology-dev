@@ -1,0 +1,272 @@
+{% for block in section.blocks %}
+  {% if block.settings.nav-btn-url-1 != blank %}
+    <div class="container mt-20 mt-lg-50">
+      {% if block.settings.heading-text != blank %}
+      <!-- Chriate – Mas Item #193 - Category Page Refinement (23/01/23) -->
+      <div class="row show-test_193">
+        <div class="col-12">
+          <h3 class="collection-navigation__heading mb-15 mb-lg-25">{{ block.settings.heading-text }}</h3>
+        </div>
+      </div>
+      {% endif %}
+      
+      <div class="row show-test_193" style="position: relative;">
+        <div class="slider__prev collection-navigation__prev position-absolute cursor-pointer" data-js-slider-prev><i>{% render 'icon-theme-006' %}</i></div>
+          <div class="collection-navigation__carousel">
+          {% for i in (1..12) %}
+            {% capture nav-btn-url %}nav-btn-url-{{i}}{% endcapture %}
+            {% capture nav-btn-img %}nav-btn-image-{{i}}{% endcapture %}
+            {% capture nav-btn-text %}nav-btn-text-{{i}}{% endcapture %}
+            {% if block.settings[nav-btn-url] != blank %}
+              <div class="col-12">
+                <div class="mb-10 w-100">          
+                  <a href="{{ block.settings[nav-btn-url] }}" class="btn btn--status w-100 p-0" style="background-color: black;"> 
+                    <span class="d-flex flex-center">
+                      {% if block.settings[nav-btn-img] != blank %}
+                        <img src="{{ block.settings[nav-btn-img] | img_url:'2000x' }}" />
+                      {% elsif block.settings[nav-btn-text] != blank %}
+                        <span class="btn__text" style="color: white;">{{ block.settings[nav-btn-text] }}</span>
+                      {% endif %}
+                    </span>
+                  </a>        
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+        <div class="slider__next collection-navigation__next position-absolute cursor-pointer" data-js-slider-next><i>{% render 'icon-theme-007' %}</i></div>
+      </div>
+      <div class="row hide-test_193">
+        {% for i in (1..12) %}
+          {% capture nav-btn-url %}nav-btn-url-{{i}}{% endcapture %}
+          {% capture nav-btn-img %}nav-btn-image-{{i}}{% endcapture %}
+          {% capture nav-btn-text %}nav-btn-text-{{i}}{% endcapture %}
+          {% if block.settings[nav-btn-url] != blank %}
+            <div class="col-4 col-sm-4 col-md-4 col-lg-2">
+              <div class="mb-10 w-100">          
+                <a href="{{ block.settings[nav-btn-url] }}" class="btn btn--status w-100 p-0" style="background-color: black;"> 
+                  <span class="d-flex flex-center">
+                    {% if block.settings[nav-btn-img] != blank %}
+                      <img src="{{ block.settings[nav-btn-img] | img_url:'2000x' }}" />
+                    {% elsif block.settings[nav-btn-text] != blank %}
+                      <span class="btn__text" style="color: white;">{{ block.settings[nav-btn-text] }}</span>
+                    {% endif %}
+                  </span>
+                </a>        
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+{% endfor %}
+
+{% schema %}
+{
+"name": "Dragon Ball Navigation",
+"blocks": [
+    {
+        "type": "custom",
+        "name": "Custom Collection",
+        "settings": [            
+          {
+            "type": "text",
+            "id": "heading-text",
+            "label": "Navigation Heading"
+          },
+          {
+             "type": "header",
+             "content": "Navigation Buttons"
+          },
+          {
+            "type": "image_picker",
+            "id": "nav-btn-image-1",
+            "label": "Navigation Button Image 1"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-text-1",
+            "label": "Navigation Button Text 1"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-url-1",
+            "label": "Navigation Button URL 1"
+          },
+          {
+            "type": "image_picker",
+            "id": "nav-btn-image-2",
+            "label": "Navigation Button Image 2"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-text-2",
+            "label": "Navigation Button Text 2"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-url-2",
+            "label": "Navigation Button URL 2"
+          },
+          {
+            "type": "image_picker",
+            "id": "nav-btn-image-3",
+            "label": "Navigation Button Image 3"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-text-3",
+            "label": "Navigation Button Text 3"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-url-3",
+            "label": "Navigation Button URL 3"
+          },
+          {
+            "type": "image_picker",
+            "id": "nav-btn-image-4",
+            "label": "Navigation Button Image 4"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-text-4",
+            "label": "Navigation Button Text 4"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-url-4",
+            "label": "Navigation Button URL 4"
+          },
+          {
+            "type": "image_picker",
+            "id": "nav-btn-image-5",
+            "label": "Navigation Button Image 5"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-text-5",
+            "label": "Navigation Button Text 5"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-url-5",
+            "label": "Navigation Button URL 5"
+          },
+          {
+            "type": "image_picker",
+            "id": "nav-btn-image-6",
+            "label": "Navigation Button Image 6"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-text-6",
+            "label": "Navigation Button Text 6"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-url-6",
+            "label": "Navigation Button URL 6"
+          },
+          {
+            "type": "image_picker",
+            "id": "nav-btn-image-7",
+            "label": "Navigation Button Image 7"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-text-7",
+            "label": "Navigation Button Text 7"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-url-7",
+            "label": "Navigation Button URL 7"
+          },
+          {
+            "type": "image_picker",
+            "id": "nav-btn-image-8",
+            "label": "Navigation Button Image 8"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-text-8",
+            "label": "Navigation Button Text 8"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-url-8",
+            "label": "Navigation Button URL 8"
+          },
+          {
+            "type": "image_picker",
+            "id": "nav-btn-image-9",
+            "label": "Navigation Button Image 9"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-text-9",
+            "label": "Navigation Button Text 9"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-url-9",
+            "label": "Navigation Button URL 9"
+          },
+          {
+            "type": "image_picker",
+            "id": "nav-btn-image-10",
+            "label": "Navigation Button Image 10"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-text-10",
+            "label": "Navigation Button Text 10"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-url-10",
+            "label": "Navigation Button URL 10"
+          },
+          {
+            "type": "image_picker",
+            "id": "nav-btn-image-11",
+            "label": "Navigation Button Image 11"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-text-11",
+            "label": "Navigation Button Text 11"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-url-11",
+            "label": "Navigation Button URL 11"
+          },
+          {
+            "type": "image_picker",
+            "id": "nav-btn-image-12",
+            "label": "Navigation Button Image 12"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-text-12",
+            "label": "Navigation Button Text 12"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-url-12",
+            "label": "Navigation Button URL 12"
+          }
+        ]
+    }
+],
+"presets": [
+    {
+      "name": "Dragon Ball Navigation",
+      "category": "Custom Collection"
+    }
+]
+}
+{% endschema %}

@@ -1,0 +1,86 @@
+{% include 'global-variables' %}
+{% include 'product-cart-res-variables' %}
+{%- assign image_size = '100x' -%}
+{%- assign show_title = show_title | default: true -%}
+{%- assign show_variant = show_variant | default: true -%}
+{%- assign show_price = show_price | default: true -%}
+{%- assign show_button_remove = show_button_remove | default: true -%}
+<div class="product-cart d-flex flex-row align-items-center pt-20" data-js-product data-product-variant-id="{{ id }}">
+    <div class="product-cart__image mr-15">
+        <a href="{{ url }}" class="d-block">
+            <img src="{{ image.src | img_url: '100x' }}">
+        </a>
+    </div>
+    <div class="product-cart__content d-flex flex-column align-items-start">
+        {%- if show_title -%}
+            <div class="product-cart__title mb-5">
+                <h3 class="h6 m-0">
+                    <a href="{{ url }}">{{ title }}</a>
+                </h3>
+        
+                <!-- Zeta Digital - Preorder Release Date -->
+                {% if item.product.description contains "Release Date:" %}
+                    <span id="popup-preorder-release-date-{{ item.id }}" style="color: red"></span>
+                    <script>
+                      var description = `{{ item.product.description | escape }}`;
+                      description = description.substr(description.search("Release Date:"), 100);
+                      var datePattern = /[0-9]{2,}-*[a-zA-Z]{3,}-*[0-9]{2,}/i;
+                      var monthPattern = /[a-zA-Z]{3,}-*[0-9]{2,}/i;
+                      var quarterPattern = /[a-zA-Z0-9]{2,}-*[0-9]{2,}/i;
+                      var releaseDate = description.match(datePattern);
+                      if (releaseDate != null) {
+                          jQuery("#popup-preorder-release-date-{{ item.id }}").html("Release Date: " + releaseDate);
+                      } else {
+                          let releaseMonth = description.match(monthPattern);
+                          if (releaseMonth != null) {
+                              jQuery("#popup-preorder-release-date-{{ item.id }}").html("Release Date: " + releaseMonth);
+                          } else {
+                              let releaseQuarter = description.match(quarterPattern);
+                              if (releaseQuarter != null) {
+                                  jQuery("#popup-preorder-release-date-{{ item.id }}").html("Release Date: " + releaseQuarter);
+                              } else {
+                                  jQuery("#popup-preorder-release-date-{{ item.id }}").css('display', 'none');
+                              }
+                          }
+                      }
+                    </script>
+                {% endif %}
+            </div>
+        {%- endif -%}
+        {%- if show_variant -%}
+            {% capture default_variant_title %}{{ 'products.product.default_variant_title' | t }}{% endcapture %}
+            <div class="product-cart__variant{% if variant_title == 'Default Title' %} d-none{% endif %}">{{ variant_title | replace: 'Default Title', default_variant_title }}</div>
+        {%- endif -%}
+    </div>
+</div>
+{%- if show_price -%}
+    <div class="product-cart__price mb-20">
+        <span class="js-remove-product" data-line="{{ forloop.index }}">
+          Remove
+        </span>
+        <div class="product-cart__quantity-wrapper">
+            <span class="js-cart-quantity cart-minus-quantity" data-product-quantity='{{ item.product.variants[0].inventory_quantity }}' data-line="{{ forloop.index }}" data-qty={{ quantity | minus: 1 }} data-product-id={{ item.product_id }}>-</span>
+            <!--Conversionry - Update quantity text to input type number 051222-->
+            <input type="number" readonly class="js-input-cart-quantity product-cart__quantity" data-product-quantity='{{ item.product.variants[0].inventory_quantity }}' data-line="{{ forloop.index }}" value="{{ quantity }}" data-product-id="{{ item.product_id }}"/>
+            <span class="js-cart-quantity cart-plus-quantity" data-product-quantity='{{ item.product.variants[0].inventory_quantity }}' data-line="{{ forloop.index }}" data-qty={{ quantity | plus: 1 }} data-product-id={{ item.product_id }}>+</span>
+        </div>
+        <span class="hide-test_73">x</span>
+        <div class="cart-price">
+            {% if onSale %}
+                {% assign item_compare = price_compare | times: quantity %}
+
+                <span class="price price-sale">
+                    <span class="price-compare">{{ price_compare | money }}</span>
+                    <span>{{ price | money }}</span>
+                    
+                </span>
+            {% else %}
+                {% assign item_compare = price | times: quantity %}
+
+                <span class="price"><span>{{ price | money }}</span></span>
+            {% endif %}
+            
+            {% assign cart_compare = cart_compare | plus: item_compare %}
+        </div>
+    </div>
+{%- endif -%}

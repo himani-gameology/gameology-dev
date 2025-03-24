@@ -1,0 +1,85 @@
+<div class="row align-items-center justify-content-center">
+  <div class="promobox px-10 promobox--text">
+    <div id="refer-friends-block" class="promobox__content h-100 h-100-inner w-100 mx-auto">
+      <div class="d-flex flex-column">
+        <div class="promobox__text-3 fs-lg mt-15">
+          <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-12 col-sm-12">
+              <p class="h3"><strong>REFER A <span style="color:#c4a156;">FRIEND</span></strong></p>
+              <p class="h4">Give $5, Get $5</p>
+            </div>
+            <div class="col-lg-7 col-md-12 col-sm-12">
+              <div class="row">
+                <div class="col-12">
+                	<p>Give your friends $5 off on their first order of $50+ and get $5 for each successful referral.</p>
+                </div>
+                {% if customer == null %}
+                <div class="col-12 mt-15">
+                	<p>Login to refer your friends!</p>
+                </div>
+                <div class="col-6 mt-10">
+                    <button onclick="window.location.href='/account/register'" class="button-join">JOIN NOW</button>
+                </div>
+                <div class="col-6 mt-10">
+                    <button onclick="window.location.href='/account'" class="button-login">SIGN IN</button>
+                </div>
+                {% else %}
+                <div class="col-lg-6 col-md-12 col-sm-12 mt-15">
+                	<p>Share follwing link to your friends!</p>
+                  	<input id="refer-url" type="text" value="Loading..." disabled/>
+                </div>
+                <div class="col-lg-6 col-md-12 col-sm-12 mt-15">
+                	<p>Your Referrals</p>
+                  	<table id="referrals-table">
+                      <tr>
+                        <th>Email</th>
+                        <th>Status</th>
+                      </tr>
+                  	</table>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-25"></div>
+  </div>
+</div>
+<hr>
+<style>
+  #refer-friends-block {
+  	max-width: 1000px;
+  }
+  .button-join {
+    background: #47141d;
+    border: 0;
+    color: #fff;
+    font-size: 14px;
+    width: 100%;
+    max-width: 168px;
+    padding: 15px 10px;
+  }
+  .swell-header-buttons {
+    margin-top: 25px;
+  }
+  .button-login {
+    background: #c4a156;
+    border: 0;
+    color: #fff;
+    font-size: 14px;
+    width: 100%;
+    max-width: 168px;
+    padding: 15px 10px;
+  }
+  table, th, td {
+  	border-bottom: 1px solid #ddd;
+    padding: 5px;
+  }
+  @media only screen and (max-width: 991px) {
+    #refer-friends-block {
+  		max-width: 350px;
+  	}
+  }
+</style>

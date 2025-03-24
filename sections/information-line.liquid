@@ -1,0 +1,206 @@
+{%- if section.blocks.size > 0 -%}
+    {% include 'global-variables' %}
+    <div data-section-id="{{ section.id }}" data-section-type="information-line">
+        {%- if section.settings.title != blank -%}
+            <h4 class="information-line-title home-section-title mb-30 text-center">{{ section.settings.title }}</h4>
+        {%- endif -%}
+        <div class="information-line information-line--type-{{ section.settings.type }} information-line--style-{{ section.settings.style }}">
+            <div class="container">
+                <div class="row py-{{ information_line_padding_v }}">
+                    {%- for block in section.blocks -%}
+                      <div class="col-12 col-lg-{{ 12 | divided_by: section.blocks.size }} {% if block.settings.title == 'Weekly TCG' %} weekly-in-store {% endif %}">
+                        {% if block.settings.url != blank %}<a href="{{ block.settings.url }}"  title="{% if block.settings.title == 'Weekly TCG' %} Click here for the Calendar {% endif %}">{% endif %}
+                            {%- if section.settings.type == '1' -%}
+                                <div class="d-flex align-items-center justify-content-center {% if block.settings.title != 'Weekly TCG' %} py-10 {% endif %}">
+                                    <i class="mr-15">{% include 'load-icon' with name: block.settings.icon %}</i>
+                                    <div>
+                                        {%- if block.settings.title != blank -%}
+                                            <h6 class="information-line__title d-inline  hoverout">{{ block.settings.title }}
+                                            {% if block.settings.title == 'Weekly TCG' %}
+                                              <svg style="width: 15px !important; min-width: 15px !important;" aria-hidden="true" focusable="false" role="presentation" class="icon icon-theme-174" viewbox="0 0 24 24">
+                                                <path d="M14.583 16.429h-1.875v-7.5a.6.6 0 0 0-.186-.439.601.601 0 0 0-.439-.186h-2.5a.598.598 0 0 0-.439.186c-.124.123-.186.27-.186.439s.062.315.186.439a.6.6 0 0 0 .439.186h1.875v6.875H9.583a.598.598 0 0 0-.439.186c-.124.124-.186.271-.186.439s.062.315.186.439a.6.6 0 0 0 .439.186h5a.6.6 0 0 0 .439-.186c.124-.124.186-.271.186-.439s-.062-.315-.186-.439a.596.596 0 0 0-.439-.186z"></path>
+                                                <path d="M21.292 7.917a10.212 10.212 0 0 0-2.148-3.174c-.905-.905-1.963-1.621-3.174-2.148s-2.507-.791-3.887-.791-2.676.264-3.887.791-2.269 1.243-3.174 2.148c-.905.905-1.621 1.963-2.148 3.174s-.791 2.507-.791 3.887.264 2.676.791 3.887 1.243 2.269 2.148 3.174c.905.905 1.963 1.621 3.174 2.148s2.506.791 3.887.791c1.38 0 2.676-.264 3.887-.791s2.269-1.243 3.174-2.148c.905-.905 1.621-1.963 2.148-3.174s.791-2.507.791-3.887-.264-2.676-.791-3.887zm-1.152 7.295a8.897 8.897 0 0 1-1.875 2.773 8.909 8.909 0 0 1-2.773 1.875c-1.062.462-2.197.693-3.408.693s-2.347-.231-3.408-.693a8.886 8.886 0 0 1-2.773-1.875 8.909 8.909 0 0 1-1.875-2.773c-.462-1.062-.693-2.197-.693-3.408s.231-2.347.693-3.408a8.862 8.862 0 0 1 1.873-2.774 8.909 8.909 0 0 1 2.773-1.875c1.061-.462 2.197-.693 3.408-.693s2.347.231 3.408.693a8.909 8.909 0 0 1 2.773 1.875 8.909 8.909 0 0 1 1.875 2.773c.462 1.062.693 2.197.693 3.408s-.229 2.347-.691 3.409z"></path>
+                                                <circle cx="12.083" cy="6.063" r=".656"></circle>
+                                              </svg>
+                                            {% endif %}
+                                            </h6>
+
+                                            {% if block.settings.title == 'Weekly TCG' %}
+                                            <h6 class="information-line__title d-inline hover">Click Here
+                                            {% if block.settings.title == 'Weekly TCG' %}
+                                              <svg style="width: 15px !important; min-width: 15px !important;" aria-hidden="true" focusable="false" role="presentation" class="icon icon-theme-174" viewbox="0 0 24 24">
+                                                <path d="M14.583 16.429h-1.875v-7.5a.6.6 0 0 0-.186-.439.601.601 0 0 0-.439-.186h-2.5a.598.598 0 0 0-.439.186c-.124.123-.186.27-.186.439s.062.315.186.439a.6.6 0 0 0 .439.186h1.875v6.875H9.583a.598.598 0 0 0-.439.186c-.124.124-.186.271-.186.439s.062.315.186.439a.6.6 0 0 0 .439.186h5a.6.6 0 0 0 .439-.186c.124-.124.186-.271.186-.439s-.062-.315-.186-.439a.596.596 0 0 0-.439-.186z"></path>
+                                                <path d="M21.292 7.917a10.212 10.212 0 0 0-2.148-3.174c-.905-.905-1.963-1.621-3.174-2.148s-2.507-.791-3.887-.791-2.676.264-3.887.791-2.269 1.243-3.174 2.148c-.905.905-1.621 1.963-2.148 3.174s-.791 2.507-.791 3.887.264 2.676.791 3.887 1.243 2.269 2.148 3.174c.905.905 1.963 1.621 3.174 2.148s2.506.791 3.887.791c1.38 0 2.676-.264 3.887-.791s2.269-1.243 3.174-2.148c.905-.905 1.621-1.963 2.148-3.174s.791-2.507.791-3.887-.264-2.676-.791-3.887zm-1.152 7.295a8.897 8.897 0 0 1-1.875 2.773 8.909 8.909 0 0 1-2.773 1.875c-1.062.462-2.197.693-3.408.693s-2.347-.231-3.408-.693a8.886 8.886 0 0 1-2.773-1.875 8.909 8.909 0 0 1-1.875-2.773c-.462-1.062-.693-2.197-.693-3.408s.231-2.347.693-3.408a8.862 8.862 0 0 1 1.873-2.774 8.909 8.909 0 0 1 2.773-1.875c1.061-.462 2.197-.693 3.408-.693s2.347.231 3.408.693a8.909 8.909 0 0 1 2.773 1.875 8.909 8.909 0 0 1 1.875 2.773c.462 1.062.693 2.197.693 3.408s-.229 2.347-.691 3.409z"></path>
+                                                <circle cx="12.083" cy="6.063" r=".656"></circle>
+                                              </svg>
+                                            {% endif %}
+                                            </h6>
+                                            {% endif %}
+                                        {%- endif -%}
+                                        {%- if block.settings.paragraph != blank -%}
+                                            <p class="d-inline hoverout">{{ block.settings.paragraph }}</p>
+                                            {% if block.settings.title == 'Weekly TCG' %}
+                                                <p class="d-inline hover"></br>FOR THE CALENDAR</p>
+                                            {% endif %}
+                                        {%- endif -%}
+                                    </div>
+                                </div>
+                            {%- else -%}
+                                <div class="d-flex align-items-start justify-content-start py-10">
+                                    <i class="mr-15">{% include 'load-icon' with name: block.settings.icon %}</i>
+                                    <div>
+                                        {%- if block.settings.title != blank -%}
+                                            <h6 class="information-line__title mb-0">{{ block.settings.title }} </h6>
+                                        {%- endif -%}
+                                        {%- if block.settings.paragraph != blank -%}
+                                            <p class="d-inline">{{ block.settings.paragraph }}</p>
+                                        {%- endif -%}
+                                    </div>
+                                </div>
+                            {%- endif -%}
+                        {% if block.settings.url != blank %}</a>{% endif %}
+                        </div>     
+                    {%- endfor -%}
+                </div>
+            </div>
+        </div>
+    </div>
+{%- else -%}
+    {% render 'no-blocks' %}
+{%- endif -%}
+{% schema %}
+{
+    "name": "Information line",
+    "settings": [
+        {
+            "type": "textarea",
+            "id": "title",
+            "label": "Title"
+        },
+{
+"type": "select",
+"id": "type",
+"label": "Type",
+"default": "1",
+"options": [
+{
+"value": "1",
+"label": "Type #1"
+},
+{
+"value": "2",
+"label": "Type #2"
+}
+]
+},
+{
+"type": "select",
+"id": "style",
+"label": "Colorize style",
+"default": "1",
+"options": [
+{
+"value": "1",
+"label": "Style #1"
+},
+{
+"value": "2",
+"label": "Style #2"
+},
+{
+"value": "3",
+"label": "Style #3"
+},
+{
+"value": "4",
+"label": "Style #4"
+},
+{
+"value": "5",
+"label": "Style #5"
+}
+]
+},
+{
+  "type": "header",
+  "content": "Video manual"
+},
+{
+  "type": "paragraph",
+  "content": "[Home sections](https:\/\/www.youtube.com\/watch?v=QQ6wFwBts4k&list=PLj-506KaR_vcQjwcpC6yII-1JY0bSj7df&index=9)"
+},
+{
+  "type": "header",
+  "content": "User manual"
+},
+{
+  "type": "paragraph",
+  "content": "[Information Line](https:\/\/mpthemes.net\/shella-shopify-theme\/documentation-version4\/doc02-07-home-information-line.php#information-line)"
+}
+    ],
+    "blocks": [
+        {
+            "type": "content",
+            "name": "Content",
+            "limit": 4,
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "icon",
+                    "label": "Icon snippet name",
+                    "default": "theme-116"
+                },
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "Title",
+                    "default": "Title text."
+                },
+                {
+                    "type": "text",
+                    "id": "paragraph",
+                    "label": "Paragraph",
+                    "default": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa error iste provident."
+                },
+                {
+                    "type": "url",
+                    "id": "url",
+                    "label": "URL"
+                }
+            ]
+        }
+    ],
+    "presets": [
+        {
+            "name": "Information line",
+            "category": "3) Static content",
+"blocks": [
+{
+"type": "content",
+"settings": {
+"icon": "theme-116",
+"title": "Free Shipping.",
+"paragraph": "All orders of $49 or more of eligible items across any product category qualify."
+}
+},
+{
+"type": "content",
+"settings": {
+"icon": "theme-125",
+"title": "Payment Methods.",
+"paragraph": "Credit Card: Visa, MasterCard, Maestro, American Express."
+}
+},
+{
+"type": "content",
+"settings": {
+"icon": "theme-009",
+"title": "Returns & Refunds.",
+"paragraph": "You can return any item purchased on Shella within 20 days of the delivery date."
+}
+}
+]
+        }
+    ]
+}
+{% endschema %}

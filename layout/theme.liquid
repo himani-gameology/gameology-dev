@@ -1,0 +1,479 @@
+{%- if content_for_header contains 'Shopify.designMode' or canonical_url contains 'challenge' -%}
+  {%- assign is_design_mode = true -%}
+{%- else -%}
+  {%- assign putdown_cfh = true -%}
+{%- endif -%}
+<!doctype html>
+<!--[if IE 9]> <html class="ie9 no-js supports-no-cookies" lang="{{ shop.locale }}"{% if settings.layout_enable_rtl %} dir="rtl"{% endif %}> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js supports-no-cookies" lang="{{ shop.locale }}"{% if settings.layout_enable_rtl %} dir="rtl"{% endif %}> <!--<![endif]-->
+{% render 'layout-get-shella' %}
+{% capture document %}
+<head>
+  <script>window.performance.mark('theme:DOM:load');</script>
+  
+  <!-- begin Convert Experiences code--><script type="text/javascript" src="//cdn-4.convertexperiments.com/js/10041790-100413418.js"></script><!-- end Convert Experiences code -->
+  <script type="text/javascript">
+    function loadScript(src) {
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = src;
+        document.head.appendChild(script);
+    }
+    var currentURL = window.location.pathname;
+    if (currentURL === "/") {
+        loadScript("//cdn-4.convertexperiments.com/js/10041790-100412158.js");
+        loadScript("//cdn-4.convertexperiments.com/js/10041790-100413418.js");
+    }
+    else if (currentURL.includes("/products/")) {
+        loadScript("//cdn-4.convertexperiments.com/js/10041790-100413418.js");
+    }
+  </script>
+
+  
+  <!-- Zeta Digital - Google Tag GA4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K344XC07LK"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+  
+    gtag('config', 'G-K344XC07LK');
+  </script>
+  {{ 'product_qty_limit.js' | asset_url | script_tag }}
+  <!-- Zeta Digital - Legacy Google Tag Manager GTM-TTXDKFR (28/09/20) -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-TTXDKFR');</script>
+<!-- Zeta Digital - Legacy Google Tag Manager GTM-TTXDKFR (28/09/20) -->
+  <script src="https://www.googleoptimize.com/optimize.js?id=GTM-KWNSBBS" async></script>
+    <!-- miniOrange SCRIPT START -->{% include 'mo-firewall' %}<!-- miniOrange SCRIPT END --> 
+
+  {% capture get_content_for_header %}
+ {{ content_for_header }} {% endcapture %}
+  {% include 'head' %}
+
+  {{ 'bold-brain-widget.css' | asset_url | stylesheet_tag }}
+
+  {%- if settings.app_language == 'weglot' -%}
+    {% capture weglot_includes %}
+      {% include 'weglot_hreftags' %}
+      {% include 'weglot_switcher' %}
+    {% endcapture %}
+  {%- endif -%}
+  {%- if weglot_includes contains "Liquid error" -%}
+    {%- assign weglot_includes = '' -%}
+  {%- endif -%}
+  {%- if is_design_mode -%}
+    {{ content_for_header }}
+{{ 'bold-brain-widget.css' | asset_url | stylesheet_tag }}
+
+    {{ weglot_includes }}
+  {%- else -%}
+    {% capture get_content_for_header %}
+      {{ content_for_header }}
+{{ 'bold-brain-widget.css' | asset_url | stylesheet_tag }}
+
+      {{ weglot_includes }}
+    {% endcapture %}
+  {%- endif -%}
+
+  {% include 'judgeme_core' %}
+   {% comment %}{%- render 'bold-common' -%} {% endcomment %}
+  <script src="https://cdn-widgetsrepository.yotpo.com/v1/loader/OnTPyUYntJV_LYRgNzb_3g" async></script>
+
+  {% render 'gsf-conversion-pixels' %}
+  <script type='text/javascript'>var jiltStorefrontParams = {{ shop.metafields.jilt_storefront | json }}; {% if customer %}jiltStorefrontParams.customerID = {{ customer.id }};{% endif %}</script>
+
+  <script type="text/javascript">
+    var intervalCart;
+    var dataCountdown = parseInt({{ settings.cart_countdown }}, 10) * 60 * 1000;
+  </script>
+  {{ 'plugin.slick.min.js' | asset_url | script_tag }}
+  <!-- Converisionry - Add postcode to checking Melbourne (08/11/2021) -->  
+  {{ 'au_suburb_postcode.js' | asset_url | script_tag }}
+  <!-- Zeta Digital - TikTok Pixel (19/02/2021) -->
+  <script>
+    !function (w, d, t) {
+      w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var i="https://analytics.tiktok.com/i18n/pixel/events.js";ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=i,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};var o=document.createElement("script");o.type="text/javascript",o.async=!0,o.src=i+"?sdkid="+e+"&lib="+t;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(o,a)};
+      ttq.load('C0NFSJ52BAPH375FNOIG');
+      ttq.page();
+    }(window, document, 'ttq');
+  </script>
+  <!-- Zeta Digital - TikTok Pixel (19/02/2021) -->
+
+  {% if settings.ss_enable == false %}
+  <!-- Zeta Digital - Algolia Search (07/09/2022) -->
+  {{ 'algolia_config.js' | asset_url | script_tag }}
+  <script type="text/template" id="template_algolia_money_format">{% include 'algolia_money_format' %}</script>
+  <script type="text/template" id="template_algolia_current_collection_id">{% include 'algolia_current_collection_id' %}</script>
+  <script type="text/template" id="template_algolia_autocomplete">{% include 'algolia_autocomplete.hogan' %}</script>
+  <script type="text/template" id="template_algolia_autocomplete.css">{% include 'algolia_autocomplete.css.hogan' %}</script>
+  <script type="text/template" id="template_algolia_autocomplete_pages_empty">{% include 'algolia_autocomplete_pages_empty.hogan' %}</script>
+  <script type="text/template" id="template_algolia_autocomplete_page">{% include 'algolia_autocomplete_page.hogan' %}</script>
+  <script type="text/template" id="template_algolia_autocomplete_collection">{% include 'algolia_autocomplete_collection.hogan' %}</script>
+  <script type="text/template" id="template_algolia_autocomplete_collections_empty">{% include 'algolia_autocomplete_collections_empty.hogan' %}</script>
+  <script type="text/template" id="template_algolia_autocomplete_article">{% include 'algolia_autocomplete_article.hogan' %}</script>
+  <script type="text/template" id="template_algolia_autocomplete_articles_empty">{% include 'algolia_autocomplete_articles_empty.hogan' %}</script>
+  <script type="text/template" id="template_algolia_autocomplete_product">{% include 'algolia_autocomplete_product.hogan' %}</script>
+  <script type="text/template" id="template_algolia_autocomplete_products_empty">{% include 'algolia_autocomplete_products_empty.hogan' %}</script>
+  <script type="text/template" id="template_algolia_autocomplete_footer">{% include 'algolia_autocomplete_footer.hogan' %}</script>
+  <script type="text/template" id="template_algolia_instant_search">{% include 'algolia_instant_search.hogan' %}</script>
+  <script type="text/template" id="template_algolia_instant_search.css">{% include 'algolia_instant_search.css.hogan' %}</script>
+  <script type="text/template" id="template_algolia_instant_search_stats">{% include 'algolia_instant_search_stats.hogan' %}</script>
+  <script type="text/template" id="template_algolia_instant_search_facet_show_more">{% include 'algolia_instant_search_facet_show_more.hogan' %}</script>
+  <script type="text/template" id="template_algolia_instant_search_facet_item">{% include 'algolia_instant_search_facet_item.hogan' %}</script>
+  <script type="text/template" id="template_algolia_instant_search_current_refined_values_item">{% include 'algolia_instant_search_current_refined_values_item.hogan' %}</script>
+  <script type="text/template" id="template_algolia_instant_search_product">{% include 'algolia_instant_search_product.hogan' %}</script>
+  <script type="text/template" id="template_algolia_instant_search_no_result">{% include 'algolia_instant_search_no_result.hogan' %}</script>
+  <!--   /* Chriate – Mas Item #192 - Search Optimization (23/01/23) - START */ -->
+  <script type="text/template" id="template_algolia_autocomplete_query_suggestion">{% include 'algolia_autocomplete_query_suggestion.hogan' %}</script>
+  <script type="text/template" id="template_algolia_autocomplete_query_suggestion_empty">{% include 'algolia_autocomplete_query_suggestion_empty.hogan' %}</script>
+  <!--   /* Chriate – Mas Item #192 - Search Optimization (23/01/23) - END */ -->
+  {{ 'algolia_dependency_font-awesome-4-4-0.min.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'algolia_externals.js' | asset_url }}" defer></script>
+  {{ 'algolia_init.js' | asset_url | script_tag }}
+  <script src="{{ 'algolia_analytics.js' | asset_url }}" defer></script>
+  <script src="{{ 'algolia_translations.js' | asset_url }}" defer></script>
+  <script src="{{ 'algolia_helpers.js' | asset_url }}" defer></script>
+  <script src="{{ 'algolia_autocomplete.js' | asset_url }}" defer></script>
+  <script src="{{ 'algolia_facets.js' | asset_url }}" defer></script>
+  <script src="{{ 'algolia_sort_orders.js' | asset_url }}" defer></script>
+  <script src="{{ 'algolia_instant_search.js' | asset_url }}" defer></script>
+
+
+
+
+
+
+
+
+  <!-- Zeta Digital - Algolia Search (07/09/2022) -->
+  {% endif %}
+
+  {% if template == 'search' %}
+<!--     <script>jdgm = window.jdgm || {};jdgm.SHOP_DOMAIN = 'gameology.myshopify.com';jdgm.PLATFORM = 'shopify';jdgm.PUBLIC_TOKEN = 'I85c58q3AcQvbyqxhfO_-8M0dQc';</script>
+    <script data-cfasync='false' type='text/javascript' async src='https://cdn.judge.me/widget_preloader.js'></script>
+    <script data-cfasync='false' type='text/javascript' async src='https://cdn.judge.me/assets/installed.js'></script> -->
+  {% endif %}
+
+<!-- Update (23/05/23) - Microsoft advertising tracking code - START -->
+  <script>
+  (function(w,d,t,r,u)
+  {
+    var f,n,i;
+    w[u]=w[u]||[],f=function()
+    {
+      var o={ti:"73003938", enableAutoSpaTracking: true};
+      o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad")
+    },
+    n=d.createElement(t),n.src=r,n.async=1,n.onload=n.onreadystatechange=function()
+    {
+      var s=this.readyState;
+      s&&s!=="loaded"&&s!=="complete"||(f(),n.onload=n.onreadystatechange=null)
+    },
+    i=d.getElementsByTagName(t)[0],i.parentNode.insertBefore(n,i)
+  })
+  (window,document,"script","//bat.bing.com/bat.js","uetq");
+</script>
+  <!-- Update (23/05/23) - Microsoft advertising tracking code - END -->
+  
+                        {% include 'otRegion' %}            
+  {% if settings.ss_enable %}
+  	{% render 'ss-script' %}
+  {% endif %}
+
+<!-- Google tag (gtag.js) --> 
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-852698508"></script>
+  <script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'AW-852698508');
+  </script>
+<!-- end Google tag (gtag.js) -->
+
+  
+{% include 'pagefly-app-header' %}</head>
+<body {% render 'layout-get-body-attributes' %} >
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TTXDKFR"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<style>
+  .swell-tab{
+    height: 48px;
+  width: 48px;
+    border-radius: 25px;
+  bottom: 120px;
+  right: 70px;
+  }
+  @media (min-width: 576px) {
+    .elIHAt {
+        right: 20px !important;
+        left: unset;
+    }
+}
+  .elIHAt{
+    z-index:100 !important;
+  }
+  .show-test_98{
+    display: none;
+  }
+  body.test_98 .show-test_98{
+    display: block;
+  }
+  #consent-tracking{
+  display: block;
+    z-index: 9001;
+    position: fixed;
+    position: fixed;
+    background: #000;
+    width: 100%;
+    bottom: 0px;
+    color: #fff;
+    padding: 1rem 0;
+    min-height: 5.625rem;
+}
+#consent-tracking h2{
+    color: #fff;
+    margin-bottom: 20px;
+}
+</style>
+
+
+{%- if settings.layout_enable_preloader -%}
+  {% render 'layout-get-preloader' with is_fixed: true %}
+{%- endif -%}
+{%- if settings.product_show_custom_options and settings.product_enable_variants_section -%}
+  {% section 'product-variants' %}
+{%- endif -%}
+{% section 'header' %}
+<main id="MainContent" class="test_155">
+  {{ content_for_layout }}
+</main>
+
+{% section 'footer' %}
+
+{% include 'popups' %}
+{% include 'popup-account-point' %}
+{% include 'footbar' %}
+{%- if settings.presentation_enable or template == 'product' and settings.product_info_page_show_usage_info_sidebar -%}
+  {% include 'fixed-sidebar' %}
+{%- endif -%}
+{% include 'templates' %}
+{% include 'layout-get-includes' %}
+{% endcapture %}
+{%- unless is_design_mode -%}
+  {{ document | strip_newlines | replace: '   ', ' ' }}
+{%- else -%}
+  {{ document }}
+{%- endunless -%}
+{%- if putdown_cfh -%}
+  {% capture get_content_for_header %}
+  {%- if settings.dev_enable_content_for_header -%}
+    {%- unless settings.javascript_loader_jquery_first -%}
+      {%- assign get_content_for_header = get_content_for_header | replace: "window.addEventListener('load', asyncLoad, false);", "window.addEventListener('theme.loaded.scripts.plugin_jquery', asyncLoad, false);" | replace: "window.attachEvent('onload', asyncLoad);", "window.attachEvent('theme.loaded.scripts.plugin_jquery', asyncLoad);" -%}
+    {%- endunless -%}
+    {{ get_content_for_header }}
+  {%- endif -%}
+  {% endcapture %}
+  {{ get_content_for_header }}
+{%- endif -%}
+<!-- START APPS -->
+{%- if settings.app_klarna_enable -%}
+  <!-- start Klarna app -->
+  <script>window.KlarnaThemeGlobals={};{%case template.name%} {%when"product"%} window.KlarnaThemeGlobals.data_purchase_amount={{product.first_available_variant.price}};window.KlarnaThemeGlobals.productVariants={{product.variants|json}};window.KlarnaThemeGlobals.documentCopy=document.cloneNode(true);{%when"cart"%} window.KlarnaThemeGlobals.data_purchase_amount={{cart.total_price}};window.KlarnaThemeGlobals.documentCopy=document.cloneNode(true);{%endcase%}</script>
+  <!-- end Klarna app -->
+{%- endif -%}
+{%- if settings.app_growave_enable -%}
+  <!-- start Growave app -->
+  {% capture the_snippet_content %}{% render 'socialshopwave-helper' %}{% endcapture %}
+  {%- unless the_snippet_content contains 'Liquid error' -%}
+    {{ the_snippet_content }}
+  {%- endunless -%}
+  <script>
+    sswRun(function(){
+      var intervalId = setInterval(function() {
+        if(ssw('.ssw-stars.ssw-stars-large').length) {
+          ssw('.ssw-stars.ssw-stars-large').on('click', function() {
+            ssw('.product-page__tabs .tabs__btn[data-tab="reviews"]').click();
+            ssw('html, body').animate({
+              scrollTop: ssw("#ssw-widget-recommends-html").offset().top - 200
+            }, 100);
+          });
+          clearInterval(intervalId);
+        }
+      },1000);
+    });
+  </script>
+  <!-- end Growave app -->
+{%- endif -%}
+<!-- END APPS -->
+{% render 'layout-get-version' %}
+<script>window.performance.mark('theme:DOM:loaded');</script>
+<!-- Zeta Digital - Zendesk Integration (01/12/2020) -->
+<script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=7bee7e9f-079a-45e0-b518-d3778d15f839"></script>
+<script type="text/javascript">  
+window.zESettings = {    
+	webWidget: {      
+		launcher: {        
+			label: {          
+				'*': 'Contact Us'     
+			}      
+		}    
+	}  
+};
+</script>
+<!-- Zeta Digital - Zendesk Integration (01/12/2020) -->
+<!-- Zeta Digital - Dynamic Zendest Label Text (07/02/2022) -->
+<script>
+var intervalId = window.setInterval(function(){
+  var labelEle = document.getElementById("launcher").contentWindow.document.body.getElementsByClassName('label-6AYOW')[0];
+}, 5000);
+</script>
+<!-- Zeta Digital - Dynamic Zendest Label Text (07/02/2022) -->
+  
+{% include 'subscribe-it-helper' %}
+{% render 'ps-footer-payment-icons' %}
+
+{% if settings.ss_enable %}
+	{% render 'ss-intellisuggest' %}
+{% endif %}
+
+
+</body>
+
+<!-- Zeta Digital - Rewards Popup Button (15/09/20) -->
+<a href="https://www.gameology.com.au/pages/rewards" class="reward-button" style="background-color:black">REWARDS</a>
+<!-- Zeta Digital - Rewards Popup Button (15/09/20) -->
+  
+{% render 'zip-popup' %}
+
+<!-- Zeta Digital - AfterPay Integration (04/05/21) -->
+<script type="text/javascript">
+// Overrides:
+var afterpay_product_selector = '#afterpay';
+var afterpay_cart_integration_enabled = false;
+
+// Non-editable fields:
+var afterpay_shop_currency = {{ shop.currency | json }};
+var afterpay_cart_currency = {{ cart.currency.iso_code | json }};
+var afterpay_shop_money_format = {{ shop.money_format | json }};
+var afterpay_shop_permanent_domain = {{ shop.permanent_domain | json }};
+var afterpay_theme_name = {{ theme.name | json }};
+var afterpay_product = {{ product | json }};
+var afterpay_current_variant = {{ product.selected_or_first_available_variant | json }};
+var afterpay_cart_total_price = {{ cart.total_price | json }};
+var afterpay_js_snippet_version = '1.0.10';
+</script>
+<script type="text/javascript" src="https://static.afterpay.com/shopify-afterpay-javascript.js"></script>
+<!-- Zeta Digital - AfterPay Integration (04/05/21) -->
+
+
+<!-- Zeta Digital - Klaviyo Integration (23/09/21) -->
+<script src="https://a.klaviyo.com/media/js/onsite/onsite.js"></script>
+<script>
+    var klaviyo = klaviyo || [];
+    klaviyo.init({
+      account: "TfqUcC",
+      platform: "shopify"
+    });
+    klaviyo.enable("backinstock",{
+    trigger: {
+      product_page_text: "Notify Me When Available",
+      product_page_class: "btn",
+      product_page_text_align: "center",
+      product_page_margin: "10px 0px 0px 0px",
+      replace_anchor: false
+    },
+    modal: {
+     headline: "{product_name}",
+     body_content: "Register to receive a notification when this item comes back in stock.",
+     email_field_label: "Email",
+     button_label: "Notify me when available",
+     subscription_success_label: "You're in! We'll let you know when it's back.",
+     footer_content: '',
+     additional_styles: "@import url('https://fonts.googleapis.com/css?family=Helvetica+Neue');",
+     drop_background_color: "#000",
+     background_color: "#fff",
+     text_color: "#222",
+     button_text_color: "#fff",
+     button_background_color: "#439fdb",
+     close_button_color: "#ccc",
+     error_background_color: "#fcd6d7",
+     error_text_color: "#C72E2F",
+     success_background_color: "#d3efcd",
+     success_text_color: "#1B9500"
+    }
+  });
+</script>
+<!-- Zeta Digital - Klaviyo Integration (23/09/21) -->
+
+<script type="text/javascript">
+  // Redirect account page to product page
+  if (typeof(Storage) !== 'undefined') {
+    var checkBody = document.querySelector('body');
+    if(hasClass(checkBody, 'js-return-product') == true || hasClass(checkBody, 'template-index') == true) {
+      var checkProduct1 = localStorage.getItem('ProductLogin');
+      var checkProduct2 = localStorage.getItem('ProductCreate');
+      if (checkProduct1 != null) {
+        window.location.href = checkProduct1;
+      } else if (checkProduct2 != null) {
+        window.location.href = checkProduct2;
+      }
+    }
+
+    function hasClass(element, cls) {
+      return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
+    }
+  }
+</script>
+
+<!-- Zeta Digital - Fav Icon with Red Dot (28/06/22) -->
+<script>
+{% if cart.item_count > 0 %}
+  jQuery("#favicon").attr("href","https://cdn.shopify.com/s/files/1/0921/7330/files/favicon_32x32_red_dot.png?v=1656394157");
+{% endif %}
+
+  jQuery(".swell-tab").html('<img src="https://cdn.shopify.com/s/files/1/0921/7330/files/share.svg?v=1721283994">')
+const open = window.XMLHttpRequest.prototype.open;
+function openReplacement() {
+  this.addEventListener("load", function () {
+    if (
+      [
+        "/cart/add.js",
+        "/cart/update.js",
+        "/cart/change.js",
+        "/cart/clear.js",
+      ].includes(this._url)
+    ) {
+        var cartOrItem = JSON.parse(this.response);
+        if (cartOrItem != null && ((cartOrItem.item_count != null && cartOrItem.item_count > 0 ) || (cartOrItem.quantity != null && cartOrItem.quantity > 0))){
+        	jQuery("#favicon").attr("href","https://cdn.shopify.com/s/files/1/0921/7330/files/favicon_32x32_red_dot.png?v=1656394157");
+        }
+        else {
+        	jQuery("#favicon").attr("href","https://cdn.shopify.com/s/files/1/0921/7330/files/favicon.png?v=1613756609");
+        }
+    }
+  });
+  return open.apply(this, arguments);
+}
+window.XMLHttpRequest.prototype.open = openReplacement;
+</script>
+<script>
+window.setTimeout(function () {
+  const urlParams = new URLSearchParams(window.location.search);
+  if(urlParams.get('store')){
+    const store = urlParams.get('store');
+    console.log('calendar : '+store);
+    if(store == 'brunswick'){
+      jQuery('[title="Brunswick Store"]').trigger('click');
+    }
+    else if (store == 'clayton'){
+      jQuery('[title="Clayton Store"]').trigger('click');
+    }
+  }
+  jQuery('.eapp-events-calendar-filter-modal').removeClass('eapp-events-calendar-filter-show');
+}, 3000);
+</script>
+<!-- Zeta Digital - Fav Icon with Red Dot (28/06/22) -->
+    {% render 'iwish_v2' with 'iwishfooter' %}
+</html>

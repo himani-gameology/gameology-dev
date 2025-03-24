@@ -1,0 +1,21 @@
+{%- assign payment_types = shop.enabled_payment_types -%}
+{%- assign shopify_pay = false -%}
+{%- assign paypal = false -%}
+{% for p_type in payment_types %}
+  {% if p_type == 'shopify_pay'%}
+    {%- assign shopify_pay = true -%}
+  {% endif %}
+  {% if p_type == 'paypal'%}  
+    {%- assign paypal = true -%}
+  {% endif %}
+{% endfor %}
+<div class="show-test_157" id="express-checkout-methods" style="display: block;">
+  {% if paypal == true %}
+    {%- render 'paypal-in-4', price: checkout.total_price -%}
+  {% endif %}
+  {% if shopify_pay == true %}
+    
+    {%- render 'shopify-pay' -%}
+    
+  {% endif %}
+</div>

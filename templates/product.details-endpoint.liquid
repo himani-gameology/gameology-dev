@@ -1,0 +1,36 @@
+{% comment %} Please don’t update this content {% endcomment %}
+
+{% layout none %}
+{
+  "product":
+    {
+      "id":{{ product.id }},
+      "metafields":[
+        
+              {% comment %}
+                Single Metafield
+              {% endcomment %}
+              {% assign v_shipping = product.metafields.free["shipping"] %}
+              {% if v_shipping != blank %}
+                {
+                  "namespace": "free",
+                  "key": "shipping",
+                  "value": {{ v_shipping | json }}
+                },
+              {% endif %}
+        
+              {% comment %}
+                Single Metafield
+              {% endcomment %}
+              {% assign v_badge = product.metafields.judgeme["badge"] %}
+              {% if v_badge != blank %}
+                {
+                  "namespace": "judgeme",
+                  "key": "badge",
+                  "value": {{ v_badge | json }}
+                },
+              {% endif %}
+        
+      ]
+    }
+}

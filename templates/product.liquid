@@ -1,0 +1,74 @@
+{% include 'breadcrumbs' %}
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+{% section 'product' %}
+{% if settings.ss_enable %}
+  <script type="searchspring/personalized-recommendations" profile="similar">
+  	seed = "{{ product.variants[0].sku }}";
+  </script>
+  <script type="searchspring/personalized-recommendations" profile="cross-sell">
+  	seed = "{{ product.variants[0].sku }}";
+  </script>
+  <script type="searchspring/personalized-recommendations" profile="recently-viewed"></script>
+{% else %}
+  {%- if settings.product_info_page_show_related_products -%}
+      {% section 'carousel-related-products' %}
+  {%- endif -%}
+{%- endif -%}
+{% render 'judgeme_widgets', widget_type: 'judgeme_review_widget', concierge_install: true, auto_install: true, product: product %}
+
+<script type="text/javascript">
+  var _learnq = _learnq || [];
+  var item = {
+    Name: {{ product.title|json }},
+    ProductID: {{ product.id|json }},
+    Categories: {{ product.collections|map:'title'|json }},
+    ImageURL: "https:{{ product.featured_image.src|img_url:'grande' }}",
+    URL: "{{ shop.secure_url }}{{ product.url }}",
+    Brand: {{ product.vendor|json }},
+    Price: {{ product.price|money|json }},
+    CompareAtPrice: {{ product.compare_at_price_max|money|json }}
+  };
+
+  _learnq.push(['track', 'Viewed Product', item]);
+  _learnq.push(['trackViewedItem', {
+    Title: item.Name,
+    ItemId: item.ProductID,
+    Categories: item.Categories,
+    ImageUrl: item.ImageURL,
+    Url: item.URL,
+    Metadata: {
+      Brand: item.Brand,
+      Price: item.Price,
+      CompareAtPrice: item.CompareAtPrice
+    }
+  }]);
+</script>
+
+<script>
+  const visitedProducts = JSON.parse(localStorage.getItem('visited_products')) || [];
+  
+  const currentProduct = {
+    title: {{ product.title|json }},
+    id: {{ product.id|json }},
+    featuredImage: "https:{{ product.featured_image.src|img_url:'grande' }}",
+    url: "{{ shop.secure_url }}{{ product.url }}",
+  };
+  
+  const index = visitedProducts.findIndex((product) => product.id === currentProduct.id);
+
+  if (index === -1) {
+    visitedProducts.unshift(currentProduct);
+  
+    if (visitedProducts.length > 12) {
+      visitedProducts.pop();
+    }
+  
+    try {
+      console.log(JSON.stringify(visitedProducts));
+      localStorage.setItem('visited_products', JSON.stringify(visitedProducts));
+    } catch (error) {
+      console.error('Failed to store visited products:', error);
+    }
+  }
+</script>
+

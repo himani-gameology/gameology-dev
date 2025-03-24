@@ -1,0 +1,108 @@
+<style>
+  #shopify-section-header {
+    margin: 0 !important;
+  }
+  .home-builder-block-id-home-builder-2 .slick-initialized .slick-slide {
+    padding: 0 !important;
+  }
+  .yugioh-title h2,.yugioh-title h3 {
+  	font-family: "Helvetica";
+  }
+  .carousel__header {
+    background-color: #141414;
+    height: 40px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    padding: 0 75px;
+  }
+  .carousel__title {
+    background-color: #141414;
+    color: white;
+    letter-spacing: 0px;
+    font-size: 20px;
+  }
+  .carousel__title.active {
+    background-color: #141414;
+    color: white;
+    letter-spacing: 0px;
+    font-size: 20px;
+  }
+  .carousel__footer {
+    background-color: #141414;
+    height: 15px;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+  }
+  .carousel__item .btn__text {
+    font-size: 14px;
+  }
+  .carousel__item .product-collection__title {
+    height: 84px;
+  }
+  .product-release-date {
+    background-color: #ff414d;
+    color: white;
+    padding: 5px;
+  }
+  .product-collection__title a {
+    display: -webkit-box;
+    max-width: 200px;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .carousel__slider_wrapper {
+      background-color: white;
+  }
+  .carousel__header__view__more {
+    color: white !important;
+    font-size: 20px;
+  }
+  .product-collection__reviews {
+    display: none;
+  }
+  @media only screen and (max-width: 767px) {
+    .carousel__header {
+      height: 100px;
+      justify-content: center !important;
+      flex-direction: column;
+    }
+    .carousel__header__view__more {
+      font-size: 12px;
+    }
+    .carousel__slider_wrapper {
+      padding: 10px !important;
+    }
+    .carousel__title.active {
+      font-size: 20px;
+    }
+    .price-save_price {
+      font-size: 10px !important;
+    }
+    .product-collection__price {
+      height: 25px;
+    }
+    .product-collection {
+      margin-bottom: 0 !important;
+    }
+  }
+</style>
+<div class="container">
+{% section 'home-builder-yugioh' %}
+</div>
+{% section 'yugioh-background' %}
+{% section 'yugioh-navigation' %}
+{% section 'carousel-products-yugioh-1' %}
+{% section 'carousel-products-yugioh-2' %}
+{% section 'carousel-products-yugioh-3' %}
+{% section 'carousel-products-yugioh-4' %}
+
+<script>
+jQuery( document ).ready(function() {
+  jQuery("#yugioh-more-text-btn").on( "click", function() {
+  	jQuery(document.getElementById("yugioh-text-2")).css("display","block");
+    jQuery(document.getElementById("yugioh-text-3")).css("display","block");
+    jQuery(document.getElementById("yugioh-more-text-btn")).addClass("d-none");
+  });
+});
+</script>

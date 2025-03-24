@@ -1,0 +1,99 @@
+<div class="show-test_113--desktop product-gallery_grid">
+  {%- assign image_obj_id = 0 -%}
+  {%- for media in product.media -%}
+    {%- assign hold_lazyload = null -%}
+    {%- assign resize = null -%}
+    {%- assign blockratio_width = null -%}
+    {%- assign donothide = true -%}
+    {% capture media_id_index %}{{ media_id_index }}{% unless forloop.first %},{% endunless %}{{ media.id }}{% endcapture %}
+    <div class="product-gallery__main_item product-gallery__main_item--type-{{ media.media_type }} position-lg-relative overflow-hidden" data-js-product-gallery-main-item data-item-index="{{ forloop.index0 }}"{% if groups_arr %} data-group={{ groups_arr[forloop.index0] }}{% endif %}>
+      {% capture media_html %}
+        {%- case media.media_type -%}
+          {% when 'image' %}
+            {%- if first_load_index != forloop.index0 -%}
+              {%- assign hold_lazyload = true -%}
+              {%- assign donothide = false -%}
+            {%- endif -%}
+            <div class="product-gallery__zoom d-none d-lg-flex align-items-center absolute-lg-stretch overflow-hidden pointer-events-none invisible" data-js-product-gallery-zoom>
+              <div class="product-gallery__zoom_width w-100" data-js-product-gallery-zoom-width>
+                <div class="product-gallery__zoom_container position-lg-relative w-100 mx-lg-auto overflow-hidden" data-js-product-gallery-zoom-container>
+                  <div class="product-gallery__zoom_container_ratio position-lg-relative" data-js-product-gallery-zoom-ratio>
+                    <div class="product-gallery__zoom_container_zoomed position-lg-absolute">
+                      <div class="product-gallery__zoom_image position-lg-absolute w-100 invisible" data-js-product-gallery-zoom-image></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% render 'rimage' with image: media size: main_image_size disable_lazyload: false format: image_format hold_lazyload: hold_lazyload donothide: donothide alt: title %}
+          {% when 'video' %}
+            {%- assign gallery_has_video = true -%}
+            {%- assign video = media.sources | where: 'format', 'mp4' | first -%}
+            {% render 'rvideo' with video: video poster: media.preview_image.src poster_size: main_image_size autoplay: main_video_autoplay controls: true lazyload: video_lazyload %}
+          {% when 'external_video' %}
+            {%- assign gallery_has_video = true -%}
+            {% render 'video-external' video_url: media.external_id autoplay: main_video_autoplay controls: true enablejsapi: true lazyload: video_lazyload %}
+          {% when 'model' %}
+              <template>
+                <div class="model-viewer-wrapper">
+                  {{ media | model_viewer_tag }}
+                </div>
+              </template>
+        {%- endcase -%}
+      {% endcapture %}
+
+      {%- if gallery_stretch_size == 'auto' or product.media.size == 1 -%}
+        {{ media_html }}
+      {%- elsif media.media_type == 'image' -%}
+        {%- assign image_height_percent = 1.0 | divided_by: media.aspect_ratio | times: 100 -%}
+        {% capture styles_html %}
+          {{ styles_html }}
+          {%- if gallery_stretch_size == 'contain' -%}
+            {%- if image_height_percent > gallery_height_procent -%}
+              {%- assign resize = 'reduce' -%}
+            {%- endif -%}
+          {%- elsif gallery_stretch_size == 'cover' -%}
+            {%- if image_height_percent < gallery_height_procent -%}
+              {%- assign resize = 'to_enlarge' -%}
+            {%- endif -%}
+          {%- elsif gallery_stretch_size == 'stretch-by-height' -%}
+            {%- if image_height_percent > gallery_height_procent -%}
+              {%- assign resize = 'reduce' -%}
+            {%- elsif image_height_percent < gallery_height_procent -%}
+              {%- assign resize = 'to_enlarge' -%}
+            {%- endif -%}
+          {%- endif -%}
+          {%- if resize == 'to_enlarge' -%}
+            {%- assign blockratio_width = gallery_height_procent | divided_by: image_height_percent | times: 100 -%}
+            [data-product-gallery-id="{{ gallery_id }}"] [data-item-index="{{ forloop.index0 }}"] .product-gallery__blockratio {
+              width: {{ blockratio_width }}%;
+              margin-left: -{{ blockratio_width | minus: 100 | divided_by: 2 }}% !important;
+            }
+          {%- elsif resize == 'reduce' -%}
+            {%- assign blockratio_width = gallery_height_procent | divided_by: image_height_percent | times: 100 -%}
+            [data-product-gallery-id="{{ gallery_id }}"] [data-item-index="{{ forloop.index0 }}"] .product-gallery__blockratio {
+              width: {{ blockratio_width }}%;
+            }
+          {%- endif -%}
+          [data-product-gallery-id="{{ gallery_id }}"] [data-item-index="{{ forloop.index0 }}"] .product-gallery__blockratio_content {
+            padding-top: {{ image_height_percent }}%;
+          }
+        {% endcapture %}
+        <div class="product-gallery__blockratio product-gallery__blockratio--stretch_size-{{ gallery_stretch_size }} position-lg-relative mx-lg-auto overflow-hidden" data-js-product-gallery-blockratio{% if blockratio_width %} data-width="{{ blockratio_width }}"{% endif %}>
+          <div class="product-gallery__blockratio_content position-lg-absolute w-100 w-100-inner" data-js-product-gallery-blockratio-content>
+            {{ media_html }}
+          </div>
+        </div>
+      {%- else -%}
+        <div class="product-gallery__blockratio position-lg-relative overflow-hidden" data-js-product-gallery-blockratio>
+          <div class="absolute-lg-stretch d-lg-flex flex-lg-center w-100-inner" data-js-product-gallery-blockratio-content>
+            {{ media_html }}
+          </div>
+        </div>
+      {%- endif -%}
+      {%- if template_layout == '5' and media.media_type == 'image' -%}
+        {{ zoom_html }}
+      {%- endif -%}
+    </div>
+  {%- endfor -%}
+</div>

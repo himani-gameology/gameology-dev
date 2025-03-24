@@ -1,0 +1,44 @@
+
+<div class="tab-container collect-container" data-id-container="clcl">
+    {% if product.available and is_preorder_product %}
+        <span class="collect-tab-content">You will receive a notification to collect your order on the release date.</span>
+        <div id="click-collect-release-date"></div>
+    {% endif %}
+
+    <div class="store-box">
+        <div class="store-box-header">
+            <h3>Clayton South</h3>
+            {% if is_preorder_product == false %}
+                <div class="status js-cl-cl-cl" data-status-clcl-clayton>
+                    <span class="stt-a">Available{% render 'icon-check-new' %}</span>
+                    <span class="stt-u">Unavailable{% render 'icon-uncheck-new' %}</span>
+                </div>
+            {% endif %}
+        </div>
+        <div class="address">10-12 Eileen Rd, Clayton South, VIC 3169</div>
+
+        {%- unless is_preorder_product -%}
+            <div class="status js-cl-cl-cl" data-status-clcl-clayton>
+                <span class="stt-a">1 - 2 Business Days when all products in stock</span>
+            </div>
+        {%- endunless -%}
+    </div>
+    <div class="store-box">
+        <div class="store-box-header">
+            <h3>Brunswick</h3><br>
+            {% if is_preorder_product == false %}
+                <div class="status" data-status-clcl-brun>
+                    <span class="stt-a">Available {%- comment -%}(Closed on Monday){%- endcomment -%}{% render 'icon-check-new' %}</span>
+                    <span class="stt-u">Unavailable{% render 'icon-uncheck-new' %}</span>
+                </div>
+            {% endif %}
+        </div>
+        <div class="address">36 Hope St, Brunswick, VIC 3056</div>
+        {%- unless is_preorder_product -%}
+            <div class="status" data-status-clcl-brun>
+                <span class="stt-a">1 - 3 business days when all products in stock</span>
+            </div>
+        {%- endunless -%}
+    </div>
+</div>
+              

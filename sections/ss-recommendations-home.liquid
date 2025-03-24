@@ -1,0 +1,47 @@
+{% if settings.ss_enable and section.settings.ss_profile_id != blank %}
+	{%- if section.settings.ss_collection_list != blank or section.settings.ss_batched == false -%}
+		{% capture ss_options %}
+			options = {
+				{% if section.settings.ss_collection_list != blank %}categories : [{%- for collection in section.settings.ss_collection_list -%}{{ collection.id }}{%- unless forloop.last -%}, {%- endunless -%}{%- endfor -%}],{% endif %}
+				{% if section.settings.ss_batched == false %}batched : false,{% endif %}
+			};
+		{% endcapture %}
+	{%- endif -%}
+
+	<script type="searchspring/personalized-recommendations" profile="{{ section.settings.ss_profile_id | escape }}">
+		{{ ss_options }}
+	</script>
+{% endif %}
+
+{% schema %}
+{
+	"name": "SS Recommendations",
+	"class": "searchspring-recommendations-home",
+	"presets": [
+		{
+			"category": "Homepage Section",
+			"name": "SS Recommendations"
+		}
+	],
+	"settings": [
+		{
+			"type": "text",
+			"id": "ss_profile_id",
+			"label": "Profile ID"
+		},
+		{
+			"type": "collection_list",
+			"id": "ss_collection_list",
+			"label": "Collection ID",
+			"info" : "Filter recommendations to a list of collection ids. This only works for category trending profiles."
+		},
+		{
+			"type": "checkbox",
+			"id": "ss_batched",
+			"label": "Batched",
+			"info" : "Turn off batching on the recommendation. This may show duplicate products across recommendations if you have multiple profiles on the same page.",
+			"default": true
+		}
+	]
+}
+{% endschema %}

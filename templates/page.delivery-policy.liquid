@@ -1,0 +1,399 @@
+{% include 'global-variables' %}
+<div class="page">
+  {% include 'breadcrumbs' %}
+  <div class="container {% if offset_pages_margin_top_d > 0 %} mt-lg-{{ offset_pages_margin_top_d }}{% endif %} pb-60{% if offset_pages_margin_bottom_d > 0 %} mb-lg-{{ offset_pages_margin_bottom_d }}{% endif %}">
+    <h1 class="page__title mt-30 text-center">{{ page.title }}</h1>
+    <div class="rte">
+      {% include 'parse-for-icons' content: page.content %}
+    </div>
+  </div>
+</div>
+
+<style>
+  html body#delivery-policy-gameology .container--sm.px-0 {
+    max-width: 1032px;
+    margin: 0 auto;
+  }
+  /* styling start for delivery policy Breadcrumbs part */
+  html body#delivery-policy-gameology .breadcrumbs {
+    padding-top: 60px !important;
+  }
+  html body#delivery-policy-gameology .breadcrumbs ul li a,
+  html body#delivery-policy-gameology .breadcrumbs ul li span{
+    font-family: "Basic Commercial",sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    line-height: 14px;
+    letter-spacing: 0;
+    color: #858585;
+  }
+  html body#delivery-policy-gameology .breadcrumbs li:not(:first-child)::before {
+    color: #858585;
+  }
+  /* styling start for delivery policy header part */
+  html body#delivery-policy-gameology h1.page__title {
+    font-family: "Helvetica Regular", sans-serif;
+    font-weight: 700;
+    font-size: 38px;
+    line-height: 27px;
+    letter-spacing: 0.75px;
+    text-align: center;
+    color: #253B80;
+    margin-top: 60px !important;
+    margin-bottom: 0;
+  }
+  html body#delivery-policy-gameology .delivery-policy-description {
+    width: 100%;
+    max-width: 750px;
+    margin: 20px auto 0;
+    text-align: center;
+  }
+  html body#delivery-policy-gameology .delivery-policy-description p {
+    font-family: "Helvetica Regular", sans-serif;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 26px;
+    letter-spacing: 0;
+    text-align: center;
+    color: #000000;
+    margin-bottom: 0;
+  }
+  html body#delivery-policy-gameology .delivery-policy-description span b {
+    font-family: "Helvetica Regular", sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 26px;
+    letter-spacing: 0;
+    text-align: center;
+    color: #000000;
+  }
+  @media screen and (max-width: 1024px){
+    html body#delivery-policy-gameology h1.page__title {
+      font-size: 28px;
+      line-height: 42px;
+      letter-spacing: 0;
+      margin-top: 30px !important;
+    }
+    html body#delivery-policy-gameology .delivery-policy-description p {
+      font-size: 15px;
+      line-height: 22.5px;
+    }
+    html body#delivery-policy-gameology .delivery-policy-description span b {
+      font-weight: 400;
+      font-size: 15px;
+      line-height: 22.5px;
+    }
+  }
+  /* styling end for delivery policy header part */
+  html body#delivery-policy-gameology .icon-with-heading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 10px;
+    margin-bottom: 10px;
+    margin-top: 70px;
+  }
+  html body#delivery-policy-gameology .icon-with-heading .icon {
+    width: 100%;
+    height: auto;
+    max-width: 40px;
+    display: contents;
+  }
+  html body#delivery-policy-gameology .icon-with-heading.guarantee .icon:after {
+    content: url("https://cdn.shopify.com/s/files/1/0921/7330/files/deployed_code_history.svg?v=1741065446");
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 40px;
+    min-width: 40px;
+  }
+  html body#delivery-policy-gameology .icon-with-heading.delivery-options .icon:after {
+    content: url("https://cdn.shopify.com/s/files/1/0921/7330/files/local_shipping.svg?v=1741066398");
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 40px;
+    min-width: 40px;
+  }
+  html body#delivery-policy-gameology .icon-with-heading.delivery-options-outside .icon:after {
+    content: url("https://cdn.shopify.com/s/files/1/0921/7330/files/language.svg?v=1741066398");
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 40px;
+    min-width: 40px;
+  }
+  html body#delivery-policy-gameology .accordion-icon:after{
+    content: url("https://cdn.shopify.com/s/files/1/0921/7330/files/Down.svg?v=1741066576");
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 25px;
+    min-width: 25px;
+    transition: all 0.3s linear;
+  }
+  html body#delivery-policy-gameology .accordion-item.is-open .accordion-icon:after {
+    transform: rotate(180deg);
+  }
+  html body#delivery-policy-gameology .icon-with-heading .heading h2 {
+    font-family: "Helvetica Regular", sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 26px;
+    letter-spacing: 0;
+    color: #000000;
+    margin: 0;
+  }
+  html body#delivery-policy-gameology p.dispatch-guarantee__description {
+    font-family: "Helvetica Regular", sans-serif;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 26px;
+    letter-spacing: 0;
+    text-align: center;
+    color: #000000;
+  }
+  html body#delivery-policy-gameology .accordion-item {
+    width: 100%;
+    max-width: 910px;
+    margin: 0 auto;
+    box-shadow: 0px 20px 50px 0px #0000001F;
+    border: 1px solid #D3D3D3;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  html body#delivery-policy-gameology .accordion-heading-with-icon {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 32.5px 30px;
+    cursor: pointer;
+    column-gap: 12px;
+  }
+  html body#delivery-policy-gameology .accordion-heading p{
+    margin: 0;
+  }
+  html body#delivery-policy-gameology .accordion-heading p strong {
+    font-family: "Helvetica Regular", sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 23px;
+    letter-spacing: 0;
+    color: #000000;
+  }
+  html body#delivery-policy-gameology .accordion-icon {
+    display: contents;
+    width: 100%;
+    height: auto;
+  }
+  html body#delivery-policy-gameology .accordion-content{
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out;
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+  html body#delivery-policy-gameology .accordion-item.is-open .accordion-content{
+    border-top: 1px solid #D3D3D3;
+    transition: all 0.3s linear;
+  }
+  html body#delivery-policy-gameology .accordion-content p {
+    font-family: "Helvetica Regular", sans-serif;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 26px;
+    letter-spacing: 0;
+    color: #000000;
+    margin: 0;
+    padding-bottom: 30px;
+  }
+  html body#delivery-policy-gameology .table-content {
+    padding-top: 30.5px;
+    padding-bottom: 30px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+  }
+  html body#delivery-policy-gameology .table-content table td p{
+    padding-left: 0px;
+    padding-bottom: 0px;
+  }
+  html body#delivery-policy-gameology .table-content table td {
+    border: 1px solid #000000;
+    border-collapse: collapse;
+    font-family: "Basic Commercial",sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 26px;
+    letter-spacing: 0;
+    color: #000000;
+    padding-bottom: 24.5px;
+  }
+  html body#delivery-policy-gameology .accordion-content h5 {
+    font-family: "Helvetica Regular", sans-serif;
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 26px;
+    letter-spacing: 0;
+    color: #000000;
+    margin: 0;
+    padding-bottom: 10px;
+  }
+  html body#delivery-policy-gameology .collect-service-text{
+    padding-top: 30px;
+    width: 100%;
+    max-width: 676px;
+  }
+  html body#delivery-policy-gameology .table-content-area {
+    padding-bottom: 30px;
+  }
+  html body#delivery-policy-gameology .table-content-area table tr th strong,
+  html body#delivery-policy-gameology .table-content-area table tr td strong,
+  html body#delivery-policy-gameology .table-content-main table tr th,
+  html body#delivery-policy-gameology .table-content-main table tr td{
+    font-family: "Basic Commercial",sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 26px;
+    letter-spacing: 0;
+    color: #000000;
+  }
+  html body#delivery-policy-gameology p.ready-for-collection {
+    display: block;
+    width: 100%;
+    max-width: 750px;
+  }
+  html body#delivery-policy-gameology p.ready-for-collection a{
+    text-decoration: underline;
+  }
+  html body#delivery-policy-gameology p.policy-updated-date strong,
+  html body#delivery-policy-gameology p.help-centre-text strong{
+    font-family: "Basic Commercial",sans-serif;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 26px;
+    letter-spacing: 0;
+    color: #000000;
+    padding-top: 60px;
+    display: block;
+  }
+  html body#delivery-policy-gameology p.policy-updated-date,
+  html body#delivery-policy-gameology p.help-centre-text{
+     margin: 0;
+  }
+  html body#delivery-policy-gameology .accordion-item.mb-0{
+    margin-bottom: 0px;
+  }
+  html body#delivery-policy-gameology .help-centre {
+    margin-top: 20px;
+  }
+  html body#delivery-policy-gameology .help-centre a {
+    font-family: "Helvetica Regular", sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 16px;
+    letter-spacing: 0.7px;
+    text-align: center;
+    color: #FFFFFF;
+    background: #AD9360;
+    padding: 10px 11px;
+    border-radius: 5px;
+  }
+  html body#delivery-policy-gameology .icon-with-heading.mb-40{
+    margin-bottom: 40px;
+  }
+  html body#delivery-policy-gameology .table-content-main {
+    padding-top: 30.5px;
+    padding-bottom: 30px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+  }
+  html body#delivery-policy-gameology .table-content-main + p a {
+    text-decoration: underline;
+    font-weight: bold;
+  }
+  @media screen and (max-width: 1024px){
+    html body#delivery-policy-gameology .icon-with-heading {
+      margin-top: 40px;
+    }
+    html body#delivery-policy-gameology .accordion-heading p strong {
+      font-size: 16px;
+      line-height: 18.4px;
+    }
+    html body#delivery-policy-gameology .accordion-heading-with-icon {
+      padding: 26px 20px;
+    }
+    html body#delivery-policy-gameology .accordion-item {
+      margin-bottom: 12px;
+    }
+    html body#delivery-policy-gameology .accordion-content {
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+    html body#delivery-policy-gameology .accordion-content p {
+      font-size: 16px;
+      line-height: 22px;
+    }
+    html body#delivery-policy-gameology .table-content {
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+    html body#delivery-policy-gameology .breadcrumbs {
+      padding-top: 20px !important;
+    }
+    html body#delivery-policy-gameology .breadcrumbs ul li a,
+    html body#delivery-policy-gameology .breadcrumbs ul li span,
+    html body#delivery-policy-gameology .breadcrumbs li:not(:first-child)::before{
+      color: #151515;
+    }
+    html body#delivery-policy-gameology .collect-service-text {
+      padding-top: 20px;
+      padding-bottom: 20px !important;
+    }
+    html body#delivery-policy-gameology .collect-service-text + p,
+    html body#delivery-policy-gameology .table-content-area{
+      padding-bottom: 20px;
+    }
+    html body#delivery-policy-gameology .table-content-main {
+      padding-top: 20px;
+      padding-bottom: 20px;
+    }
+    html body#delivery-policy-gameology p.policy-updated-date strong, 
+    html body#delivery-policy-gameology p.help-centre-text strong {
+      padding-top: 30px;
+    }
+    html body#delivery-policy-gameology p.help-centre-text strong{
+      text-align: center;
+    }
+    html body#delivery-policy-gameology .help-centre {
+      text-align: center;
+    }
+    html body#delivery-policy-gameology .container.pb-60 {
+      padding-bottom: 30px !important;
+    }
+  }
+  html body#delivery-policy-gameology footer#footer table, 
+  html body#delivery-policy-gameology footer#footer th, 
+  html body#delivery-policy-gameology footer#footer td {
+      border: medium none;
+  }
+</style>
+
+<script>
+  (function () {
+    const accordionBtns = document.querySelectorAll("body#delivery-policy-gameology .accordion-item");
+
+    accordionBtns.forEach((accordion) => {
+      accordion.onclick = function () {
+        this.classList.toggle("is-open");
+        let content = this.querySelector('.accordion-content');
+        if (content.style.maxHeight) {
+          content.style.maxHeight = null;
+        } else {
+          content.style.maxHeight = content.scrollHeight + "px";
+        }
+      };
+    });
+  })();
+</script>

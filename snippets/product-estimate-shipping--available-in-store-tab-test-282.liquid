@@ -1,0 +1,34 @@
+{% if is_preorder_product == false %}
+    <div class="tab-container in-store-container" data-id-container="buys">
+        <div class="store-box">
+            <div class="store-box-header">
+                <h3>Clayton South</h3>
+                <div class="status" data-status-buys-clayton>
+                    <span class="stt-a">Available{% render 'icon-check-new' %}</span>
+                    <span class="stt-u">Unavailable{% render 'icon-uncheck-new' %}</span>
+                </div>
+            </div>
+
+            <div class="store-box-stock">
+              <h3 class="clayton-stock"></h3>
+            </div>
+            <div class="address">10-12 Eileen Rd, Clayton South, VIC 3169</div>
+        </div>
+
+        <div class="store-box">
+            <div class="store-box-header">
+                <h3>Brunswick</h3>
+                <div class="status" data-status-buys-brun>
+                    <span class="stt-a">Available {%- comment -%}(Closed on Monday){%- endcomment -%}{% render 'icon-check-new' %}</span>
+                    <span class="stt-u">Unavailable{% render 'icon-uncheck-new' %}</span>
+                </div>
+            </div>
+
+            <div class="store-box-stock">
+              <h3 class="brunswick-stock"></h3>
+            </div>
+          
+            <div class="address">36 Hope St, Brunswick, VIC 3056</div>
+        </div>
+    </div>
+{% endif %}

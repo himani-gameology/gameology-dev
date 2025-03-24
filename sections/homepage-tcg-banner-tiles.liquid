@@ -1,0 +1,79 @@
+<style>
+.homepage-tcg-tiles {
+  height: 180px;
+} 
+@media(max-width: 767px){
+  .tcg-banner-tiles-block {
+    margin-top: -15px;
+  } 
+}
+@media(max-width: 541px){
+  .homepage-tcg-tiles {
+    height: 160px;
+  } 
+}
+@media(max-width: 446px){
+  .homepage-tcg-tiles {
+    height: 90px;
+  } 
+}
+</style>
+<div class="mb-20 mt-md-20 mt-lg-20 container text-center text-md-left tcg-banner-tiles-block hide-test_200">
+  <h1 style="font-size: 20px; color:black; font-weight:700; margin:0;">{{ section.settings.title }}</h1>
+  <div class="row pl-10 pr-10">
+    {% for block in section.blocks %}
+    {% assign num = forloop.index %}
+    <div class="col-6 col-md-3 col-lg-3 p-0 mb-10 homepage-tcg-tiles">
+      <div class="h-100 m-5 {% if num == 1 %}ml-lg-0 ml-md-0{% elsif num == 4 %}mr-lg-0 mr-md-0{% endif %} d-flex align-items-center justify-content-around" style="background:rgba(133, 133, 133, 0.15); border-radius: 4px;">  
+        <a class="pl-10 pr-10" href="{% if block.settings.url != blank %}{{ block.settings.url }}{% else %}{{ block.settings.collection.url }}{% endif %}"> <img src="{{ block.settings.image | img_url:"master" }}"/></a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "TCG Tiles",
+    "settings": [
+      {
+            "type": "header",
+            "content": "General"
+      },
+      {
+            "type": "text",
+            "id": "title",
+            "label": "Title"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "content",
+            "name": "TCG Banner",
+            "limit": 4,
+            "settings": [
+              {
+                    "type": "collection",
+                    "id": "collection",
+                    "label": "Collection"
+              },
+              {
+                    "type": "url",
+                    "id": "url",
+                    "label": "Url"
+              },
+              {
+                    "type": "image_picker",
+                    "id": "image",
+                    "label": "Image"
+              }
+            ]
+      }
+    ],
+    "presets": [
+        {
+            "name": "TCG Tiles"
+        }
+    ]
+  }
+{% endschema %}

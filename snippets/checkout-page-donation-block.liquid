@@ -1,0 +1,90 @@
+<div id="donation-block" style="margin-bottom: 20px;">
+  <div class="alternative-payment-separator" data-alternative-payment-separator=""></div>
+  <div class="section" style="padding-top: 20px;">
+    <div class="section__header">
+      <div class="layout-flex layout-flex--tight-vertical layout-flex--loose-horizontal layout-flex--wrap">
+        <h2 class="section__title layout-flex__item layout-flex__item--stretch" id="main-header" tabindex="-1" style="padding-left:0px !important;">
+          Charitable Donation to Beyond Blue
+        </h2>
+      </div>
+    </div>
+    <div class="section__content">
+      {% assign has_donation_product = false %}
+      {% for item in checkout.line_items %}
+        {% if item.product_id == 7448324964467 %}
+          {% assign has_donation_product = true %}
+        {% endif %}
+      {% endfor %}
+      {% if has_donation_product == false %}
+        <table>
+          <tbody>
+            <tr>
+              <td width="100px">
+                <img src="https://cdn.shopify.com/s/files/1/0921/7330/files/BB_ProudlySupporting_Colour_DIGITAL_PP_WEB_645a3091-8ddd-40d6-8048-5719fcb4b2ae.png?v=1719531552"/>
+              </td>
+              <td style="text-align: left;">
+                Loneliness tells people they don't matter, but your support will show them they do. That's why Beyond Blue needs you, to provide 24/7 mental health support for everyone in Australia contacting our Support Service.
+                <br>
+                <a id="display-donation-org-intro-btn" href="#">Learn More</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <table style="margin-top: 20px;">
+          <tbody>
+            <tr>
+              <td colspan="3">
+                <select class="field__input field__input--select" aria-required="true" name="donation" id="checkout_donation_select">
+                  <option>Select Donation Amount</option>
+                  <option value="41452172312691">$2</option>
+                  <option value="41452172345459">$5</option>
+                  <option value="41452172378227">$10</option>
+                  <option value="41452172410995">$20</option>
+                  <option value="41452172443763">$50</option>
+                  <option value="41452172476531">$100</option>
+                </select>
+              </td>
+              <td>
+                <form method="post" action="/cart/add">
+                  <input type="hidden" id="donation_variant_id" name="id" />
+                  <input type="hidden" name="return_to" value="/checkout/" />
+                  <input type="hidden" name="quantity" value="1" />
+                  <button name="button" type="submit" class="btn" aria-busy="false"><span class="btn__content">Donate</span></button>
+                </form>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      {% else %}
+        <table>
+          <tbody>
+            <tr>
+              <td width="100px">
+                <img src="https://cdn.shopify.com/s/files/1/0921/7330/files/BB_ProudlySupporting_Colour_DIGITAL_PP_WEB_645a3091-8ddd-40d6-8048-5719fcb4b2ae.png?v=1719531552"/>
+              </td>
+              <td style="text-align: left;">Thank you for donation. Your life-changing gift helps Beyond Blue on a mission to make it easier for people to feel better earlier, get well, and stay well.</td>
+            </tr>
+          </tbody>
+        </table>
+      {% endif %}
+    </div> 
+  </div>
+</div>
+<div id="donation-org-intro" title="Beyond Blue" style="display:none;">
+<img src="https://cdn.shopify.com/s/files/1/0921/7330/files/BB_ProudlySupporting_Colour_DIGITAL_PP_WEB_645a3091-8ddd-40d6-8048-5719fcb4b2ae.png?v=1719531552" alt="Gameology is Supporting Beyond Blue">
+  <p>Beyond Blue is one of Australia's most trusted mental health organisations. For more than 20 years, people in Australia have placed their trust in Beyond Blue as a reliable source of mental health information, support, and hope.</p>
+<br>
+<p>You can visit Beyond Blue directly <a href="https://www.beyondblue.org.au/">here</a> or you can contact Beyond Blue directly on 03 9810 6100 for support.</p>
+</div>
+<script>
+  var donationSelect = document.getElementById("checkout_donation_select");
+  var donationVariantId = document.getElementById("donation_variant_id");
+  donationSelect.addEventListener("blur",function(e){
+      donationVariantId.value = donationSelect.value;
+  },false);
+
+  $('#display-donation-org-intro-btn').on('click', function(e){
+    e.preventDefault();
+    $('#donation-org-intro').dialog();
+  });
+</script>

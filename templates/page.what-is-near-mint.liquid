@@ -1,0 +1,231 @@
+{% include 'global-variables' %}
+
+<style>
+
+   .container  .layout-content h5 {
+    margin-top: -22px !important;
+    margin-bottom: 5px;
+  }
+  .container  .layout-content h4 {
+    margin-bottom: 2px;
+  }
+  .container .layout-content  ul li{
+     margin-bottom: 10px !important;
+     font-weight : normal !important;
+    color: #000 !important;
+  }
+  .container .layout-content .col-lg-6.col-md-12.col-sm-12.text-right a ,.container  .layout-content .col-lg-6.col-md-12.col-sm-12 a 
+  {
+    background-color: #141414!important;
+        border-color: #141414!important;
+        color: #fff!important;
+  }
+
+  .layout-content .col-lg-6.col-md-12.col-sm-12.text-right a:hover ,  .layout-content .col-lg-6.col-md-12.col-sm-12 a:hover
+  {
+    background-color: #fff!important;
+        border-color: #141414!important;
+        color: #141414!important;
+  }
+  .container .layout-content  p , .container  .layout-content  a ,.container  .layout-content div {
+    color: #000;
+    font-weight: lighter;
+    font-family: 'smsb-helvetica';
+  }
+  
+  .layout-content th,.layout-content td{
+    padding:10px !important;
+  }
+
+  .accordion-div .accordion {
+    background-color: white;
+    color: #000;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 16px;
+    transition: 0.4s;
+  }
+  
+  .accordion-div .active, .accordion:hover {
+    background-color: #ccc;
+  }
+
+  .accordion-div .accordion .down-arrow {
+   display:none;
+  }
+   .accordion-div .accordion .down-arrow {
+   display:block;
+  }
+  
+  .accordion-div .accordion.active .down-arrow {
+   display:inline !important;
+  }
+  
+  .accordion-div .accordion.active .up-arrow {
+   display:none !important;
+  }
+  
+  .accordion-div .panel {
+    padding: 0 18px;
+    background-color: white;
+    overflow: hidden;
+    display:none;
+    
+  }
+</style>
+<div class="page">
+  
+  <div class="container {% if offset_pages_margin_top_d > 0 %} mt-lg-{{ offset_pages_margin_top_d }}{% endif %} pb-60{% if offset_pages_margin_bottom_d > 0 %} mb-lg-{{ offset_pages_margin_bottom_d }}{% endif %}">
+    <div class="rte">
+      <div class="layout-content" style="margin-top:40px;">
+        <h1 >What is Near Mint?</h1> 
+        <p>"Near Mint" can mean different things to different people. That’s why we’ve established some guidelines to aid in determining what meets this criteria. For us, "Near Mint" refers to a card in like-new condition—similar to what you’d expect when opening it straight from a blister pack, with no significant defects. While we aim to provide a straightforward standard, we understand there can still be some interpretation of what constitutes a defect. To help, we’ve provided detailed examples below to make things as clear as possible.</p>
+        <p><strong>Guidelines for Near Mint Cards</strong></p>
+        <p><strong>Major Defects:</strong> Cards with any major defects are not accepted. Major defects mostly (but not exclusively) occur after cards have been opened.</p>
+        <p><strong>Minor Defects:</strong> Cards with very few minor defects may be considered acceptable. These are usually present from the manufacturing process and are likely present while the card is still sealed.</p>
+        <p>Please refer to below details on what we would consider Major and Minor defect. We reserve the right to reject any card at our discretion to maintain the high-quality standard our customers expect. Thank you for understanding!</p>
+        <div style="margin-top:40px;" class='accordion-div'>
+          <h3 style='color:rgba(212, 76, 71, 1);fill:rgba(212, 76, 71, 1);'>Major Defects</h3>
+          <p>Major defects include edge/corner damage and large white spots that cross into the front/back surface of the card even if marginally. Any surface wear, marks or damage and heavily misprinted cards. We accept un-centered card but centering worse than 90/10 would be a major defect/heavy misprint.</p>
+          <p>Examples (Click arrow to view images):</p>
+          <button class="accordion">
+            <svg class='down-arrow' role="graphics-symbol" viewBox="0 0 100 100" class="triangle" style="display:none; width: 0.6875em; height: 0.6875em;  fill: inherit; flex-shrink: 0; transition: transform 200ms ease-out; transform: rotateZ(180deg); opacity: 1;"><polygon points="5.9,88.2 50,11.8 94.1,88.2 "></polygon></svg> 
+            <svg class='up-arrow' role="graphics-symbol" viewBox="0 0 100 100" class="triangle" style="width: 0.6875em; height: 0.6875em;  fill: inherit; flex-shrink: 0; transition: transform 200ms ease-out; transform: rotateZ(90deg); opacity: 1;"><polygon points="5.9,88.2 50,11.8 94.1,88.2 "></polygon></svg>
+            Severe edge and corner damage. Clearly crosses onto the back surface of the card
+          </button>
+          <div class="panel">
+            <img src='https://cdn.shopify.com/s/files/1/0921/7330/files/image_21.png?v=1735518266' class='m-5'> 
+            <img src='https://cdn.shopify.com/s/files/1/0921/7330/files/image_22.png?v=1735518265' class='m-5'>    
+          </div>
+          
+          <button class="accordion">
+            <svg class='down-arrow' role="graphics-symbol" viewBox="0 0 100 100" class="triangle" style="display:none; width: 0.6875em; height: 0.6875em;  fill: inherit; flex-shrink: 0; transition: transform 200ms ease-out; transform: rotateZ(180deg); opacity: 1;"><polygon points="5.9,88.2 50,11.8 94.1,88.2 "></polygon></svg> 
+            <svg class='up-arrow' role="graphics-symbol" viewBox="0 0 100 100" class="triangle" style="width: 0.6875em; height: 0.6875em;  fill: inherit; flex-shrink: 0; transition: transform 200ms ease-out; transform: rotateZ(90deg); opacity: 1;"><polygon points="5.9,88.2 50,11.8 94.1,88.2 "></polygon></svg>
+            Smaller less obvious damage but still extends onto card back surface
+          </button>
+          <div class="panel">
+            <img src='https://cdn.shopify.com/s/files/1/0921/7330/files/image_23.png?v=1735518877'  class='m-5'>
+            <img src='https://cdn.shopify.com/s/files/1/0921/7330/files/image_24.png?v=1735518877'  class='m-5'>  
+          </div>
+          
+          <button class="accordion">
+            <svg class='down-arrow' role="graphics-symbol" viewBox="0 0 100 100" class="triangle" style="display:none; width: 0.6875em; height: 0.6875em;  fill: inherit; flex-shrink: 0; transition: transform 200ms ease-out; transform: rotateZ(180deg); opacity: 1;"><polygon points="5.9,88.2 50,11.8 94.1,88.2 "></polygon></svg> 
+            <svg class='up-arrow' role="graphics-symbol" viewBox="0 0 100 100" class="triangle" style="width: 0.6875em; height: 0.6875em;  fill: inherit; flex-shrink: 0; transition: transform 200ms ease-out; transform: rotateZ(90deg); opacity: 1;"><polygon points="5.9,88.2 50,11.8 94.1,88.2 "></polygon></svg>
+             Surface Damage
+          </button>
+          <div class="panel">
+             <img src='https://cdn.shopify.com/s/files/1/0921/7330/files/image_25.png?v=1735518877'  class='m-5'> 
+          </div>
+
+          <button class="accordion">
+            <svg class='down-arrow' role="graphics-symbol" viewBox="0 0 100 100" class="triangle" style="display:none; width: 0.6875em; height: 0.6875em;  fill: inherit; flex-shrink: 0; transition: transform 200ms ease-out; transform: rotateZ(180deg); opacity: 1;"><polygon points="5.9,88.2 50,11.8 94.1,88.2 "></polygon></svg> 
+            <svg class='up-arrow' role="graphics-symbol" viewBox="0 0 100 100" class="triangle" style="width: 0.6875em; height: 0.6875em;  fill: inherit; flex-shrink: 0; transition: transform 200ms ease-out; transform: rotateZ(90deg); opacity: 1;"><polygon points="5.9,88.2 50,11.8 94.1,88.2 "></polygon></svg>
+             Scuffed cards from play (Actual returned cards)
+          </button>
+          <div class="panel">
+             <img src='https://cdn.shopify.com/s/files/1/0921/7330/files/image_26.png?v=1735518877'  class='m-5'> 
+          </div>
+
+          <button class="accordion">
+            <svg class='down-arrow' role="graphics-symbol" viewBox="0 0 100 100" class="triangle" style="display:none; width: 0.6875em; height: 0.6875em;  fill: inherit; flex-shrink: 0; transition: transform 200ms ease-out; transform: rotateZ(180deg); opacity: 1;"><polygon points="5.9,88.2 50,11.8 94.1,88.2 "></polygon></svg> 
+            <svg class='up-arrow' role="graphics-symbol" viewBox="0 0 100 100" class="triangle" style="width: 0.6875em; height: 0.6875em;  fill: inherit; flex-shrink: 0; transition: transform 200ms ease-out; transform: rotateZ(90deg); opacity: 1;"><polygon points="5.9,88.2 50,11.8 94.1,88.2 "></polygon></svg>
+             Clear heavy misprint
+          </button>
+          <div class="panel">
+             <img src='https://cdn.shopify.com/s/files/1/0921/7330/files/image_27.png?v=1735518877'  class='m-5'> 
+          </div>
+
+          <button class="accordion">
+            <svg class='down-arrow' role="graphics-symbol" viewBox="0 0 100 100" class="triangle" style="display:none; width: 0.6875em; height: 0.6875em;  fill: inherit; flex-shrink: 0; transition: transform 200ms ease-out; transform: rotateZ(180deg); opacity: 1;"><polygon points="5.9,88.2 50,11.8 94.1,88.2 "></polygon></svg> 
+            <svg class='up-arrow' role="graphics-symbol" viewBox="0 0 100 100" class="triangle" style="width: 0.6875em; height: 0.6875em;  fill: inherit; flex-shrink: 0; transition: transform 200ms ease-out; transform: rotateZ(90deg); opacity: 1;"><polygon points="5.9,88.2 50,11.8 94.1,88.2 "></polygon></svg>
+             Centering worse than 90/10
+          </button>
+          <div class="panel">
+             <img src='https://cdn.shopify.com/s/files/1/0921/7330/files/image_28.png?v=1735518877'  class='m-5'> 
+          </div>
+
+          <button class="accordion">
+            <svg class='down-arrow' role="graphics-symbol" viewBox="0 0 100 100" class="triangle" style="display:none; width: 0.6875em; height: 0.6875em;  fill: inherit; flex-shrink: 0; transition: transform 200ms ease-out; transform: rotateZ(180deg); opacity: 1;"><polygon points="5.9,88.2 50,11.8 94.1,88.2 "></polygon></svg> 
+            <svg class='up-arrow' role="graphics-symbol" viewBox="0 0 100 100" class="triangle" style="width: 0.6875em; height: 0.6875em;  fill: inherit; flex-shrink: 0; transition: transform 200ms ease-out; transform: rotateZ(90deg); opacity: 1;"><polygon points="5.9,88.2 50,11.8 94.1,88.2 "></polygon></svg>
+             White spots in multiple corners likely wear/ damage from inadequate storage
+          </button>
+          <div class="panel">
+             <img src='https://cdn.shopify.com/s/files/1/0921/7330/files/image_29.png?v=1735518877'  class='m-5'> 
+          </div>
+
+          <button class="accordion">
+            <svg class='down-arrow' role="graphics-symbol" viewBox="0 0 100 100" class="triangle" style="display:none; width: 0.6875em; height: 0.6875em;  fill: inherit; flex-shrink: 0; transition: transform 200ms ease-out; transform: rotateZ(180deg); opacity: 1;"><polygon points="5.9,88.2 50,11.8 94.1,88.2 "></polygon></svg> 
+            <svg class='up-arrow' role="graphics-symbol" viewBox="0 0 100 100" class="triangle" style="width: 0.6875em; height: 0.6875em;  fill: inherit; flex-shrink: 0; transition: transform 200ms ease-out; transform: rotateZ(90deg); opacity: 1;"><polygon points="5.9,88.2 50,11.8 94.1,88.2 "></polygon></svg>
+             Raised/rolled card edge
+          </button>
+          <div class="panel">
+             <img src='https://cdn.shopify.com/s/files/1/0921/7330/files/image_31.png?v=1735518877'  class='m-5'> 
+          </div>
+
+          
+          
+        </div>
+
+        <div style="margin-top:40px;" class='accordion-div'>
+          <h3 style='color:rgba(217, 115, 13, 1);fill:rgba(217, 115, 13, 1);'>Minor Defects</h3>
+          <p>Minor defects are small white dots or slightly frayed edges that DO NOT cross into the front or back surface of the card.  More likely a result of the card not being cleanly cut at the manufacturer as opposed to damage.</p>
+          <p>We accept un-centred cards but anything exceeding 70/30 but less than 90/10 centering we would consider to be a minor defect.</p>
+          <p>Examples (Click arrow to view images):</p>
+          <!--<button class="accordion">
+            <svg class='down-arrow' role="graphics-symbol" viewBox="0 0 100 100" class="triangle" style="display:none; width: 0.6875em; height: 0.6875em;  fill: inherit; flex-shrink: 0; transition: transform 200ms ease-out; transform: rotateZ(180deg); opacity: 1;"><polygon points="5.9,88.2 50,11.8 94.1,88.2 "></polygon></svg> 
+            <svg class='up-arrow' role="graphics-symbol" viewBox="0 0 100 100" class="triangle" style="width: 0.6875em; height: 0.6875em;  fill: inherit; flex-shrink: 0; transition: transform 200ms ease-out; transform: rotateZ(90deg); opacity: 1;"><polygon points="5.9,88.2 50,11.8 94.1,88.2 "></polygon></svg>
+            Small white spot. Any amount bigger or onto the card surface we would call it a major defect. 
+          </button>
+          <div class="panel">
+            <img src='https://cdn.shopify.com/s/files/1/0921/7330/files/image_30.png?v=1735518266' class='m-5'> 
+          </div>-->
+          
+          <button class="accordion">
+            <svg class='down-arrow' role="graphics-symbol" viewBox="0 0 100 100" class="triangle" style="display:none; width: 0.6875em; height: 0.6875em;  fill: inherit; flex-shrink: 0; transition: transform 200ms ease-out; transform: rotateZ(180deg); opacity: 1;"><polygon points="5.9,88.2 50,11.8 94.1,88.2 "></polygon></svg> 
+            <svg class='up-arrow' role="graphics-symbol" viewBox="0 0 100 100" class="triangle" style="width: 0.6875em; height: 0.6875em;  fill: inherit; flex-shrink: 0; transition: transform 200ms ease-out; transform: rotateZ(90deg); opacity: 1;"><polygon points="5.9,88.2 50,11.8 94.1,88.2 "></polygon></svg>
+            70/30 - 90/10 (Percentage of centreing on left and right side or top and bottom)
+          </button>
+          <div class="panel">
+            <img src='https://cdn.shopify.com/s/files/1/0921/7330/files/image_32.png?v=1735518266' class='m-5'>
+          </div>
+          
+          <button class="accordion">
+            <svg class='down-arrow' role="graphics-symbol" viewBox="0 0 100 100" class="triangle" style="display:none; width: 0.6875em; height: 0.6875em;  fill: inherit; flex-shrink: 0; transition: transform 200ms ease-out; transform: rotateZ(180deg); opacity: 1;"><polygon points="5.9,88.2 50,11.8 94.1,88.2 "></polygon></svg> 
+            <svg class='up-arrow' role="graphics-symbol" viewBox="0 0 100 100" class="triangle" style="width: 0.6875em; height: 0.6875em;  fill: inherit; flex-shrink: 0; transition: transform 200ms ease-out; transform: rotateZ(90deg); opacity: 1;"><polygon points="5.9,88.2 50,11.8 94.1,88.2 "></polygon></svg>
+             Edge fraying due to manufacturer. Card is undamaged and nothing extends onto card surface.
+          </button>
+          <div class="panel">
+             <img src='https://cdn.shopify.com/s/files/1/0921/7330/files/image_33.png?v=1735518266' class='m-5'>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+var acc = document.getElementsByClassName("accordion");
+var i;
+
+for (i = 0; i < acc.length; i++) {
+  acc[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var panel = this.nextElementSibling;
+    if (panel.style.display === "block") {
+      panel.style.display = "none";
+      /* $('.accordion.active .down-arrow').show();
+      $'.accordion.active .down-up').hide(); */
+    } else {
+      panel.style.display = "block";
+       /* $('.accordion.active .down-arrow').hide();
+      $('.accordion.active .down-up').show(); */
+    }
+  });
+}
+</script>
+
+

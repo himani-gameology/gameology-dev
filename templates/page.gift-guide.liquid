@@ -1,0 +1,230 @@
+{% section 'gift-guide-header' %}
+{% section 'gift-guide-block-1' %}
+{% section 'gift-guide-block-2' %}
+{% section 'gift-guide-block-3' %}
+{% section 'gift-guide-price-range-block' %}
+{% section 'gift-guide-block-4' %}
+{% section 'gift-guide-block-5' %}
+{% section 'gift-guide-block-6' %}
+{% section 'gift-guide-block-7' %}
+
+<style>
+  .gift-guide-block {
+    margin: 20px 100px;
+  }
+  .gift-guide-header {
+    margin: 20px 100px;
+  }
+  .gift-guide-subheader img {
+    width: -webkit-fill-available;
+    height: 177px;
+    object-fit: cover;
+  }
+  .gift-guide-price-range-block {
+    margin: 40px 100px;
+    border-top: 2px solid #191919;
+    border-bottom: 0px solid #191919;
+  }
+  .gift-guide-price-range-btn {
+    font-size: 20px;
+    font-weight: 900;
+    padding: 20px;
+    background-color: #bf1e2d;
+    color: white !important;
+    border: 10px solid white;
+    letter-spacing: 1px;
+    border-radius: 20px;
+  }
+  .gift-guide-price-range-btn:hover {
+    background-color: #981a26;
+  }
+  .carousel__header {
+    background-color: #141414;
+    height: 100px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+  }
+  .carousel__title {
+    background-color: #141414;
+    color: #ad9360;
+    letter-spacing: 0px;
+  }
+  .carousel__title.active {
+    background-color: #141414;
+    color: #ad9360;
+    letter-spacing: 0px;
+  }
+  .carousel__footer {
+    background-color: #141414;
+    height: 30px;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+  }
+  .carousel__item .btn__text {
+    font-size: 14px;
+  }
+  .carousel__item .product-collection__title {
+    height: 63px;
+  }
+  .product-release-date {
+    background-color: #ff414d;
+    color: white;
+    padding: 5px;
+  }
+  .product-collection__title a {
+    display: -webkit-box;
+    max-width: 200px;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .product-collection__reviews {
+    display: none;
+  }
+  @media only screen and (min-width: 1400px) {
+    .gift-guide-block {
+      margin: 20px 200px;
+    }
+    .gift-guide-header {
+      margin: 20px 200px;
+    }
+    .gift-guide-price-range-block {
+      margin: 50px 200px;
+    }
+  }
+  @media only screen and (min-width: 1600px) {
+    .gift-guide-block {
+      margin: 20px 300px;
+    }
+    .gift-guide-header {
+      margin: 20px 300px;
+    }
+    .gift-guide-price-range-block {
+      margin: 50px 300px;
+    }
+  }
+  @media only screen and (min-width: 1800px) {
+    .gift-guide-block {
+      margin: 20px 400px;
+    }
+    .gift-guide-header {
+      margin: 20px 400px;
+    }
+    .gift-guide-price-range-block {
+      margin: 50px 400px;
+    }
+  }
+  @media only screen and (min-width: 2000px) {
+    .gift-guide-block {
+      margin: 20px 500px;
+    }
+    .gift-guide-header {
+      margin: 20px 500px;
+    }
+    .gift-guide-price-range-block {
+      margin: 50px 500px;
+    }
+  }
+  @media only screen and (min-width: 2200px) {
+    .gift-guide-block {
+      margin: 20px 600px;
+    }
+    .gift-guide-header {
+      margin: 20px 600px;
+    }
+    .gift-guide-price-range-block {
+      margin: 50px 600px;
+    }
+  }
+  @media only screen and (min-width: 2400px) {
+    .gift-guide-block {
+      margin: 20px 700px;
+    }
+    .gift-guide-header {
+      margin: 20px 700px;
+    }
+    .gift-guide-price-range-block {
+      margin: 50px 700px;
+    }
+  }
+  @media only screen and (min-width: 2600px) {
+    .gift-guide-block {
+      margin: 20px 800px;
+    }
+    .gift-guide-header {
+      margin: 20px 800px;
+    }
+    .gift-guide-price-range-block {
+      margin: 50px 800px;
+    }
+  }
+  @media only screen and (min-width: 768px) {
+    .gift-guide-block img {
+      border-radius: 10px;
+    }
+    .block-1-2-square img {
+      height: 570.5px;
+      width: 570.5px;
+      object-fit: cover;
+    }
+    .block-1-2-rectangle img {
+      height: 374px;
+      width: 590.5px;
+      object-fit: cover;    
+    }
+    .block-1-2-wide img {
+      height: 177px;
+      width: 570.5px;
+      object-fit: cover;
+    }
+    .block-1-2-square .wide img {
+      height: 177px;
+      width: 570.5px;
+      object-fit: cover;
+    }
+    .block-1-3-square img {
+      height: 374px;
+      width: 374px;
+      object-fit: cover;
+    }
+    .block-1-4-square img {
+      height: 275.25px;
+      width: 275.25px;
+      object-fit: cover;
+    }
+    .block-1-6-square img {
+      height: 177px;
+      width: 177px;
+      object-fit: cover;
+    }
+  }
+  @media only screen and (max-width: 767px) {
+    .gift-guide-block {
+      margin: 0;
+    }
+    .gift-guide-header {
+      margin: 0;
+    }
+    .gift-guide-price-range-block {
+      margin: 50px 10px;
+    }
+    .gift-guide-block img {
+      margin: 10px 0;
+    }
+    .carousel__slider_wrapper {
+      padding: 10px !important;
+    }
+    .carousel__title.active {
+      font-size: 32px;
+    }
+    .price-save_price {
+      font-size: 10px !important;
+    }
+    .product-collection__price {
+      height: 25px;
+    }
+    .product-collection {
+      margin-bottom: 0 !important;
+    }
+  }
+</style>

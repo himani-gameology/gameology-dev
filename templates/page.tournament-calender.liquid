@@ -1,0 +1,26 @@
+{% include 'global-variables' %}
+<style>
+#gameology-events-calendar .btn{
+  color:#fff;
+  background-color:#000;
+}
+#gameology-events-calendar .btn:hover{
+  background-color:#fff;
+  color:#000;
+}
+</style>
+<div class="page">
+  <div class="container {% if offset_pages_margin_top_d > 0 %} mt-lg-{{ offset_pages_margin_top_d }}{% endif %} pb-60{% if offset_pages_margin_bottom_d > 0 %} mb-lg-{{ offset_pages_margin_bottom_d }}{% endif %}">
+    <div class="rte">
+      <div class="container">
+        {% section 'tournament-builder' %}
+      </div>
+       <div class="row">
+          <div class="col-lg-6 col-md-12 col-sm-12 text-right"><a class='btn  px-20 py-1' target='_blank' href='https://www.eventbrite.com.au/o/gameology-brunswick-79412119693'>Click here for Brunswick Ticketed Events</a></div>
+          <div class="col-lg-6 col-md-12 col-sm-12 "><a class='btn  px-20 py-1' target='_blank' href='https://www.eventbrite.com.au/o/gameology-clayton-76950467913'>Click here for Clayton Ticketed Events</a></div>
+       </div>
+      <div class="elfsight-sapp-bb2803af-614d-41d8-a2af-1132b9430fe2"></div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,63 @@
+<!-- Converisionry - Add postcode to checking Melbourne 08/11/2021 -->  
+{{ 'au_suburb_postcode.js' | asset_url | script_tag }}
+
+<script>
+  var triggerFindLocation = false;
+  
+  function findLocation(){
+    fetch(`https://get.geojs.io/v1/ip/geo.json`).then(e=>e.json()).then(e=>{
+      const city = e.city.replace('City', '').trim();
+      const isMelbourne = ausPostcode.some(i=>i.includes(city)) ? 'melbourne' : 'other';
+      isMelbourne == 'melbourne' ? document.body.classList.add('is-melbourne') : document.body.classList.remove('is-melbourne');
+      triggerFindLocation = true;
+      sessionStorage.setItem('test_167', isMelbourne == 'melbourne');
+    })
+  }
+
+  function findLocation_219(){
+    fetch(`https://get.geojs.io/v1/ip/geo.json`).then(e=>e.json()).then(e=>{
+      console.log(e.city);
+      // const isMelbourne = ausPostcode.some(i=>i.includes(city)) ? 'melbourne' : 'other';
+      const isMelbourne = e.city === 'Melbourne';
+      isMelbourne ? document.body.classList.add('is-melbourne') : document.body.classList.remove('is-melbourne');
+      triggerFindLocation = true;
+      sessionStorage.setItem('test_219', isMelbourne);
+
+      console.log(document.querySelector('label[for="checkout_id_delivery-pickup"]'));
+      document.querySelector('label[for="checkout_id_delivery-pickup"]')?.click();
+    })
+  }
+  
+  (()=>{
+    if(sessionStorage.getItem('test_167') || sessionStorage.getItem('test_219')){
+      window.addEventListener('DOMContentLoaded', e=>{
+        if(sessionStorage.getItem('test_167')) {
+          document.querySelector('input[value="test_167"]')?.click();
+          findLocation();
+        } else {
+          findLocation_219();
+        }
+      })
+    } else {
+      const observer = new MutationObserver((mutationList, observer)=>{
+        mutationList.forEach((mutation)=>{
+          if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+            if(document.body.classList.contains('test_167')) {
+              !triggerFindLocation && findLocation();
+              observer.disconnect();
+            } else if(document.body.classList.contains('test_219')) {
+              findLocation_219();
+              observer.disconnect();
+            } else {
+              sessionStorage.removeItem('test_167');
+              sessionStorage.removeItem('test_219');
+            }
+          }
+        })
+      });
+      observer.observe(document.body, {
+        attributes: true
+      })
+    }
+ })()
+</script>

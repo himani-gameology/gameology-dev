@@ -1,0 +1,27 @@
+<!-- Zeta Digital - Apply In Stock Label, Preorder Button Text and Style Start (+ Line 11,16) -->
+{%- assign is_coming_soon_product = false -%}
+{% for tag in product.tags %}
+  {% if tag contains 'comingsoon' %}
+      {%- assign is_coming_soon_product = true -%}
+  {% endif %}
+{% endfor %}
+<!-- Zeta Digital - Apply In Stock Label, Preorder Button Text and Style End (+ Line 11,16) -->
+
+{% capture cart_icon_name %}{{ settings.cart_icon | default: 'icon-theme-109' }}{% endcapture %}
+<{% if settings.buttons_animation_icon_enable %}a {% if current_variant.available == false %} href="javascript:void(0);" {% else  %} href="{{ url }}" {% endif %} {% else %}button type="submit"{% endif %} class="btn btn--status{% if settings.buttons_animation_icon_enable %} btn--animated{% endif %}{% if settings.cart_ajax and enable_select_options_button != true and current_variant.available == true %} js-product-button-add-to-cart{% endif %}{% if show_label_preorder and current_variant.available %} js-product-button-preorder{% endif %}{% if current_variant.available == false %} js-product-button-soldout{% endif %} w-100 p-0" name="add" data-js-product-button-add-to-cart{% unless current_variant.available %} data-button-status="sold-out"{% else %}{% if enable_select_variant_button %} data-button-status="select"{% if button_select_disable %} data-button-select-disable{% endif %}{% endif %}{% endunless %}  {% if current_variant.available == false %} data-product-id="{{ product.id }}" data-product-url="{{ url }}" avail-in-store="flase" not-avail-all="flase" {% endif %}>
+    {%- if enable_select_options_button -%}
+        <span class="d-none d-sm-flex flex-center"><i class="hide-test_188 btn__icon mr-5 mb-4">{% include cart_icon_name %}</i><span class="btn__text">{{ 'products.product.add_to_cart.select_options' | t }}</span></span>
+        <span class="d-flex d-sm-none flex-center"><i class="hide-test_188 btn__icon mr-5 mb-4">{% include cart_icon_name %}</i><span class="btn__text">{{ 'products.product.add_to_cart.select_options_mobile' | t }}</span></span>
+    {%- else -%}
+
+      
+        <span class="d-flex flex-center"><i class="hide-test_188 btn__icon mr-5 mb-4">{% include cart_icon_name %}</i><span class="btn__text">{%- if show_label_preorder == false -%}{{ 'products.product.add_to_cart.title' | t }}{%- else -%}PRE-ORDER{%- endif -%}</span></span>
+        <span class="d-flex flex-center" data-button-content="added"><i class="mr-5 mb-4">{% render 'icon-theme-110' %}</i>{{ 'products.product.add_to_cart.added' | t }}</span>
+        {%- if enable_select_variant_button -%}
+            <span class="d-none d-sm-flex flex-center" data-button-content="select"><i class="hide-test_188 btn__icon mr-5 mb-4">{% include cart_icon_name %}</i><span class="btn__text">{{ 'products.product.add_to_cart.select_options' | t }}</span></span>
+            <span class="d-flex d-sm-none flex-center" data-button-content="select"><i class="hide-test_188 btn__icon mr-5 mb-4">{% include cart_icon_name %}</i><span class="btn__text">{{ 'products.product.add_to_cart.select_options_mobile' | t }}</span></span>
+        {%- endif -%}
+    {%- endif -%}
+    <span class="d-flex flex-center" data-button-content="sold-out">{%- if show_label_preorder == false -%}{{ 'products.product.add_to_cart.sold_out' | t }}{%- else -%}{%- if is_coming_soon_product == false -%}PRE ORDER LIMIT REACHED{%- else -%}COMING SOON{%- endif -%}{%- endif -%}</span>
+</{% if settings.buttons_animation_icon_enable %}a{% else %}button{% endif %}>
+{%- assign enable_select_options_button = false -%}

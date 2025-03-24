@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="{CDNURL}/ebay/css/trend-bootstrap.css?noless">
+        <link rel="stylesheet" type="text/css" href="{CDNURL}/ebay/css/trend-style-12.css?noless">
+        <title>Trend Ebay/Shopify Listing</title>
+    </head>
+    <body class="">
+        <div class="header">
+            <img src="{CDNUrl}/ebay/trend-header-delivery.png" alt="Fast and Free Shipping Australia Wide" class="header__shipping">
+            <a href="{EbayStoreURL}" class="header__logo">
+                <img src="{CDNUrl}/ebay/trend-header-logo.png" alt="Trend Logo" class="header__thumb">
+            </a>
+        </div>
+        <div class="product">
+            <div class="row">
+                <div class="col-xs-12 col-md-4">
+                    <div class="box-images-details">
+						<div class="slider">
+						    <div class="grid-wrapper">
+						        <div class="grid-item"></div>
+						        <div class="grid-item"></div>
+						        <div class="grid-item"></div>
+						        <div class="grid-item"></div>
+						        <div class="grid-item"></div>
+						        <div class="grid-item"></div>
+						        <div class="grid-item"></div>
+						        <div class="grid-item"></div>
+						        <div class="grid-item"></div>
+						        <div class="grid-item"></div>
+						        <div class="grid-item"></div>
+						        <div class="grid-item"></div>
+						        <div class="grid-item"></div>
+						        <div class="grid-item"></div>
+						        <div class="grid-item"></div>
+						        <div class="grid-item"></div>
+						        <div class="grid-item"></div>
+						        <div class="grid-item"></div>
+						        <div class="grid-item"></div>
+						        <div class="grid-item"></div>
+						        <div class="grid-item"></div>
+						        <div class="grid-item"></div>
+						        <div class="grid-item"></div>
+						        <div class="grid-item"></div>
+						        <div class="grid-item"></div>
+						        {for AllEnabledImages step=12}
+									<div class="grid-content">
+										{for AllEnabledImages}
+                                            <input name="slide_switch" id="id{position}" value="{AllEnabledImages.url}" type="radio">
+											<label for="id{position}">
+                                                <span>
+                                                    <img src="{AllEnabledImages.url}&width=200&height=200" alt="{title}" />
+                                                </span>
+										    </label>
+											<div class="img-details">
+												<p>
+													<img src="{AllEnabledImages.url}" alt="{title}" />
+												</p>
+											</div>
+                                        {/for}
+									</div>
+								{/for}
+					        </div>
+					    </div>
+					</div>
+                </div>
+                <div class="product__copy col-xs-12 col-md-8">
+                    <h1 class="product__name">{Title}</h1>
+                    <div class="product__description">
+                        {description}
+                    </div>
+                </div>
+            </div>
+            <div class="product__details row">
+                <div class="product__detail col-xs-6">
+                    <span class="detail__attribute">Vendor</span>
+                    <span class="detail__value">{ItemSpecifics.Brand}</span>
+                </div>
+                <div class="product__detail col-xs-6">
+                    <span class="detail__attribute">Product Code</span>
+                    <span class="detail__value">{ProductCode}</span>
+                </div>
+            </div>
+            <div class="store__perks row">
+                <div class="store__perk col-xs-12 col-sm-4">
+                    <div class="perk__circle">
+                        <img src="{CDNUrl}/ebay/trend-icon-van.png" alt="Free Shipping" class="perk__icon perk__icon--shipping">
+                    </div>
+                    <span class="perk__name">Free Shipping</span>
+                    <span class="perk__description">All orders include fast and free shipping Australia-wide.</span>
+                </div>
+                <div class="store__perk col-xs-12 col-sm-4">
+                    <div class="perk__circle">
+                        <img src="{CDNUrl}/ebay/trend-icon-lock.png" alt="Secure Payment" class="perk__icon perk__icon--secure">
+                    </div>
+                    <span class="perk__name">Secure Payment</span>
+                    <span class="perk__description">Shop safe and securely with PayPal buyer protection.</span>
+                </div>
+                <div class="store__perk col-xs-12 col-sm-4">
+                    <div class="perk__circle">
+                        <img src="{CDNUrl}/ebay/trend-icon-return.png" alt="60 Day Returns" class="perk__icon perk__icon--returns">
+                    </div>
+                    <span class="perk__name">60 day Returns</span>
+                    <span class="perk__description">Enjoy hassle-free returns. Contact us any time for enquiries.</span>
+                </div>
+            </div>
+            <div class="cta__footer row">
+                <div class="col-xs-12 col-md-4">
+                    <a href="http://offer.{EbaySiteURL}/ws/eBayISAPI.dll?BinConfirm&amp;quantity=1&amp;fb=1&amp;item={EbayItemID}" class="cta__btn cta__btn--primary">
+                        <img src="{CDNUrl}/ebay/trend-icon-cart.png" alt="Buy Now" class="cta__icon">
+                        <span class="cta__text">Buy Now</span>
+                    </a>
+                </div>
+                <div class="col-xs-12 col-md-4">
+                    <a href="{EbayStoreURL}" class="cta__btn ctn__btn--secondary">
+                        <img src="{CDNUrl}/ebay/trend-icon-store.png" alt="Buy Now" class="cta__icon">
+                        <span class="cta__text">Visit Store</span>
+                    </a>
+                </div>
+                <div class="col-xs-12 col-md-4">
+                    <a href="http://cgi1.{EbaySiteURL}/ws/eBayISAPI.dll?MakeTrack&amp;item={EbayItemID}" class="cta__btn ctn__btn--secondary">
+                        <img src="{CDNUrl}/ebay/trend-icon-binoculars.png" alt="Watch Item" class="cta__icon">
+                        <span class="cta__text">Watch Item</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

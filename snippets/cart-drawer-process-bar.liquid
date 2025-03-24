@@ -1,0 +1,67 @@
+<!--Conversionry - Add process bar 030922-->
+{%- liquid
+	assign totalPoint = cart.total_price | money_without_trailing_zeros | remove: cart.currency.symbol | strip | times: 1 | floor
+
+	if totalPoint >= 500
+		assign greenLine = 100 | append: '%'
+		assign yellowLine = 100 | append: '%'
+
+	elsif totalPoint >= 400
+		assign greenLine = 50 | append: '%'
+		assign yellowLine = 100 | append: '%'
+
+	elsif totalPoint >= 300
+		assign greenLine = 25 | append: '%'
+		assign yellowLine = 100 | append: '%'
+
+	elsif totalPoint >= 200
+		assign yellowLine = 100 | append: '%'
+
+	elsif totalPoint >= 100
+		assign yellowLine = 50 | append: '%'
+	endif
+-%}
+
+<div class="hidden_task show-test_147">
+	<div class="reward-process-bar">
+		<div class="reward-row">
+			<div class="reward-title">
+				<p class="h5">GAMERS GUILD POINTS</p>
+			</div>
+
+			<div class="reward-bar-wrapper">
+				<div class="reward-bar">
+					<div class="reward-bar-value">
+
+						<span class="bar-fill fill-by-red" style="width: 100%"></span>
+						{%- if totalPoint > 50 -%}
+						<span class="bar-fill fill-by-yellow" style="width: {{yellowLine}}"></span>
+						{%- endif -%}
+						{%- if totalPoint > 200 -%}
+						<span class="bar-fill fill-by-green" style="width: {{greenLine}}"></span>
+						{%- endif -%}
+					</div>
+
+					<div class="reward-bar-bottom">
+						<span></span>
+						<span></span>
+						<span></span>
+						<span></span>
+						<span></span>
+						<span></span>
+						<span></span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="reward-row">
+			<p class="reward-content">
+				{%- if totalPoint < 500 -%}
+					You are <span>{{totalPoint}}</span> points closer to your next reward!
+				{%- else -%}
+					You’ve earned the next reward!  Claim at checkout!
+				{%- endif -%}
+			</p>
+		</div>
+	</div>
+</div>

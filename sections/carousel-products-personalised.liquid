@@ -1,0 +1,189 @@
+{%- if section.blocks.size > 0 -%}
+    {% include 'global-variables' %}
+    {%- if carousel_products_async_ajax_loading == false -%}
+        {%- if content_for_header contains 'Shopify.designMode' -%}
+            {%- assign is_design_mode = true -%}
+            {%- assign carousel_products_async_ajax_loading = false -%}
+        {%- endif -%}
+        {%- assign countdown_lazy = true -%}
+    {%- endif -%}
+    <div class="personalised-carousel chr-hidden show-test_200 chr-v-hidden" data-section-id="{{ section.id }}" data-section-type="carousel-products" data-postload="carousel_products">
+        <div class="overflow-hidden">
+            <div{% render 'layout-get-container-class' %}>
+                <div class="carousel{% if section.settings.arrows %} carousel--arrows{% endif %} carousel-products position-relative">
+                    <div class="carousel__head{% unless section.settings.show_title %} d-none{% endunless %} row justify-content-center mb-35"{% if section.blocks.size > 1 %} data-carousel-control{% endif %}>
+                        {%- for block in section.blocks -%}
+                            {%- if collections[block.settings.collection] != blank -%}
+								<!-- Custom Collection Title - Zeta Digital (01/06/2021) -->
+                                <h4 class="carousel__title home-section-title home-section-title--multiple col-11 col-lg-4 mw-100" style="display: flex;align-items: center;column-gap: 10px;padding-bottom: 10px;">     
+                                    <svg width="29" height="30" viewBox="0 0 29 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M8.9806 13.8864C8.57214 13.4653 8.03448 13.2326 7.461 13.2326C6.86884 13.2326 6.31498 13.4807 5.90216 13.928L5.90215 13.928C5.49892 14.365 5.27766 14.9426 5.27766 15.5536C5.27766 16.1645 5.49891 16.742 5.90214 17.1791L5.90215 17.1791L8.58557 20.0868C8.58557 20.0868 8.58557 20.0868 8.58557 20.0868C8.68731 20.1971 8.83048 20.2599 8.98055 20.2599C9.13064 20.2599 9.27372 20.1971 9.37555 20.0871L9.37564 20.087L12.0591 17.1792L12.0591 17.1792C12.4622 16.7423 12.6834 16.1646 12.6834 15.5537C12.6834 14.9563 12.4719 14.3907 12.0854 13.9574V13.9567L12.0589 13.928C11.646 13.4807 11.0922 13.2328 10.5001 13.2328C9.92654 13.2328 9.38904 13.4654 8.9806 13.8864ZM6.69224 14.6571L6.69226 14.6571C6.90156 14.4302 7.17458 14.3077 7.461 14.3077C7.74731 14.3077 8.02048 14.4303 8.22994 14.6569L8.58569 15.0424C8.5857 15.0424 8.5857 15.0424 8.5857 15.0424C8.68744 15.1526 8.83061 15.2154 8.98068 15.2154C9.13075 15.2154 9.27392 15.1526 9.37566 15.0424L9.37567 15.0424L9.7312 14.657C9.73121 14.657 9.73122 14.657 9.73123 14.657C9.94067 14.4302 10.2137 14.3077 10.5001 14.3077C10.7866 14.3077 11.0596 14.4302 11.269 14.657L11.3425 14.5892L11.269 14.657C11.4871 14.8932 11.6085 15.2111 11.6085 15.5536C11.6085 15.896 11.4871 16.214 11.269 16.4503L11.269 16.4503L8.98068 18.9299L6.69225 16.4503C6.69224 16.4503 6.69224 16.4503 6.69224 16.4503C6.23687 15.9567 6.23689 15.1505 6.69224 14.6571Z" fill="#FF414D" stroke="#FF414D" stroke-width="0.2"/>
+                                      <path d="M2.2315 29.1H15.7299C16.4641 29.1 17.0614 28.5029 17.0614 27.7685V5.7265C17.0614 4.99226 16.4643 4.395 15.7299 4.395H2.2315C1.49727 4.395 0.9 4.99213 0.9 5.7265V27.7685C0.9 28.5028 1.49713 29.1 2.2315 29.1ZM1.97485 5.7265C1.97485 5.58506 2.09014 5.46985 2.2315 5.46985H15.7299C15.8712 5.46985 15.9864 5.58501 15.9864 5.7265V27.7685C15.9864 27.9099 15.8712 28.025 15.7299 28.025H2.2315C2.09002 28.025 1.97485 27.9098 1.97485 27.7685V5.7265Z" fill="#FF414D" stroke="#FF414D" stroke-width="0.2"/>
+                                      <path d="M20.1851 28.4577L20.1851 28.4577L16.3726 27.3408L16.3726 27.3407C16.0878 27.2572 15.9244 26.9588 16.0079 26.6738L20.1851 28.4577ZM20.1851 28.4577C20.3067 28.4932 20.4294 28.5107 20.5504 28.5114L20.5504 28.5115H20.5589C21.1349 28.5115 21.6674 28.1345 21.8374 27.5541L28.0346 6.40118C28.1346 6.05992 28.0956 5.69974 27.9252 5.38783L27.9251 5.38778C27.7544 5.07588 27.4723 4.84878 27.1312 4.74887C27.1312 4.74887 27.1312 4.74887 27.1312 4.74887L14.1771 0.953809L14.1491 1.04957L14.1771 0.953808C13.4726 0.747413 12.7318 1.15273 12.5251 1.85731L12.5251 1.85734L11.6689 4.78024C11.6689 4.78025 11.6689 4.78026 11.6689 4.78026C11.5853 5.06528 11.7487 5.36371 12.0335 5.44723L12.0336 5.44725C12.3184 5.53062 12.6171 5.3675 12.7005 5.08258C12.7005 5.08258 12.7005 5.08257 12.7005 5.08257L13.5568 2.15982C13.5966 2.02407 13.7396 1.94589 13.8751 1.98558L26.8291 5.78064C26.895 5.79994 26.949 5.84338 26.982 5.90371L27.0698 5.8557M20.1851 28.4577L20.8057 27.252M20.8057 27.252L20.8058 27.2519L27.003 6.09901C27.003 6.09899 27.003 6.09898 27.003 6.09897C27.0223 6.03289 27.0149 5.96399 26.9819 5.90356L27.0698 5.8557M20.8057 27.252C20.7661 27.3876 20.6231 27.4657 20.4874 27.426M20.8057 27.252L27.0989 6.12708M27.0698 5.8557C27.1154 5.93939 27.1257 6.03561 27.0989 6.12708M27.0698 5.8557L27.0989 6.12708M27.0989 6.12708L20.9017 27.28C20.8465 27.4687 20.648 27.5772 20.4593 27.522M20.4593 27.522L20.4874 27.426L20.4874 27.426M20.4593 27.522L20.4874 27.426M20.4593 27.522L20.4874 27.426M20.4874 27.426L16.6749 26.3091C16.39 26.2256 16.0914 26.3889 16.0079 26.6738L20.4874 27.426Z" fill="#FF414D" stroke="#FF414D" stroke-width="0.2"/>
+                                      <path d="M16.4083 18.3427C16.2814 18.3148 16.164 18.241 16.0835 18.126L16.0835 18.126C15.9133 17.8827 15.9725 17.5476 16.2158 17.3774C16.2158 17.3774 16.2158 17.3774 16.2158 17.3774L19.192 15.2947L17.9169 12.1946L16.8321 12.9539C16.8321 12.9539 16.8321 12.9539 16.8321 12.9539C16.5889 13.1241 16.2537 13.0649 16.0835 12.8216L16.4083 18.3427ZM16.4083 18.3427L16.4061 18.3555H16.5242C16.6307 18.3555 16.7385 18.3239 16.8322 18.2581L20.1609 15.9286C20.3671 15.7844 20.4455 15.5165 20.3498 15.2838L20.3498 15.2838L18.6557 11.1649L18.6557 11.1648C18.5936 11.0139 18.4664 10.8995 18.3098 10.8536C18.3098 10.8536 18.3098 10.8536 18.3098 10.8536L18.2817 10.9495L16.4083 18.3427Z" fill="#FF414D" stroke="#FF414D" stroke-width="0.2"/>
+                                    </svg>
+                                    <a {% if forloop.index == 1 %} class="active"{% endif %} data-collection="{{ collections[block.settings.collection].handle }}">{% if block.settings.title != blank %}{{ block.settings.title }}{% else %}{{ collections[block.settings.collection].title }}{% endif %}</a>
+                      			</h4>
+                      			<div class="carousel__view_more col-1 col-lg-8 mt-20 mw-100 text-right">
+<!--                                   <a href="{{ collections[block.settings.collection].url }}"> View more >> </a> -->
+                      			</div>
+                            {%- elsif forloop.index0 == 0 -%}
+                                {% render 'no-blocks' with message: 'homepage.onboarding.no_content_message.carousel_products' %}
+                            {%- endif -%}
+                        {%- endfor -%}
+                    </div>
+                    <div class="carousel__slider_wrapper position-relative">
+                        <div class="carousel__slider position-relative invisible"
+                             data-js-carousel
+                             data-autoplay="{{ section.settings.autoplay }}"
+                             data-speed="{{ section.settings.speed | times: 1000 }}"
+                             data-count="6"
+                             data-infinite="{{ section.settings.infinite }}"
+                             data-arrows="{{ section.settings.arrows }}"
+                             data-bullets="{{ section.settings.bullets }}">
+                            {%- if section.settings.arrows -%}
+                                <div class="carousel__prev position-absolute cursor-pointer" data-js-carousel-prev><i>{% render 'icon-theme-006' %}</i></div>
+                            {%- endif -%}
+                            <div class="carousel__products overflow-hidden">
+                                {%- for block in section.blocks limit: 1 -%}
+                                    <div class="carousel__slick row" data-js-carousel-slick data-carousel-items data-max-count="{{ section.settings.max_count }}" data-products-pre-row="6" data-async-ajax-loading="{{ carousel_products_async_ajax_loading }}">
+                                        {%- assign limit = 6 | abs | at_most: section.settings.max_count | plus: 1 -%}
+                                        {%- for product in collections[block.settings.collection].products limit: section.settings.max_count -%}
+                                            {%- if first_product == blank -%}
+                                                {%- assign first_product = product -%}
+                                            {%- endif -%}
+                                        {%- endfor -%}
+                                    </div>
+                                {%- endfor -%}
+                            </div>
+                            {%- if section.settings.arrows -%}
+                                <div class="carousel__next position-absolute cursor-pointer" data-js-carousel-next><i>{% render 'icon-theme-007' %}</i></div>
+                            {%- endif -%}
+                        </div>
+                        {%- if carousel_products_async_ajax_loading -%}
+                            <div class="carousel__spacer">
+                                <div class="row">
+                                    <div class="col-6 col-md-4 col-xl-{{ 12 | divided_by: 6 }}">
+                                        <div style="padding-top:{{ 1 | divided_by: first_product.images[0].aspect_ratio | times: 100 }}%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        {%- endif -%}
+                        {% include 'loader-spinner' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script defer='defer'>
+        // Loader.require({type: "script", name: "carousel_products"});
+    </script>
+{%- else -%}
+    {% render 'no-blocks' %}
+{%- endif -%}
+
+
+{% schema %}
+{
+    "name": "Personalised Carousel",
+    "settings": [
+        {
+            "type": "checkbox",
+            "id": "show_title",
+            "label": "Show title",
+            "default": true
+        },
+{
+"type": "header",
+"content": "General"
+},
+        {
+            "type": "select",
+            "id": "container",
+            "label": "Content width",
+            "default": "boxed",
+            "options": [
+                {
+                    "value": "fullwidth",
+                    "label": "Full width"
+                },
+                {
+                    "value": "boxed",
+                    "label": "Boxed"
+                }
+            ]
+        },
+        {
+            "type": "range",
+            "id": "max_count",
+            "min": 2,
+            "max": 50,
+            "step": 1,
+            "unit": "pds",
+            "label": "Max count",
+            "default": 6
+        },
+{
+"type": "header",
+"content": "Slider settings"
+},
+        {
+            "type": "checkbox",
+            "id": "autoplay",
+            "label": "Autoplay",
+            "default": true
+        },
+        {
+            "type": "range",
+            "id": "speed",
+            "min": 2,
+            "max": 10,
+            "step": 1,
+            "label": "Autoplay speed (sec)",
+            "default": 5
+        },
+        {
+            "type": "checkbox",
+            "id": "infinite",
+            "label": "Is infinite",
+            "default": true
+        },
+        {
+            "type": "checkbox",
+            "id": "arrows",
+            "label": "Arrows",
+            "default": true
+        },
+        {
+            "type": "checkbox",
+            "id": "bullets",
+            "label": "Bullets",
+            "default": true
+        }
+    ],
+    "blocks": [
+        {
+            "type": "collection",
+            "name": "Collection",
+            "settings": [
+                {
+                    "type": "textarea",
+                    "id": "title",
+                    "label": "Title"
+                },
+                {
+                    "type": "collection",
+                    "id": "collection",
+                    "label": "Collection"
+                }
+            ]
+        }
+    ],
+    "presets": [
+        {
+            "name": "Personalised Carousel",
+            "category": "2) Carousels"
+        }
+    ]
+}
+{% endschema %}

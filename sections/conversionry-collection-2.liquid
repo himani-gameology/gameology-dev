@@ -1,0 +1,571 @@
+<div class="container">
+    {% if section.blocks.size > 0 %}
+        {% for block in section.blocks %}
+          {% if block.settings.collection-handle == collection.handle %}
+                <!-- Large Nav Buttons -->
+                {% if block.settings.large-nav-btn-url-1 != blank %}
+                  <div class="row mt-20">
+                    {% for i in (1..4) %}
+                      {% capture large-nav-btn-url %}large-nav-btn-url-{{i}}{% endcapture %}
+                      {% capture large-nav-btn-img %}large-nav-btn-image-{{i}}{% endcapture %}
+                      {% capture large-nav-btn-text %}large-nav-btn-text-{{i}}{% endcapture %}
+                      {% if block.settings[large-nav-btn-url] != blank %}
+                        <div class="col-6 col-sm-6 col-md-6 col-lg-3">
+                          <div class="mb-10 w-100">          
+                            <a href="{{ block.settings[large-nav-btn-url] }}" class="btn btn--status w-100 p-0" style="background-color: black;"> 
+                              <span class="d-flex flex-center">
+                                {% if block.settings[large-nav-btn-img] != blank %}
+                                  <img src="{{ block.settings[large-nav-btn-img] | img_url:'2000x' }}" />
+                                {% elsif block.settings[large-nav-btn-text] != blank %}
+                                  <span class="btn__text" style="color: white;">{{ block.settings[large-nav-btn-text] }}</span>
+                                {% endif %}
+                              </span>
+                            </a>        
+                          </div>
+                        </div>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+            
+                <!-- Nav Buttons -->
+                {% if block.settings.nav-btn-url-1 != blank %}
+                  {% if block.settings.navigation-heading-text != blank %}
+                  <!-- Chriate – Mas Item #193 - Category Page Refinement (23/01/23) -->
+                  <div class="row show-test_193">
+                    <div class="col-12">
+                      <h3 class="collection-navigation__heading conversionry-collection-heading mb-15 mb-lg-25">{{ block.settings.navigation-heading-text }}</h3>
+                    </div>
+                  </div>
+                  {% endif %}
+                  <div class="row mt-20 show-test_193" style="position: relative;">
+                    <div class="slider__prev collection-navigation__prev position-absolute cursor-pointer" data-js-slider-prev><i>{% render 'icon-theme-006' %}</i></div>
+                      <div class="collection-navigation__carousel">
+                    {% for i in (1..12) %}
+                      {% capture nav-btn-url %}nav-btn-url-{{i}}{% endcapture %}
+                      {% capture nav-btn-img %}nav-btn-image-{{i}}{% endcapture %}
+                      {% capture nav-btn-text %}nav-btn-text-{{i}}{% endcapture %}
+                      {% if block.settings[nav-btn-url] != blank %}
+                        <div class="col-4 col-sm-4 col-md-4 col-lg-2">
+                          <div class="mb-10 w-100">          
+                            <a href="{{ block.settings[nav-btn-url] }}" class="btn btn--status w-100 p-0" style="background-color: black;"> 
+                              <span class="d-flex flex-center">
+                                {% if block.settings[nav-btn-img] != blank %}
+                                  <img src="{{ block.settings[nav-btn-img] | img_url:'2000x' }}" />
+                                {% elsif block.settings[nav-btn-text] != blank %}
+                                  <span class="btn__text" style="color: white;">{{ block.settings[nav-btn-text] }}</span>
+                                {% endif %}
+                              </span>
+                            </a>        
+                          </div>
+                        </div>
+                      {% endif %}
+                    {% endfor %}
+                    </div>
+                    <div class="slider__next collection-navigation__next position-absolute cursor-pointer" data-js-slider-next><i>{% render 'icon-theme-007' %}</i></div>
+                  </div>
+                  <div class="row mt-20 hide-test_193">
+                    {% for i in (1..12) %}
+                      {% capture nav-btn-url %}nav-btn-url-{{i}}{% endcapture %}
+                      {% capture nav-btn-img %}nav-btn-image-{{i}}{% endcapture %}
+                      {% capture nav-btn-text %}nav-btn-text-{{i}}{% endcapture %}
+                      {% if block.settings[nav-btn-url] != blank %}
+                        <div class="col-4 col-sm-4 col-md-4 col-lg-2">
+                          <div class="mb-10 w-100">          
+                            <a href="{{ block.settings[nav-btn-url] }}" class="btn btn--status w-100 p-0" style="background-color: black;"> 
+                              <span class="d-flex flex-center">
+                                {% if block.settings[nav-btn-img] != blank %}
+                                  <img src="{{ block.settings[nav-btn-img] | img_url:'2000x' }}" />
+                                {% elsif block.settings[nav-btn-text] != blank %}
+                                  <span class="btn__text" style="color: white;">{{ block.settings[nav-btn-text] }}</span>
+                                {% endif %}
+                              </span>
+                            </a>        
+                          </div>
+                        </div>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+
+                <!-- Collections -->
+                {% for i in (1..3) %}
+                  {% capture collection-title %}collection-selection-title-{{i}}{% endcapture %}
+                  {% capture collection %}collection-selection-collection-{{i}}{% endcapture %}
+                  {%- if collections[block.settings[collection]] != blank -%}
+                  <div class="mt-20">
+                    <div data-section-type="carousel-products" data-postload="carousel_products">
+                      <div class="overflow-hidden">
+                        <div class="carousel carousel--arrows carousel-products position-relative" data-carousel-ajax>
+
+                          <div class="carousel__header pl-75 pr-75 mb-20 d-flex align-content-center align-items-center justify-content-between">
+                            <h1 class="active m-0" data-collection="{{ collections[block.settings[collection]].handle }}">{% if block.settings[collection-title] != blank %}{{ block.settings[collection-title] }}{% else %}{{ collections[block.settings[collection]].title }}{% endif %}</h1>
+                            <a class="carousel__header__view__more" href="{{ collections[block.settings[collection]].url }}">VIEW MORE >></a>
+                          </div>
+                          <!-- Carousel Body -->
+                          <div class="carousel__slider_wrapper position-relative">
+                            <div class="carousel__slider position-relative invisible" data-js-carousel data-autoplay="false" data-speed="6000" data-count="6" data-infinite="true" data-arrows="true" data-bullets="false">
+                              <div class="carousel__prev position-absolute cursor-pointer" data-js-carousel-prev><i>{% render 'icon-theme-006' %}</i></div>      
+                              <div class="carousel__products pl-30 pr-30 overflow-hidden">
+                                <div class="carousel__slick row" data-js-carousel-slick data-carousel-items data-max-count="12" data-products-pre-row="6" data-async-ajax-loading="ture">
+                                  {%- for product in collections[block.settings[collection]].products limit: 1 -%}
+                                    {%- if first_product == blank -%}
+                                        {%- assign first_product = product -%}
+                                    {%- endif -%}
+                                  {%- endfor -%}
+                                </div>
+                              </div>
+                              <div class="carousel__next position-absolute cursor-pointer" data-js-carousel-next><i>{% render 'icon-theme-007' %}</i></div>
+                            </div>
+                          </div>    
+                          <div class="carousel__footer"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {%- endif -%}
+                {% endfor %}
+
+  
+          {% endif %}
+        {% endfor %}
+    {% endif %}
+</div>
+      
+<script>
+    Loader.require({type: "script", name: "carousel_products"});
+</script>
+
+<style>
+.carousel__header {
+  background-color: #141414;
+  height: 40px;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+}
+.carousel__header h1 {
+    font-size: 20px;
+    height: 40px;
+    color: white;
+    background-color: #141414;
+    letter-spacing: 0;
+    display: flex;
+    align-items: center;
+}
+.carousel__header__view__more {
+  background-color: #141414;
+  color: white !important;
+  letter-spacing: 0px;
+  font-size: 20px;
+}
+.product-collection__title {
+  height: 42px !important;
+}
+.product-collection__title a {
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  overflow: hidden !important;
+}
+.price-and-wishlist {
+  display: flex;
+  justify-content: space-between;
+}
+.product-collection-bottom {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.carousel__prev {
+  left: 0%;
+}
+.carousel__next {
+  right: 0%;
+}
+.carousel__next, .carousel__prev {
+  top: 40% !important;
+  opacity: 1;
+  transform: none;
+}
+#shopify-section-conversionry-collection .product-collection__reviews {
+  display: none;
+}
+.carousel__footer {
+  background-color: #141414;
+  height: 15px;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+}
+.jdgm-prev-badge__text {
+  font-size: 12px;
+  color: #000;
+}
+.no-of-players {
+  display: none;
+}
+.jdgm-star:before {
+  font-size: 10px;
+}
+.product-collection__buttons .col-lg-2 {
+  display: none;
+}
+@media only screen and (max-width: 1024px) {
+  .carousel__next, .carousel__prev {
+    top: 40% !important;
+  }
+  .product-collection-bottom {
+    height: 35px;
+  }
+  .show-test_50 {
+    display: none !important;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .carousel__header {
+    height: 100px;
+    justify-content: center !important;
+    flex-direction: column;
+  }
+  .carousel__header__view__more {
+    font-size: 12px;
+  }
+  .carousel__title.active {
+    font-size: 20px;
+  }
+  .carousel__header h1 {
+    font-size: 20px;
+  }
+  .carousel__slider_wrapper {
+    padding: 10px !important;
+  }
+  .price-save_price {
+    font-size: 10px !important;
+  }
+  .product-collection__price {
+    height: 25px;
+  }
+  .product-collection {
+    margin-bottom: 0 !important;
+  }
+  .carousel__products {
+    padding: 0 !important;
+  }
+}
+</style>
+{% schema %}
+{
+"name": "Conversriony Collection 2",
+"max_blocks": 3,
+"blocks": [
+    {
+        "type": "custom",
+        "name": "Custom Collection",
+        "settings": [
+          {
+            "type": "text",
+            "id": "collection-handle",
+            "label": "Collection Handle"
+          },
+          {
+            "type": "image_picker",
+            "id": "banner-image",
+            "label": "Banner Image"
+          },          
+          {
+             "type": "header",
+             "content": "Collections"
+          },
+          {
+            "type": "text",
+            "id": "collection-selection-title-1",
+            "label": "Collection Title 1"
+          },
+          {
+            "type": "collection",
+            "id": "collection-selection-collection-1",
+            "label": "Collection 1"
+          },    
+          {
+            "type": "text",
+            "id": "collection-selection-title-2",
+            "label": "Collection Title 2"
+          },
+          {
+            "type": "collection",
+            "id": "collection-selection-collection-2",
+            "label": "Collection 2"
+          },              
+          {
+            "type": "text",
+            "id": "collection-selection-title-3",
+            "label": "Collection Title 3"
+          },
+          {
+            "type": "collection",
+            "id": "collection-selection-collection-3",
+            "label": "Collection 3"
+          },
+          {
+             "type": "header",
+             "content": "Large Navigation Buttons"
+          },
+          {
+            "type": "image_picker",
+            "id": "large-nav-btn-image-1",
+            "label": "Large Navigation Button Image 1"
+          },
+          {
+            "type": "text",
+            "id": "large-nav-btn-text-1",
+            "label": "Large Navigation Button Text 1"
+          },
+          {
+            "type": "text",
+            "id": "large-nav-btn-url-1",
+            "label": "Large Navigation Button URL 1"
+          },
+          {
+            "type": "image_picker",
+            "id": "large-nav-btn-image-2",
+            "label": "Large Navigation Button Image 2"
+          },
+          {
+            "type": "text",
+            "id": "large-nav-btn-text-2",
+            "label": "Large Navigation Button Text 2"
+          },
+          {
+            "type": "text",
+            "id": "large-nav-btn-url-2",
+            "label": "Large Navigation Button URL 2"
+          },
+          {
+            "type": "image_picker",
+            "id": "large-nav-btn-image-3",
+            "label": "Large Navigation Button Image 3"
+          },
+          {
+            "type": "text",
+            "id": "large-nav-btn-text-3",
+            "label": "Large Navigation Button Text 3"
+          },
+          {
+            "type": "text",
+            "id": "large-nav-btn-url-3",
+            "label": "Large Navigation Button URL 3"
+          },
+          {
+            "type": "image_picker",
+            "id": "large-nav-btn-image-4",
+            "label": "Large Navigation Button Image 4"
+          },
+          {
+            "type": "text",
+            "id": "large-nav-btn-text-4",
+            "label": "Large Navigation Button Text 4"
+          },
+          {
+            "type": "text",
+            "id": "large-nav-btn-url-4",
+            "label": "Large Navigation Button URL 4"
+          },
+          {
+             "type": "header",
+             "content": "Navigation Buttons"
+          },
+          {
+            "type": "text",
+            "id": "navigation-heading-text",
+            "label": "Navigation Heading"
+          },
+          {
+            "type": "image_picker",
+            "id": "nav-btn-image-1",
+            "label": "Navigation Button Image 1"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-text-1",
+            "label": "Navigation Button Text 1"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-url-1",
+            "label": "Navigation Button URL 1"
+          },
+          {
+            "type": "image_picker",
+            "id": "nav-btn-image-2",
+            "label": "Navigation Button Image 2"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-text-2",
+            "label": "Navigation Button Text 2"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-url-2",
+            "label": "Navigation Button URL 2"
+          },
+          {
+            "type": "image_picker",
+            "id": "nav-btn-image-3",
+            "label": "Navigation Button Image 3"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-text-3",
+            "label": "Navigation Button Text 3"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-url-3",
+            "label": "Navigation Button URL 3"
+          },
+          {
+            "type": "image_picker",
+            "id": "nav-btn-image-4",
+            "label": "Navigation Button Image 4"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-text-4",
+            "label": "Navigation Button Text 4"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-url-4",
+            "label": "Navigation Button URL 4"
+          },
+          {
+            "type": "image_picker",
+            "id": "nav-btn-image-5",
+            "label": "Navigation Button Image 5"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-text-5",
+            "label": "Navigation Button Text 5"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-url-5",
+            "label": "Navigation Button URL 5"
+          },
+          {
+            "type": "image_picker",
+            "id": "nav-btn-image-6",
+            "label": "Navigation Button Image 6"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-text-6",
+            "label": "Navigation Button Text 6"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-url-6",
+            "label": "Navigation Button URL 6"
+          },
+          {
+            "type": "image_picker",
+            "id": "nav-btn-image-7",
+            "label": "Navigation Button Image 7"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-text-7",
+            "label": "Navigation Button Text 7"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-url-7",
+            "label": "Navigation Button URL 7"
+          },
+          {
+            "type": "image_picker",
+            "id": "nav-btn-image-8",
+            "label": "Navigation Button Image 8"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-text-8",
+            "label": "Navigation Button Text 8"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-url-8",
+            "label": "Navigation Button URL 8"
+          },
+          {
+            "type": "image_picker",
+            "id": "nav-btn-image-9",
+            "label": "Navigation Button Image 9"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-text-9",
+            "label": "Navigation Button Text 9"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-url-9",
+            "label": "Navigation Button URL 9"
+          },
+          {
+            "type": "image_picker",
+            "id": "nav-btn-image-10",
+            "label": "Navigation Button Image 10"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-text-10",
+            "label": "Navigation Button Text 10"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-url-10",
+            "label": "Navigation Button URL 10"
+          },
+          {
+            "type": "image_picker",
+            "id": "nav-btn-image-11",
+            "label": "Navigation Button Image 11"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-text-11",
+            "label": "Navigation Button Text 11"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-url-11",
+            "label": "Navigation Button URL 11"
+          },
+          {
+            "type": "image_picker",
+            "id": "nav-btn-image-12",
+            "label": "Navigation Button Image 12"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-text-12",
+            "label": "Navigation Button Text 12"
+          },
+          {
+            "type": "text",
+            "id": "nav-btn-url-12",
+            "label": "Navigation Button URL 12"
+          }
+        ]
+    }
+],
+"presets": [
+    {
+      "name": "Conversriony Collection 2",
+      "category": "Custom Collection"
+    }
+]
+}
+{% endschema %}

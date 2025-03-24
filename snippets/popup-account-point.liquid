@@ -1,0 +1,109 @@
+<div class="earn-point-login-popup-bg"></div>
+<div class="earn-point-login-popup">
+  <div class="close-earn-point-login-popup js-close-login-popup">
+    {% render 'icon-close' %}
+  </div>
+  <div class="login-content">
+    <div class="login-header">
+      {% if settings.login_title != blank %}
+        <div class="rte">
+          {{ settings.login_title }}
+        </div>
+      {% endif %}
+    </div>
+    <div class="login-bottom desktop">
+      {% if settings.login_bottom != blank %}
+        <span>{{ settings.login_bottom }}</span>
+      {% endif %}
+    </div>
+    <div class="login-form-container">
+      <div class="login-tab-header js-change-tab-account">
+        <span class="active" data-tab="login">{{ 'products.point.login' | t }}</span>
+        <span data-tab="create">{{ 'products.point.create_account' | t }}</span>
+      </div>
+      <div class="login-tab-form">
+        <div class="form-login tab-form active" data-tab="login">
+          {% form 'customer_login' %}
+            <div>
+                <input type="email" name="customer[email]" id="CustomerEmail" class="{% if form.errors contains 'email' %}input-error{% endif %}" placeholder="Email" spellcheck="false" autocomplete="off" autocapitalize="off" required="required">
+            </div>
+            {%- if form.password_needed -%}
+              <div>
+                <input type="password" name="customer[password]" id="CustomerPassword" class="{% if form.errors contains 'password' %}input-error{% endif %}" placeholder="Password" required="required">
+              </div>
+            {%- endif -%}
+            {% include 'form-get-message' %}
+            {%- if form.password_needed -%}
+              <a href="/account/login/#recover" target="_blank" class="btn-link js-button-block-visibility" data-block-link="#recover" data-action="open" data-action-close-popup="account">{{ 'general.popups.account.login.forgot_password' | t }}</a>
+            {%- endif -%}
+            <input type="submit" class="js-login-account btn btn--full" value="{{ 'general.popups.account.login.button' | t }}">
+          {% endform %}
+        </div>
+        <div class="form-create tab-form" data-tab="create">
+          {% if customer %}
+            <div class="created">
+              <p>
+                {{ 'products.point.created_1' | t }}
+                <br/>
+                {{ customer.email }}
+              </p>
+              <p>{{ 'products.point.created_2' | t }}</p>
+              <div class="btn js-close-login-popup">{{ 'products.point.continue_shopping' | t }}</div>
+            </div>
+          {% else %}
+            {% form 'create_customer' %}
+              {{ form.errors | default_errors }}
+              <div>
+                  <input type="text" name="customer[first_name]" id="CreateFirstName" placeholder="First name"{% if form.first_name %} value="{{ form.first_name }}"{% endif %} required="required">
+              </div>
+              <div>
+                  <input type="text" name="customer[last_name]" id="CreateLastName" placeholder="Last name"{% if form.last_name %} value="{{ form.last_name }}"{% endif %} required="required">
+              </div>
+              <div>
+                  <input type="email" name="customer[email]" id="CreateEmail" class="{% if form.errors contains 'email' %}input-error{% endif %}" placeholder="Email" value="{% if form.email %}{{ form.email }}{% endif %}" spellcheck="false" autocomplete="off" autocapitalize="off" required="required">
+              </div>
+              <div>
+                  <input type="password" name="customer[password]" id="CreatePassword" class="{% if form.errors contains 'password' %}input-error{% endif %}" placeholder="Password" required="required">
+              </div>
+
+              <a href="/account/login/#recover" target="_blank" class="btn-link js-button-block-visibility" data-block-link="#recover" data-action="open" data-action-close-popup="account">{{ 'general.popups.account.login.forgot_password' | t }}</a>
+              
+              <input type="submit" class="js-login-account create btn btn--full" value="{{ 'products.point.create_account' | t }}">
+            {% endform %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="login-bottom mobile">
+      {% if settings.login_bottom != blank %}
+        <span>{{ settings.login_bottom }}</span>
+      {% endif %}
+    </div>
+    <div class="login-info-block">
+      <div class="login-block">
+        {% if settings.login_image_1 != blank %}
+          <img src="{{ settings.login_image_1 | img_url: '40x' }}">
+        {% endif %}
+        {% if settings.login_image_1 != blank %}
+          <div class="rte">{{ settings.login_text_1 }}</div>
+        {% endif %}
+      </div>
+      <div class="login-block">
+        {% if settings.login_image_2 != blank %}
+          <img src="{{ settings.login_image_2 | img_url: '40x' }}">
+        {% endif %}
+        {% if settings.login_image_2 != blank %}
+          <div class="rte">{{ settings.login_text_2 }}</div>
+        {% endif %}
+      </div>
+      <div class="login-block">
+        {% if settings.login_image_3 != blank %}
+          <img src="{{ settings.login_image_3 | img_url: '40x' }}">
+        {% endif %}
+        {% if settings.login_image_3 != blank %}
+          <div class="rte">{{ settings.login_text_3 }}</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>

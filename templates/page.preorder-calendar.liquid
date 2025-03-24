@@ -1,0 +1,235 @@
+{% include 'global-variables' %}
+<div class="page">
+  <div class="container mt-40 pl-0 pr-0 pb-60{% if offset_pages_margin_bottom_d > 0 %} mb-lg-{{ offset_pages_margin_bottom_d }}{% endif %}">
+    <h1 class="preorder-calendar-title mb-30">PREORDER CALENDAR</h1>
+    <div id="preorder-navigation" class="row mb-30">
+    </div>
+    <section id="preorder-calendar-section">
+    </section>
+  </div>
+</div>
+
+<style>
+  .preorder-calendar-title {
+    font-size: 50px;
+  }
+  .preorder-date {
+    background-color: #141414;
+    padding: 30px;
+    height: 225px;
+  }
+  .preorder-date-day, .preorder-date-month, .preorder-date-year, .preorder-date-quarter {
+    color: white;
+  }
+  .preorder-date-month, .preorder-date-quarter {
+    font-size: 64px;
+    letter-spacing: 0px;
+  }
+  .preorder-date-year {
+    font-size: 32px;
+    font-weight: 400;
+  }
+  .view-product-btn {
+    background-color: #141414;
+    color: white !important;
+    padding: 10px 20px;
+    border-radius: 5px;
+  }
+  .preorder-product {
+    height: 225px;
+    border-right: 1px solid lightgrey;
+    background-color: #f1f1f1;
+  }
+  .preorder-product.even-row {
+    background-color: #e1e1e1 !important;
+  }
+  .product-title {
+    font-size: 16px;
+  }
+  .product-price {
+    font-size: 14px;
+  }
+  .product-release-date {
+    font-size: 14px;
+    height: 21px;
+  }
+  #preorder-navigation {
+    padding: 0 30px 0 15px;
+  }
+  .navigation-btn {
+    background-color: #141414;
+    color: white !important;
+    padding: 10px;
+    text-align: center;
+  }
+  @media only screen and (max-width: 767px) {
+    .preorder-calendar-title {
+      text-align: center;
+    }
+    .preorder-product.even-row {
+      background-color: #f1f1f1 !important;
+    }
+    .preorder-product {
+      border-bottom: 1px solid lightgrey;
+      margin-right: 0 !important;
+    }
+    .preorder-product-bar {
+      margin-left: 10px !important;
+    }
+    .product-title {
+      font-size: 14px;
+    }
+    .product-price {
+      font-size: 12px;
+    }
+    .product-release-date {
+      font-size: 12px;
+    }
+    #preorder-navigation {
+      padding: 0;
+    }
+  }
+</style>
+
+<script>
+var releaseByMonth = {};
+var releaseByQuarter = {};
+{% paginate collections['Preorders'].products by 1000 %}  
+  {% for product in collections['Preorders'].products %}
+    {% unless product.description contains "TBA" %}
+      var preorderProduct = {'title': `{{ product.title }}`, 'price': "{{ product.price | money }}", 'image': "{{ product.featured_image | img_url: "master" }}", 'url': "{{ product.url }}"};
+      var description = `{{ product.description }}`;
+      description = description.substr(description.search("Release Date:"), 100);   
+      var datePattern = /[0-9]{2,}-*[a-zA-Z]{3,}-*[0-9]{2,}/i;  
+      var monthPattern = /[a-zA-Z]{3,}-*[0-9]{2,}/i;      
+      var yearPattern = /[a-zA-Z0-9]{2,}-*[0-9]{2,}/i;    
+    
+      var releaseDate = description.match(datePattern);
+      var releaseMonth = description.match(monthPattern);
+      var releaseYear = description.match(yearPattern);
+      if (releaseDate != null) {
+        if (releaseByMonth[releaseMonth[0]] == null){
+          releaseByMonth[releaseMonth[0]] = [];
+        }
+        preorderProduct.release = releaseDate[0];
+         releaseByMonth[releaseMonth[0]].push(preorderProduct);
+      }
+      else {
+        if (releaseMonth != null) {
+          if (releaseByMonth[releaseMonth[0]] == null){
+            releaseByMonth[releaseMonth[0]] = [];
+          }
+          releaseByMonth[releaseMonth[0]].push(preorderProduct);
+        }
+        else {
+          if (releaseYear != null) {
+            if (releaseByQuarter[releaseYear[0]] == null){
+              releaseByQuarter[releaseYear[0]] = [];
+            }
+            releaseByQuarter[releaseYear[0]].push(preorderProduct);
+          }
+        }
+      }
+    {% endunless %}
+  {% endfor %}
+{% endpaginate %}
+
+{% comment %}Zeta digital - Sort date order for replease by month{% endcomment %}
+Object.keys(releaseByMonth).forEach(key => {
+  var releaseMonth = key.split("-")[0];
+  var releaseMonthMapping = {'January': 1, 'February': 2, 'March': 3, 'April': 4, 'May': 5, 'June': 6, 'July': 7, 'August': 8, 'September': 9, 'October': 10, 'November': 11, 'December': 12};
+  releaseMonth = releaseMonthMapping[releaseMonth];
+  var releaseDate = releaseMonth + "-" + key.split("-")[1];
+  releaseByMonth[releaseDate] = releaseByMonth[key];
+  delete releaseByMonth[key];
+});
+
+{% comment %}Zeta digital - Sort date order for replease by quarter{% endcomment %}
+Object.keys(releaseByQuarter).forEach(key => {
+  var releaseDate = key.slice();
+  if (releaseDate.includes('Q1')){
+    releaseDate = releaseDate.replace("Q1", "3.1");
+  }
+  else if (releaseDate.includes('Q2')){
+    releaseDate = releaseDate.replace("Q2", "6.1");
+  }
+  else if (releaseDate.includes('Q3')){
+    releaseDate = releaseDate.replace("Q3", "9.1");
+  }
+  else if (releaseDate.includes('Q4')){
+    releaseDate = releaseDate.replace("Q4", "12.1");
+  }
+  releaseByQuarter[releaseDate] = releaseByQuarter[key];
+  delete releaseByQuarter[key];
+});
+
+var releaseDateUnsorted = Object.assign(releaseByMonth, releaseByQuarter);
+var releaseDateSorted = {};
+Object.keys(releaseDateUnsorted).sort(function(a, b) {
+  var aa = a.split('-'),
+      bb = b.split('-');
+  return aa[1] - bb[1] || aa[0] - bb[0];
+}).forEach(function(key) {
+  var releaseMonth = key.split("-")[0];
+  var releaseMonthMapping = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June', 7: 'July', 8: 'August', 9: 'September', 10: 'October', 11: 'November', 12: 'December', 3.1: 'Q1', 6.1: 'Q2', 9.1: 'Q3', 12.1: 'Q4'};
+  releaseMonth = releaseMonthMapping[releaseMonth];
+  const releaseDate = releaseMonth + "-" + key.split("-")[1];
+  releaseDateSorted[releaseDate] = releaseDateUnsorted[key];
+});
+  
+{% comment %}Zeta digital - Append sorted date to HTML{% endcomment %}
+Object.keys(releaseDateSorted).forEach(key => {
+  var releaseDatePattern = key.split("-");
+  var releaseDateMonth = releaseDatePattern[0];
+  var releaseDateYear = releaseDatePattern[1];
+  
+  var preorderProductBarId = key.toLowerCase() + "-preorders";
+
+  var navigationHtml = `<a class="col-6 col-lg-2 navigation-btn" href="#`+ key +`">` + releaseDateMonth.toUpperCase().slice(0, 3) + ` ` + releaseDateYear + `</a>`;
+  document.getElementById('preorder-navigation').innerHTML += navigationHtml;
+  
+  var html = `<div class="preorder-calendar-block row ml-0 mr-0 mb-lg-40" id="`+ key +`">
+        <div class="preorder-date col-12 col-lg-3 d-flex flex-column justify-content-center">
+          <h1 class="preorder-date-month m-0">` + releaseDateMonth.toUpperCase().slice(0, 3)  + `</h1>
+          <h1 class="preorder-date-year m-0">` + releaseDateYear + `</h1>
+        </div>
+        <div class="preorder-product-bar col-12 col-lg-9 row m-0 p-0" id="`+ preorderProductBarId + `">
+        </div>
+      </div>`;
+  document.getElementById('preorder-calendar-section').innerHTML += html;
+
+{% comment %}Zeta digital - Append products to HTML{% endcomment %}
+  var evenRowNumberOne = -2;
+  var evenRowNumberTwo = -1;
+  var evenRowNumberArray = [];
+  releaseDateSorted[key].forEach(function(productInfo, index){
+    var productReleaseHtml = '';
+    var evenRow = '';
+    
+    evenRowNumberOne += 4;
+    evenRowNumberTwo += 4;
+    evenRowNumberArray.push(evenRowNumberOne);
+    evenRowNumberArray.push(evenRowNumberTwo);
+    
+    if (evenRowNumberArray.includes(index)) {
+      evenRow = 'even-row';
+    }
+    if (productInfo.release != undefined) {
+      productReleaseHtml = `Release Date: ` + productInfo.release;
+    }
+    var productHtml = `
+    <div class="preorder-product row col-12 col-lg-6 p-15 mr-15 ` + evenRow + `">
+      <div class="col-4 d-flex align-items-center p-0">
+        <img src="` + productInfo.image + `">
+      </div>
+      <div class="col-8 pl-15 pr-15">
+        <h5 class="product-title mb-10">`+ productInfo.title + `</h5>
+        <h5 class="product-price mb-10">` + productInfo.price + `</h5>
+        <h5 class="product-release-date mb-10">` + productReleaseHtml + `</h5>
+        <a class="view-product-btn mt-10 text-center" style="position: absolute; top: 69%; width: -webkit-fill-available;" href="` + productInfo.url + `">VIEW PRODUCT</a>
+      </div>
+    </div>`;
+    document.getElementById(preorderProductBarId).innerHTML += productHtml;
+  });
+});
+</script>

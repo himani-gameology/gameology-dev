@@ -1,0 +1,74 @@
+  <div class="ais-page container mt-10 mb-10 mb-lg-25 mt-lg-25">
+    <h1 class="ais-heading">
+
+    </h1>
+    <div class="ais-facets ais-facets__shown">
+        <div class="ais-facets-button show-test_201-flex">
+          Hide filters
+        </div>
+        <div class="ais-clear-refinements-container"></div>
+        <div class="ais-current-refined-values-container"></div>
+      [[# facets ]]
+        <div class="ais-facet-[[ type ]] ais-facet-[[ escapedName ]]">
+          <div class="ais-range-slider--header ais-facet--header ais-header">[[ title ]] <span class="dropdown-arrow">&#9650;</span></div>
+          <div class="ais-facet-[[ escapedName ]]-container ais-facet--container"></div>
+        </div>
+      [[/ facets ]]
+    </div>
+    <div class="ais-block">
+      <div class="ais-input">
+        <div class="ais-input--label">
+          [[ translations.search ]]
+        </div>
+        <div class="ais-search-box-container"></div>
+        <div class="ais-input-button">
+          <div class="ais-clear-input-icon"></div>
+          <a title="Search by Algolia - Click to know more" href="https://www.algolia.com/search-solutions/shopify/?utm_source=shopify&utm_medium=link&utm_campaign=instantsearch-[[ storeName ]]">
+            <div class="ais-algolia-icon"></div>
+          </a>
+        </div>
+      </div>
+
+
+      <div class="ais-floater">
+        <div class="ais-wrap">
+          <div class="ais-floater-close show-test_225-flex"></div>
+          <div class="ais-search-title show-test_225-flex">
+            <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6.23067e-05 3.74679C6.23067e-05 4.11381 0.143129 4.45887 0.403058 4.71879L4.42698 8.7427C4.61301 8.92874 4.7149 9.17466 4.7149 9.4377V15.0715C4.7149 15.2944 4.84087 15.4984 5.04091 15.5985C5.12392 15.6404 5.2149 15.6605 5.3049 15.6605C5.4299 15.6605 5.5549 15.6204 5.65891 15.5425L8.80199 13.1855C8.94994 13.0745 9.038 12.8996 9.038 12.7145V9.43751C9.038 9.17546 9.14005 8.92855 9.32592 8.74251L13.3498 4.71859C13.6098 4.45866 13.7528 4.11359 13.7528 3.74659V2.10759C13.7528 1.13267 12.9599 0.339508 11.9848 0.339508L1.76808 0.339671C0.793166 0.339671 0 1.13263 0 2.10775L6.23067e-05 3.74679ZM8.49006 7.90987C8.08202 8.31791 7.8571 8.86087 7.8571 9.43787V12.421L5.89306 13.894V9.4377C5.89306 8.8607 5.66813 8.31775 5.26011 7.9097L2.01206 4.66166H11.7383L8.49006 7.90987ZM1.17923 2.10779C1.17923 1.78275 1.44323 1.51875 1.76827 1.51875H11.9824C12.3075 1.51875 12.5715 1.78274 12.5715 2.10779V3.48279H1.1794L1.17923 2.10779Z" fill="#141414"/>
+            </svg>
+            <p>FILTER BY GAME TYPE</p>
+          </div>
+          <div class="ais-search-header">
+            <div class="ais-sort">
+              [[# multipleSortOrders ]]
+              [[ translations.sortBy ]] <span class="ais-sort-orders-container"></span>
+              [[/ multipleSortOrders ]]
+
+              [[^ multipleSortOrders ]]
+              [[ translations.sortBy ]] [[ translations.relevance ]]
+              [[/ multipleSortOrders ]]
+            </div>
+            <div class="ais-stats-container"></div>
+            <div class="ais-change-display">
+              <span class="ais-change-display-block ais-change-display-selected"><i class="fa fa-th-large"></i></span>
+              <span class="ais-change-display-list"><i class="fa fa-th-list"></i></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="show-test_217 search-category-list">
+
+      </div>
+      <div class="ais-hits-container ais-results-as-block"></div>
+    </div>
+    <div class="ais-pagination-container"></div>
+  </div>
+
+  <div class="ais-filter-button show-test_225-flex">
+    <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6.23067e-05 3.74679C6.23067e-05 4.11381 0.143129 4.45887 0.403058 4.71879L4.42698 8.7427C4.61301 8.92874 4.7149 9.17466 4.7149 9.4377V15.0715C4.7149 15.2944 4.84087 15.4984 5.04091 15.5985C5.12392 15.6404 5.2149 15.6605 5.3049 15.6605C5.4299 15.6605 5.5549 15.6204 5.65891 15.5425L8.80199 13.1855C8.94994 13.0745 9.038 12.8996 9.038 12.7145V9.43751C9.038 9.17546 9.14005 8.92855 9.32592 8.74251L13.3498 4.71859C13.6098 4.45866 13.7528 4.11359 13.7528 3.74659V2.10759C13.7528 1.13267 12.9599 0.339508 11.9848 0.339508L1.76808 0.339671C0.793166 0.339671 0 1.13263 0 2.10775L6.23067e-05 3.74679ZM8.49006 7.90987C8.08202 8.31791 7.8571 8.86087 7.8571 9.43787V12.421L5.89306 13.894V9.4377C5.89306 8.8607 5.66813 8.31775 5.26011 7.9097L2.01206 4.66166H11.7383L8.49006 7.90987ZM1.17923 2.10779C1.17923 1.78275 1.44323 1.51875 1.76827 1.51875H11.9824C12.3075 1.51875 12.5715 1.78274 12.5715 2.10779V3.48279H1.1794L1.17923 2.10779Z" fill="#141414"/>
+    </svg>
+    <p>FILTER BY GAME TYPE</p>
+  </div>

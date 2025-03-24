@@ -1,0 +1,75 @@
+<div class="row gift-guide-block">
+  <div class="block-1-4-square col-12 col-lg-3 p-0 pl-lg-10 pr-lg-10 d-flex justify-content-center flex-column">
+    <a class="mb-lg-20" href="{{ section.settings.block-left-url-1 }}"><img src="{{ section.settings.block-left-img-1 | img_url:"master" }}"></a>
+    <a href="{{ section.settings.block-left-url-2 }}"><img src="{{ section.settings.block-left-img-2 | img_url:"master" }}"></a>
+  </div>
+  <div class="block-1-2-square col-12 col-lg-6 p-0 pl-lg-10 pr-lg-10 d-flex justify-content-center">
+    <a href="{{ section.settings.block-center-url }}"><img src="{{ section.settings.block-center-img | img_url:"master" }}"></a>
+  </div>
+  <div class="block-1-4-square col-12 col-lg-3 p-0 pl-lg-10 pr-lg-10 d-flex justify-content-center flex-column">
+    <a class="mb-lg-20" href="{{ section.settings.block-right-url-1 }}"><img src="{{ section.settings.block-right-img-1 | img_url:"master" }}"></a>
+    <a href="{{ section.settings.block-right-url-2 }}"><img src="{{ section.settings.block-right-img-2 | img_url:"master" }}"></a>
+  </div>
+</div>
+{% schema %}
+{
+    "name": "Gift Guide Block 8",
+    "settings": [
+        {
+            "type": "image_picker",
+            "id": "block-left-img-1",
+            "label": "Left Block Image 1 (1/4 Square)"
+        },
+        {
+            "type": "url",
+            "id": "block-left-url-1",
+            "label": "Left Block Url 1"
+        },
+        {
+            "type": "image_picker",
+            "id": "block-left-img-2",
+            "label": "Left Block Image 2 (1/4 Square)"
+        },
+        {
+            "type": "url",
+            "id": "block-left-url-2",
+            "label": "Left Block Url 2"
+        },
+        {
+            "type": "image_picker",
+            "id": "block-center-img",
+            "label": "Center Block Image (1/2 Square)"
+        },
+        {
+            "type": "url",
+            "id": "block-center-url",
+            "label": "Center Block Url"
+        },
+        {
+            "type": "image_picker",
+            "id": "block-right-img-1",
+            "label": "Right Block Image 1 (1/4 Square)"
+        },
+        {
+            "type": "url",
+            "id": "block-right-url-1",
+            "label": "Right Block Url 1"
+        },
+        {
+            "type": "image_picker",
+            "id": "block-right-img-2",
+            "label": "Right Block Image 2 (1/4 Square)"
+        },
+        {
+            "type": "url",
+            "id": "block-right-url-2",
+            "label": "Right Block Url 2"
+        }
+    ],
+    "presets": [
+        {
+            "name": "Gift Guide Block 8"
+        }
+    ]
+}
+{% endschema %}

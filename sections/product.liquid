@@ -1,0 +1,927 @@
+{% include 'global-variables' %}
+
+{%- assign is_product_page = true -%}
+{%- assign sidebar = sidebar | default: settings.product_info_page_sidebar -%}
+{% capture container_class %}{% if sidebar != 'off' %} product-page__container--with-sidebar{% endif %}{% if sidebar == 'left' %} order-xl-1{% endif %}{% endcapture %}
+{% capture sidebar_class %}{% if sidebar == 'left' %} product-page__sidebar--left pr-xl-30 mr-xl-30{% elsif sidebar == 'right' %} product-page__sidebar--right pl-xl-30 ml-xl-30{% endif %}{% endcapture %}
+{% capture sidebar_html %}
+    {%- if sidebar != 'off' -%}
+        {% include 'product-info-res-variables' %}
+        <div class="product-page__sidebar{{ sidebar_class }}{% if enable_sticky_sidebar %} sticky-sidebar-xl js-sticky-sidebar{% endif %}" data-js-sticky-sidebar-media-xl>
+            {%- if enable_sticky_sidebar -%}
+                <div data-js-sticky-sidebar-body>
+            {%- endif -%}
+                    <div data-js-position-desktop="sidebar">
+                        {% include 'product-page-get-sidebar' %}
+                    </div>
+            {%- if enable_sticky_sidebar -%}
+                </div>
+            {%- endif -%}
+        </div>
+    {%- endif -%}
+{% endcapture %}
+{% include 'product-info-res-variables' %}
+{% include 'product-res-variables' %}
+{%- assign show_addthis = show_addthis | default: false -%}
+{%- assign show_button_dynamic_checkout = show_button_dynamic_checkout | default: settings.product_info_page_show_button_dynamic_checkout -%}
+{%- assign show_dynamic_checkout_confirmation = show_dynamic_checkout_confirmation | default: settings.product_info_page_show_dynamic_checkout_confirmation -%}
+{%- assign styled_dynamic_checkout = styled_dynamic_checkout | default: settings.product_info_page_styled_dynamic_checkout -%}
+{%- assign show_tabs = show_tabs | default: section.settings.show_tabs -%}
+{%- assign tabs_type = tabs_type | default: section.settings.tabs_type -%}
+{%- assign show_tab_description = show_tab_description | default: section.settings.show_tab_description -%}
+{%- assign show_tab_reviews = show_tab_reviews | default: section.settings.show_tab_reviews -%}
+{% capture content_margins %}mt-{{ offset_product_page_content_margin_top_d }} mb-{{ offset_product_page_content_margin_bottom_d }}{% endcapture %}
+
+<!-- Converionry - Add fomo product 080722 -->
+{%- liquid
+  assign viewMin = section.settings['fomo_view_min']
+  assign viewMax = section.settings['fomo_view_max']
+  assign soldMin = section.settings['fomo_sold_min']
+  assign soldMax = section.settings['fomo_sold_max']
+
+  assign diff = viewMax | minus: viewMin
+  assign randomView = "now" | date: "%N" | modulo: diff | plus: viewMin
+
+  assign diff = soldMax | minus: soldMin
+  assign randomSold = "now" | date: "%N" | modulo: diff | plus: soldMin
+-%}
+
+<style>
+  @media (min-width:  1025px) {
+    .sticky-sidebar.sidebar-fixed-top [data-js-sticky-sidebar-body] {
+      position: sticky!important;
+      width: 100%!important;
+    }
+    
+    .mini-popup-container.offset-bottom {
+      bottom: 180px !important;
+      left: 0 !important
+    }
+  
+  }
+
+  .mini-popup-container.container-mobile {
+    transition: bottom 0.4s ease;
+  }
+
+  .mini-popup-container.offset-bottom {
+    bottom: 86px !important;
+  }
+
+  .reward-button {
+    background-color: black;
+  }
+  
+  .offset-bottom .mini-popup-container.container-mobile {
+    bottom: 79px !important;
+    transition: bottom 0s ease;
+  }
+
+  #launcher.offset-bottom {
+    bottom: 50px !important;
+  }
+</style>
+<div data-section-id="{{ section.id }}" data-section-type="product-page" data-enable-history-state="true">
+    {%- case template_layout -%}
+        {%- when '1' -%}
+            <div class="product-page {{ content_margins }}">
+                <div class="container{% if sidebar != 'off' %} d-xl-flex{% endif %}">
+                  
+                    <div class="product-page__container{{ container_class }}">
+                        <div class="product-page__main">
+                            {% include 'product-page-get-main' %}
+                        </div>
+                         {% include 'product-blocks-sidebar' %}
+                        {%- if section.settings.show_tabs -%}
+                          <div class="product-page__tabs mt-lg-40">
+                            <!--Conversionry - Add product detail table 020822-->
+                           {%- render 'product-detail-table' -%}
+                            {% include 'product-page-get-tabs' %}
+                            {% comment %}{% render 'pre-order-block' %}{% endcomment %}
+                          
+                            {% include 'product-page-upsell' %}
+                            {% render 'judgeme_widgets', widget_type: 'judgeme_review_widget', concierge_install: false, product: product %}
+                            <div class="mt-50">	
+                              <!--<h4 class="mb-0">WHAT OUR CUSTOMERS SAY</h4>-->
+                              <div class="elfsight-sapp-695ecac6-6643-448d-acd5-c747d5b51ad0"></div>
+                            </div>
+                          </div>
+                        {%- endif -%}
+
+                    </div>
+                    {{ sidebar_html }}
+                </div>
+            </div>
+        {%- when '2' -%}
+            <div class="product-page {{ content_margins }}">
+                <div class="container{% if sidebar != 'off' %} d-xl-flex{% endif %}">
+                    <div class="product-page__container{{ container_class }}">
+                        <div class="product-page__main">
+                            {% include 'product-page-get-main' %}
+                        </div>
+                    </div>
+                    {{ sidebar_html }}
+                </div>
+            </div>
+        {%- when '3' -%}
+            <div class="product-page {{ content_margins }}">
+                <div class="container{% if sidebar != 'off' %} d-xl-flex{% endif %}">
+                    <div class="product-page__container{{ container_class }}">
+                        <div class="product-page__main">
+                            {% include 'product-page-get-main' %}
+                        </div>
+                    </div>
+                    {{ sidebar_html }}
+                </div>
+            </div>
+        {%- when '4' -%}
+            <div class="product-page {{ content_margins }}">
+                <div class="container{% if sidebar != 'off' %} d-xl-flex{% endif %}">
+                    <div class="product-page__container{{ container_class }}">
+                        <div class="product-page__main">
+                            {% include 'product-page-get-main' %}
+                        </div>
+                    </div>
+                    {{ sidebar_html }}
+                </div>
+            </div>
+        {%- when '5' -%}
+            <div class="product-page {{ content_margins }}">
+                <div class="container{% if sidebar != 'off' %} d-xl-flex{% endif %}">
+                    <div class="product-page__container{{ container_class }}">
+                        <div class="product-page__main">
+                            {% include 'product-page-get-main' %}
+                        </div>
+                        {%- if section.settings.show_tabs -%}
+                            <div class="product-page__tabs mt-40">
+                                {% include 'product-page-get-tabs' %}
+                            </div>
+                        {%- endif -%}
+                    </div>
+                    {{ sidebar_html }}
+                </div>
+            </div>
+    {%- endcase -%}
+</div>
+
+{%- if enable_sticky_sidebar -%}
+    <script>
+        Loader.require({type: "script", name: "sticky_sidebar"});
+    </script>
+{%- endif -%}
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org/",
+  "@type": "Product",
+  "name": {{ product.title | json }},
+  "url": {{ shop.url | append: product.url | json }},
+  {%- if product.featured_media -%}
+    {%- assign media_size = product.featured_media.preview_image.width | append: 'x' -%}
+    "image": [
+      {{ product.featured_media | img_url: media_size | prepend: "https:" | json }}
+    ],
+  {%- endif -%}
+  "description": {{ product.description | strip_html | json }},
+  {%- if current_variant.sku != blank -%}
+    "sku": {{ current_variant.sku | json }},
+  {%- endif -%}
+  "brand": {
+    "@type": "Thing",
+    "name": {{ product.vendor | json }}
+  },
+  "offers": [
+    {%- for variant in product.variants -%}
+      {
+        "@type" : "Offer",
+        {%- if variant.sku != blank -%}
+          "sku": {{ variant.sku | json }},
+        {%- endif -%}
+        "availability" : "http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}",
+        "price" : {{ variant.price | divided_by: 100.00 | json }},
+        "priceCurrency" : {{ cart.currency.iso_code | json }},
+        "url" : {{ shop.url | append: variant.url | json }}
+      }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ]
+}
+</script>
+
+
+{% schema %}
+{
+  "name": "Product page",
+  "settings": [
+    {
+        "type": "paragraph",
+        "content": "To enable the SIDEBAR on the product page, activate the option Theme settings -> Product Page & Quick View -> Sidebar on product page -> Sidebar position"
+    },
+    {
+      "type": "header",
+      "content": "Tabs"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tabs",
+      "label": "Show tabs",
+      "default": true
+    },
+    {
+        "type": "select",
+        "id": "tabs_type",
+        "label": "Tabs type",
+        "default": "tabs",
+        "info": "In this section you can select one of the options: \"Default tabs\" or \"Sheet of tabs\". Once you select the option \"Sheet of tabs\" the Reviews and Description blocks will be displayed without a tab, but all other tabs will be hidden using this combination.",
+        "options": [
+            {
+                "value": "tabs",
+                "label": "Default tabs"
+            },
+            {
+                "value": "sheet",
+                "label": "Sheet of tabs"
+            }
+        ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tab_description",
+      "label": "Show tab 'Description'",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tab_reviews",
+      "label": "Show tab 'Reviews'",
+      "info": "Be sure you configure the reviews app at the Theme settings -> Reviews.",
+      "default": true
+    },
+    {
+        "type": "paragraph",
+        "content": "Click 'Add content' ↓ to add CUSTOM TAB or content for SIDEBAR"
+    },
+    {
+        "type": "header",
+        "content": "User manual"
+    },
+    {
+        "type": "paragraph",
+        "content": "[Product Page](https:\/\/mpthemes.net\/shella-shopify-theme\/documentation-version4\/doc03-01-product-section.php#product-page-section)"
+    },
+    {
+       "type":"header",
+       "content":"Fomo settings"
+    },
+    {
+       "type":"paragraph",
+       "content":"+ Viewing users"
+    },
+    {
+      "type":"number",
+      "id":"fomo_view_min",
+      "label":"Minimum Random number",
+      "default": 2
+    },
+    {
+      "type":"number",
+      "id":"fomo_view_max",
+      "label":"Maximum Random number",
+      "default": 20
+    },
+    {
+       "type":"paragraph",
+       "content":"+ Sold counting"
+    },
+    {
+      "type":"number",
+      "id":"fomo_sold_min",
+      "label":"Minimum Random number",
+      "default": 2
+    },
+    {
+      "type":"number",
+      "id":"fomo_sold_max",
+      "label":"Maximum Random number",
+      "default": 20
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab_custom_html",
+      "name": "Custom HTML tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Custom HTML"
+        },
+        {
+          "type": "page",
+          "id": "page_content",
+          "label": "Page content",
+          "info": "Default page: 'Include Product Tab Custom HTML'"
+        }
+      ]
+    },
+    {
+      "type": "tab_custom_text",
+      "name": "Custom text tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Custom text"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "HTML content",
+          "default": "<p>Text content of Tab goes here!</p><p>You can make&nbsp;text <strong>bold</strong>, <em>italic</em> or add <a href=\"\/blogs\/news\" title=\"News\">link</a> using rich text editor.</p><p></p>"
+        }
+      ]
+    },
+    {
+      "type": "sidebar_custom_html",
+      "name": "Sidebar custom HTML",
+      "settings": [
+        {
+          "type": "page",
+          "id": "page_content",
+          "label": "Page content",
+          "info": "Default page: 'Include Product Sidebar Custom HTML'"
+        }
+      ]
+    },
+    {
+      "type": "sidebar_products",
+      "name": "Sidebar products",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "FEATURED PRODUCTS"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "range",
+          "id": "max_count",
+          "min": 0,
+          "max": 10,
+          "step": 1,
+          "unit": "pds",
+          "label": "Max count",
+          "info": "0 is infinite",
+          "default": 3
+        },
+        {
+          "type": "select",
+          "id": "product_type",
+          "label": "Products type",
+          "default": "short",
+          "options": [
+            {
+              "value": "short",
+              "label": "Short"
+            },
+            {
+              "value": "full",
+              "label": "Full"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+<!-- Zeta Digital - Display Sidebar Content Start -->
+{{ "zeta_settings.js" | asset_url | script_tag }}
+
+<!-- Zeta Digital - Display Vendor -->
+{% if vendor != blank and vendor != 'Unbranded' %}
+	<script>
+      jQuery('#vendor,#vendor-mb').text('{{ vendor }}');
+	</script>
+{%- else -%}
+	<script>
+      jQuery('#vendor-block,#vendor-block-mb').css('display', 'none');
+	</script>
+{%- endif -%}
+
+<!-- Zeta Digital - Display Barcode -->
+{% if barcode != blank %}
+	<script>
+      if (isNaN("{{ barcode }}")){
+      	jQuery('#barcode-block').css('display', 'none');	
+      }
+      else {
+		jQuery('#barcode,#barcode-mb').text('{{ barcode }}');
+      }
+	</script>
+{%- else -%}
+	<script>
+      jQuery('#barcode-block,#barcode-block-mb').css('display', 'none');	
+	</script>
+{%- endif -%}
+
+<!-- Zeta Digital - Display Pre-order Info -->
+<script>
+  {% if is_preorder_product %}
+  	{% if description contains "Release Date:" %}
+  		var description = `{{ description | escape }}`;
+  		description = description.substr(description.search("Release Date:"), 100);
+  		var datePattern = /[0-9]{2,}-*[a-zA-Z]{3,}-*[0-9]{2,}/i;
+  		var monthPattern = /[a-zA-Z]{3,}-*[0-9]{2,}/i;
+  		var quarterPattern = /[a-zA-Z0-9]{2,}-*[0-9]{2,}/i;
+  		var releaseDate = description.match(datePattern);
+        if (releaseDate != null){
+          jQuery('#preorder-release-date').html(releaseDate);
+          jQuery('#preorder-release-date-mobile').html(releaseDate);
+        }
+        else {
+          let releaseMonth = description.match(monthPattern);
+          if (releaseMonth != null){
+          	jQuery('#preorder-release-date').html(releaseMonth);
+          	jQuery('#preorder-release-date-mobile').html(releaseMonth);
+          }
+          else {
+            let releaseQuarter = description.match(quarterPattern);
+            if (releaseQuarter != null){
+              jQuery('#preorder-release-date').html(releaseQuarter);
+              jQuery('#preorder-release-date-mobile').html(releaseQuarter);
+            }
+            else {
+              jQuery('#preorder-release-date-block').css('display', 'none');
+              jQuery('#preorder-release-date-block-mobile').css('display', 'none');
+            }
+          }
+        }
+  	{% else %}
+  		jQuery('#preorder-release-date-block').css('display', 'none');
+  		jQuery('#preorder-release-date-block-mobile ').css('display', 'none');
+  	{% endif %}
+  {% else %}
+  	jQuery('#preorder-block').css('display', 'none');
+  	jQuery('#preorder-block-mobile').css('display', 'none');
+  {% endif %}
+</script>
+
+<!-- Zeta Digital - Initial BGG Variables and Origital Variables -->
+<script>
+  var bgg_tags = ["BGG Max Players: ", "BGG Min Players: ", "BGG Min Age: ", "BGG Max Play Time: ", "BGG Min Play Time: ", "BGG Mechanism: ", "BGG Expansion: ", "BGG Type: ", "BGG Weight: "];
+  var bgg_categories = [];
+  var bgg_mechanisms = [];
+  var bgg_expansions = [];
+  var bgg_integrates = [];
+  var bgg_types = [];
+  var bgg_min_players = null;
+  var bgg_max_players = null;
+  var bgg_min_age = null;
+  var bgg_min_play_time = null;
+  var bgg_max_play_time = null;
+  var bgg_weight = null;
+  
+  var num_player = null;
+  var player_age = null;
+  var base_game = null;
+  var expansions = [];
+</script>
+{% for tag in product.tags %}
+  {% if tag contains 'BGG Category:' %}
+    <script>
+      bgg_categories.push('{{ tag | replace: 'BGG Category: ', '' }}');
+    </script>
+  {% elsif tag contains 'BGG Type:' %}
+    <script>
+      bgg_types.push('{{ tag | replace: 'BGG Type: ', '' }}');
+    </script>
+  {% elsif tag contains 'BGG Mechanism:' %}
+    <script>
+      bgg_mechanisms.push('{{ tag | replace: 'BGG Mechanism: ', '' }}');
+    </script>
+  {% elsif tag contains 'BGG Expansion:' %}
+    <script>
+      bgg_expansions.push('{{ tag | replace: 'BGG Expansion: ', '' }}');
+    </script>
+  {% elsif tag contains 'BGG Integrate:' %}
+    <script>
+      bgg_integrates.push('{{ tag | replace: 'BGG Integrate: ', '' }}');
+    </script>
+  {% elsif tag contains 'BGG Min Players:' %}
+    <script>
+      bgg_min_players = '{{ tag | replace: 'BGG Min Players: ', '' }}';
+    </script>
+  {% elsif tag contains 'BGG Max Players:' %}
+    <script>
+      bgg_max_players = '{{ tag | replace: 'BGG Max Players: ', '' }}';
+    </script>
+  {% elsif tag contains 'BGG Min Age:' %}
+    <script>
+      bgg_min_age = '{{ tag | replace: 'BGG Min Age: ', '' }}';
+    </script>
+  {% elsif tag contains 'BGG Min Play Time:' %}
+    <script>
+      bgg_min_play_time = '{{ tag | replace: 'BGG Min Play Time: ', '' }}';
+    </script>
+  {% elsif tag contains 'BGG Max Play Time:' %}
+    <script>
+      bgg_max_play_time = '{{ tag | replace: 'BGG Max Play Time: ', '' }}';
+    </script>
+  {% elsif tag contains 'BGG Weight:' %}
+    <script>
+      bgg_weight = '{{ tag | replace: 'BGG Weight: ', '' }}';
+    </script>
+  {% elsif tag contains 'Age:' %}
+    <script>
+      var age_tag = '{{ tag | replace: 'Age:', '' }}';
+      if (!age_tag.includes('BGG')){
+      	player_age = '{{ tag | replace: 'Age:', '' }}';
+      }
+    </script>
+  {% elsif tag contains 'No. of Players:' %}
+    <script>
+      num_player = '{{ tag | replace: 'No. of Players:', '' }}';
+    </script>
+  {% elsif tag contains 'Base:' %}
+    <script>
+      base_game = '{{ tag | replace: 'Base: ', '' }}';
+    </script>
+  {% elsif tag contains 'Expansion:' %}
+    <script>
+      expansions.push('{{ tag | replace: 'Expansion: ', '' }}');
+    </script>
+  {% endif %}
+{% endfor %}
+
+<!-- Zeta Digital - Display Category / Collections -->
+<script>
+  var collections_html = '',
+      collections_html_mb = '';
+  var available_categories = ['Card Game','Fantasy','Miniatures','Science Fiction','Fighting','Movies / TV / Radio theme','Adventure','Party Game','Humor','Wargame','Dice','Bluffing','Exploration','Economic','Deduction','Horror','Animals','Medieval','Novel-based','Puzzle','City Building','Abstract Strategy','Negotiation'];
+  if (bgg_categories.length > 0){
+    bgg_categories.forEach(function(category){
+      if (available_categories.includes(category)){
+        var category_text = category.toLowerCase();
+        category_text = category_text.replaceAll(' /', '');
+        category_text = category_text.split(' ').join('-');
+
+        collections_html += `<a href="https://www.gameology.com.au/collections/bgg-category-${category_text}" target="_blank" style="color: #FF414D;" onMouseOver="this.style.color='black'" onMouseOut="this.style.color='#FF414D'">${category}</a><br/>`; collections_html_mb += `,<a href="https://www.gameology.com.au/collections/bgg-category-${category_text}" target="_blank" style="color: #FF414D;" onMouseOver="this.style.color='black'" onMouseOut="this.style.color='#FF414D'">${category}</a><br>`;        
+      }
+    });
+  }
+  if (collections_html == null || collections_html == ''){
+    jQuery('#collection-block,#collection-block-mb').css('display', 'none');
+  }
+  else {
+    jQuery('#collections').html(collections_html);
+    jQuery('#collections-mb').html(collections_html_mb.substring(1));
+    jQuery('#collections_html').html(collections_html);
+  }
+</script>
+
+<!-- Zeta Digital - Base Game -->
+<script>
+  if (base_game) {
+    var shopifyBaseGame = null;
+    jQuery.getJSON(`https://www.gameology.com.au/products/${base_game}.js`, function(product) {
+      shopifyBaseGame = product;
+      var base_game_html = `<a target="_blank" style="color: #FF414D;" onMouseOver="this.style.color='black'" onMouseOut="this.style.color='#FF414D'" href="https://www.gameology.com.au${shopifyBaseGame.url}">${shopifyBaseGame.title}</a>`;
+      jQuery('#base-game').html(base_game_html);
+      jQuery('#base-game-block').css('display', 'block');
+      var base_game_main_html = `
+        <div class="product-page-info__base-game mb-20">    
+            <h5>Required Base Game</h5>
+            <div style="display: flex; align-items: center;">
+				<img src="${shopifyBaseGame.featured_image}" width="80px">
+                <div>
+					<p style="color: black; margin-bottom: 5px;"><b>Please note: <font color="#f54337">${shopifyBaseGame.title}</font> is required in order to play this game.</b></p>
+					<a target="_blank" style="color: #FF414D;" onMouseOver="this.style.color='black'" onMouseOut="this.style.color='#FF414D'" href="https://www.gameology.com.au${shopifyBaseGame.url}">View Product</a>
+                </div>
+            </div>
+            <hr style="margin-top: 15px; margin-bottom: 15px;">   
+        </div>
+		`;
+      jQuery(base_game_main_html).insertAfter(jQuery('.product-page-info__countdown'));
+    });
+  }
+</script>
+
+<!-- Zeta Digital - Display Type -->
+<script>
+  var product_type = "{{ product.type }}";
+  var types_html = `<a target="_blank" style="color: #FF414D;" onMouseOver="this.style.color='black'" onMouseOut="this.style.color='#FF414D'" href="https://www.gameology.com.au/collections/${product_type.replaceAll(' ', '-').replaceAll('-&-', '-').toLowerCase()}">${product_type}</a>`; 
+  if (product_type.length <= 0){
+	jQuery('#bgg-types-block').css('display', 'none');
+  }
+  else {
+    jQuery('#bgg-types').html(types_html);
+  }
+  if(product_type == 'Single Cards'){
+    jQuery('#tcg-single-block').css('display', 'block');
+    jQuery('#tcg-single-block-mobile').css('display', 'block');
+  }
+
+  if(product_type == 'Trading Card Games' || product_type == 'Single Cards'){
+    jQuery('#tcg-buy-sell-block').css('display', 'block');
+    jQuery('#tcg-buy-sell-block-mobile').css('display', 'block');
+  }
+</script>
+
+<!-- Zeta Digital - Display Mechanism -->
+<script>
+  var mechanisms_html = '';
+  if (bgg_mechanisms.length <= 0){
+	jQuery('#bgg-mechanisms-block').css('display', 'none');
+  }
+  else {
+    bgg_mechanisms.forEach(function(bgg_mechanism){
+      let mechanism_text = bgg_mechanism.split(' ').join('+');
+      mechanisms_html += `<a href="https://www.gameology.com.au/pages/search-results-page?q=BGG+Mechanism%3A+${mechanism_text}" target="_blank" style="color: #FF414D;" onMouseOver="this.style.color='black'" onMouseOut="this.style.color='#FF414D'">${bgg_mechanism}</a><br/>`;
+    });
+    jQuery('#bgg-mechanisms').html(mechanisms_html);
+  }
+</script>
+
+<!-- Zeta Digital - Expansions -->
+<script>
+  if (expansions.length > 0) {
+    var shopifyExpansions = [];
+    expansions.forEach(function(expansion){
+      console.log(expansion);
+      jQuery.ajax({
+        url: `https://www.gameology.com.au/products/${expansion}.js`,
+        dataType: 'json',
+        async: false,
+        success: function(response) {
+          shopifyExpansions.push(response);
+        }
+      });  
+    });
+    
+    if (shopifyExpansions.length > 0){
+        shopifyExpansions.forEach(function(shopifyExpansion){
+    		var expansion_html = `<a target="_blank" style="color: #FF414D;" onMouseOver="this.style.color='black'" onMouseOut="this.style.color='#FF414D'" href="https://www.gameology.com.au${shopifyExpansion.url}">${shopifyExpansion.title}</a><br>`;
+    		jQuery('#expansions_html').append(expansion_html);
+    	});
+    	jQuery('#expansions-block').css('display', 'block');
+      
+      
+        var expansions_main_html = `
+		<hr style="margin-top: 15px; margin-bottom: 15px;">   
+        <div class="product-page-info__base-game mb-30 mt-20">    
+            <h3>AVAILABLE EXPANSIONS</h3>
+			<div id="expansion-products" class="row" style="display: flex; align-items: center; text-align:center;">`;
+        for (var i = 0; i < shopifyExpansions.length; i++){
+              expansions_main_html += `
+                <div class="col-4" style="margin-top: 25px;${i > 2? 'display: none;' : ''}">
+                    <img src="${shopifyExpansions[i].featured_image}" width="180px">
+                    <p style="color:black;margin-top: 15px;margin-bottom: 0px;font-size:14px;line-height:12px;">${shopifyExpansions[i].title}</p>
+                    <div class="mt-10">
+                        ${shopifyExpansions[i].compare_at_price > shopifyExpansions[i].price ? `<span class="price price--sale" data-js-product-price{% if settings.price_show_sale_separator %} data-js-show-sale-separator{% endif %}><span style="font-size:25px !important;">$${(shopifyExpansions[i].price / 100).toFixed(2)}</span>{% if settings.price_show_sale_separator %}{{ 'products.product.price_sale_separator' | t }}{% endif %}<span class="ml-10 price-compare_at_price text-left d-none d-sm-none d-md-block d-lg-block" style="font-size:11px !important; margin-top: -1px !important;"><p>$${(shopifyExpansions[i].compare_at_price / 100).toFixed(2)}</p><span class="price-save_price"><p>You save </p><p>$${((shopifyExpansions[i].compare_at_price - shopifyExpansions[i].price) / 100).toFixed(2)}</p></span></span></span>` : `<span class="price single--price" data-js-product-price{% if settings.price_show_sale_separator %} data-js-show-sale-separator{% endif %}><span style="font-size:25px !important;">$${(shopifyExpansions[i].price / 100).toFixed(2)}</span></span>`}
+                    </div>
+                    <a target="_blank" style="color: #FF414D;font-size:12px;" onMouseOver="this.style.color='black'" onMouseOut="this.style.color='#FF414D'" href="https://www.gameology.com.au${shopifyExpansions[i].url}">View Product</a>
+                </div>
+              `;        
+        }
+        expansions_main_html += `</div>`;
+        if (shopifyExpansions.length > 3){
+          expansions_main_html += `
+            <div class="row" style="justify-content: center;">
+              <a id="show-more-btn" style="background-color: red;color: white;padding: 10px 30px;border-radius: 15px;margin-top: 20px;">Show More</a>
+            </div>
+    	  `;
+        }
+        expansions_main_html += `</div>`;
+
+        jQuery('.tabs__content').append(jQuery(expansions_main_html));
+        jQuery('#shopify-section-carousel-related-products').css('display', 'none');
+
+        jQuery('#show-more-btn').on("click", function() {
+          jQuery("#expansion-products").children().show();
+          jQuery('#show-more-btn').hide();
+        });
+    }
+  }
+</script>
+
+<!-- Zeta Digital - Display BGG Expansion -->
+<!-- 
+<script>
+  var expansions_html = '';
+  if (bgg_expansions.length <= 0){
+	jQuery('#bgg-expansions-block').css('display', 'none');
+  }
+  else {
+    jQuery.ajax({
+      dataType: "json",
+      type: "GET",
+      async: false,
+      url: "https://api.gameology.com.au/api/product/expansion/shopify/get/" + "{{ product.id }}",
+      success: function(response)
+      {
+      	bgg_expansions.forEach(function(bgg_expansion_tag){
+          var foundExpansionRecord = false;
+          response.forEach(function(bgg_expansion){
+            if (bgg_expansion.expansion_tag.replace('BGG Expansion: ', '') == bgg_expansion_tag){
+      			foundExpansionRecord = true;
+              	expansions_html += `<a href="${bgg_expansion.shopify_product_url}" target="_blank" style="color: #FF414D;" onMouseOver="this.style.color='black'" onMouseOut="this.style.color='#FF414D'">${bgg_expansion_tag}</a><br/>`;
+            }
+          });
+          if (!foundExpansionRecord){
+            expansions_html += `<span>${bgg_expansion_tag}</span><br/>`;
+          }
+    	});
+  		jQuery('#bgg-expansions').html(expansions_html);
+      },
+      error: function(){
+      }
+    });
+  }
+</script>
+-->
+
+<!-- Zeta Digital - Display Integrate With -->
+<script>
+  var integrations_html = '';
+  if (bgg_integrates.length <= 0){
+	jQuery('#bgg-integrates-block').css('display', 'none');
+  }
+  else {
+    jQuery.ajax({
+      dataType: "json",
+      type: "GET",
+      async: false,
+      url: "https://api.gameology.com.au/api/product/integration/shopify/get/" + "{{ product.id }}",
+      success: function(response)
+      {
+        bgg_integrates.forEach(function(bgg_integration_tag){
+          var foundIntegrationRecord = false;
+          response.forEach(function(bgg_integration){
+            if (bgg_integration.integration_tag.replace('BGG Integrate: ', '') == bgg_integration_tag){
+            foundIntegrationRecord = true;
+                integrations_html += `<a href="${bgg_integration.shopify_product_url}" target="_blank" style="color: #FF414D;" onMouseOver="this.style.color='black'" onMouseOut="this.style.color='#FF414D'">${bgg_integration_tag}</a><br/>`;
+            }
+          });
+          if (!foundIntegrationRecord){
+            integrations_html += `<span>${bgg_integration_tag}</span><br/>`;
+          }
+        });
+        jQuery('#bgg-integrates').html(integrations_html);
+      },
+      error: function(){
+      }
+    });
+  }
+</script>
+
+<!-- Zeta Digital - Number of Players -->
+<script>
+  var players_collection_name = ['Solo Play', '2', '3', '4', '5', '6+'];
+  var min_players_collection = ['minimum-players-solo-play', 'minimum-players-2-players', 'minimum-players-3-players', 'minimum-players-4-players', 'minimum-players-5-players', 'minimum-players-2-players', 'minimum-players-6-players'];
+  var max_players_collection = ['maximum-players-solo-play', 'maximum-players-2-players', 'maximum-players-3-players', 'maximum-players-4-players', 'maximum-players-5-players', 'maximum-players-2-players', 'maximum-players-6-players'];
+  
+  var num_players_html = '';
+  if (bgg_min_players != null && bgg_min_players != 0){
+    if (parseInt(bgg_min_players) < 6){
+    	num_players_html += `<a href="https://www.gameology.com.au/collections/${min_players_collection[parseInt(bgg_min_players) - 1]}" target="_blank" style="color: #FF414D;" onMouseOver="this.style.color='black'" onMouseOut="this.style.color='#FF414D'">${players_collection_name[parseInt(bgg_min_players) - 1]}</a>`;
+    }
+    else {
+    	num_players_html += `<a href="https://www.gameology.com.au/collections/${min_players_collection[6]}" target="_blank" style="color: #FF414D;" onMouseOver="this.style.color='black'" onMouseOut="this.style.color='#FF414D'">${players_collection_name[5]}</a>`;
+    }
+  }
+  if (bgg_max_players != null & bgg_max_players != 0){
+    if (num_players_html != ''){
+      num_players_html += ' - ';
+    }
+    if (parseInt(bgg_max_players) < 6){
+    	num_players_html += `<a href="https://www.gameology.com.au/collections/${max_players_collection[parseInt(bgg_max_players) - 1]}" target="_blank" style="color: #FF414D;" onMouseOver="this.style.color='black'" onMouseOut="this.style.color='#FF414D'">${players_collection_name[parseInt(bgg_max_players) - 1]}</a>`;
+    }
+    else {
+    	num_players_html += `<a href="https://www.gameology.com.au/collections/${max_players_collection[6]}" target="_blank" style="color: #FF414D;" onMouseOver="this.style.color='black'" onMouseOut="this.style.color='#FF414D'">${players_collection_name[5]}</a>`;
+    }
+  }
+  if (bgg_min_players == null && bgg_max_players == null && num_player != null){
+    num_players_html += num_player;
+  }
+  
+  if (num_players_html != ''){ 
+    jQuery('#num-player-mb').html(num_players_html.replace(' - ','-'));    
+    jQuery('#num-player').html(num_players_html += ' Players');   
+  }
+  else{
+    jQuery('#num-player-block,#num-player-block-mb').css('display', 'none');
+  }
+</script>
+
+<!-- Zeta Digital - Min Ages -->
+<script>
+  if (bgg_min_age != null){
+    bgg_min_age = parseInt(bgg_min_age);
+    var collection_name = '';
+    if (bgg_min_age >= 18){
+      collection_name = 'players-age-18';
+    }
+    else if (bgg_min_age >= 14 && bgg_min_age <= 17){
+      collection_name = 'players-age-14-17';
+    }
+    else if (bgg_min_age >= 12 && bgg_min_age <= 13){
+      collection_name = 'players-age-12-13';
+    }
+    else if (bgg_min_age >= 10 && bgg_min_age <= 11){
+      collection_name = 'players-age-10-11';
+    }
+    else if (bgg_min_age >= 8 && bgg_min_age <= 9){
+      collection_name = 'players-age-8-9';
+    }   
+    else if (bgg_min_age >= 6 && bgg_min_age <= 7){
+      collection_name = 'players-age-6-7';
+    }       
+    else if (bgg_min_age >= 4 && bgg_min_age <= 5){
+      collection_name = 'players-age-4-5';
+    } 
+    else if (bgg_min_age >= 0 && bgg_min_age <= 3){
+      collection_name = 'players-age-3';
+    }     
+  	jQuery('#player-age,#player-age-mb').html(`<a href="https://www.gameology.com.au/collections/${collection_name}" target="_blank" style="color: #FF414D;" onMouseOver="this.style.color='black'" onMouseOut="this.style.color='#FF414D'">${bgg_min_age}+</a><br/>`);
+  }
+  else if (player_age != null){
+  	jQuery('#player-age,#player-age-mb').html(player_age);
+  }
+  else {
+  	jQuery('#player-ages-block,#player-ages-block-mb').css('display', 'none');
+  }
+</script>
+<!-- Zeta Digital - Display Sidebar Content End -->
+
+<!-- Zeta Digital - Frequently Buy Together App Style Change Start -->
+<script>
+var frequentBundleInterval = setInterval(updateBundleStyle, 100);
+
+function updateBundleStyle() {
+  if (jQuery('.cbb-frequently-bought-form').length){
+    if (jQuery(window).width() > 1024){
+      jQuery('.cbb-frequently-bought-form').prependTo('.cbb-frequently-bought-selector-list');
+      jQuery('.cbb-frequently-bought-form').css('padding-left', '15px');
+      jQuery('.cbb-frequently-bought-products').css({'margin': '0px 15px 0px 0px'});
+      jQuery('.cbb-frequently-bought-title').css({'font-size': '1.5rem'});
+      jQuery('.cbb-frequently-bought-product-image').css('width', '100px');
+      jQuery('.cbb-frequently-bought-selector-label-name').css('font-size', '15px');
+    }
+    else if (jQuery(window).width() > 379){
+      jQuery('.cbb-frequently-bought-form').appendTo('.cbb-frequently-bought-container');
+      jQuery('.cbb-frequently-bought-title').css('font-size', '1.5rem');
+      jQuery('.cbb-frequently-bought-product-image-link').css({'width': '100px', 'height': '100px'});
+      jQuery('.cbb-frequently-bought-product-image').css({'width': '90px', 'height': '100px'});
+      jQuery('.cbb-frequently-bought-selector-label-name').css('font-size', '15px');
+      jQuery('.cbb-frequently-bought-products').css({'width': '100%','margin': '0px 0px 0px 0px', 'border': 'solid 1px','border-bottom': 'none', 'border-radius': '5px 5px 0px 0px', 'text-align': 'center'});
+      jQuery('.cbb-frequently-bought-product').css({'width': 'initial', 'height': 'initial', 'padding-left': 'initial', 'box-sizing': 'initial'});
+      jQuery('.cbb-frequently-bought-plus-icon').css({'height': '100px', 'line-height': '100px'});
+      jQuery('.cbb-frequently-bought-selector-list').css({'width': '100%', 'padding': '15px 0px 15px 0px', 'border': 'solid 1px','border-bottom': 'none'});
+      jQuery('.cbb-frequently-bought-form').css({'width': '100%', 'padding': '15px 0px 15px 0px', 'border': 'solid 1px', 'border-radius': '0px 0px 5px 5px', 'text-align': 'center'});
+    } 
+    else {
+      jQuery('.cbb-frequently-bought-form').appendTo('.cbb-frequently-bought-container');
+      jQuery('.cbb-frequently-bought-title').css('font-size', '1.5rem');
+      jQuery('.cbb-frequently-bought-product-image-link').css({'width': '80px', 'height': '100px', 'margin': '0'});
+      jQuery('.cbb-frequently-bought-product-image').css({'width': '80px', 'height': '100px', 'margin': '0'});
+      jQuery('.cbb-frequently-bought-selector-label-name').css('font-size', '15px');
+      jQuery('.cbb-frequently-bought-products').css({'width': '100%','margin': '0px 0px 0px 0px', 'border': 'solid 1px','border-bottom': 'none', 'border-radius': '5px 5px 0px 0px', 'text-align': 'center'});
+      jQuery('.cbb-frequently-bought-product').css({'width': 'initial', 'height': 'initial', 'padding-left': 'initial', 'box-sizing': 'initial'});
+      jQuery('.cbb-frequently-bought-plus-icon').css({'height': '100px', 'line-height': '100px'});
+      jQuery('.cbb-frequently-bought-selector-list').css({'width': '100%', 'padding': '15px 0px 15px 0px', 'border': 'solid 1px','border-bottom': 'none'});
+      jQuery('.cbb-frequently-bought-form').css({'width': '100%', 'padding': '15px 0px 15px 0px', 'border': 'solid 1px', 'border-radius': '0px 0px 5px 5px', 'text-align': 'center'});
+    }
+	clearInterval(frequentBundleInterval);
+  }
+}
+</script>
+<!-- Zeta Digital - Frequently Buy Together App Style Change End -->
+
+<!-- Zeta Digital - Mobile Join Gameology Block Start -->
+<script>
+
+    jQuery(document).ready(function() {
+      jQuery(window).scroll(function() {
+        if (jQuery(".footbar-product").hasClass("show animate visible")){
+          jQuery(".izvwrV.izvwrV").attr('style', 'bottom: 80px !important');
+          jQuery(".reward-button").attr('style', 'bottom: 120px !important');
+          jQuery('.miniForm .mini-popup-container').addClass('offset-bottom');
+          jQuery('iframe#launcher').addClass('offset-bottom');
+        } else {
+          jQuery(".izvwrV.izvwrV").attr('style', 'bottom: 0px !important');
+          jQuery(".reward-button").attr('style', 'bottom: 0px !important');
+          jQuery('.miniForm .mini-popup-container').removeClass('offset-bottom');
+          jQuery('iframe#launcher').removeClass('offset-bottom');
+        }
+      });
+    })
+</script>
+<!-- Zeta Digital - Mobile Join Gameology Block End -->

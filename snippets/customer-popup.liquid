@@ -1,0 +1,133 @@
+<div id="customerPopup" class="popup">
+	<div class="popup-layer js-popup-close"></div>
+	<div class="popup-inner">
+		{%- comment -%}Login form{%- endcomment-%}
+		<button type="button" class="btn btn-popup-close js-popup-close">
+			<svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M0.345309 10.29C0.554368 10.499 0.763426 10.5687 1.04217 10.5687C1.32092 10.5687 1.52997 10.499 1.73903 10.29L5.08398 6.945L8.42893 10.29C8.63799 10.499 8.84705 10.5687 9.12579 10.5687C9.40454 10.5687 9.6136 10.499 9.82266 10.29C10.1711 9.94151 10.1711 9.31434 9.82266 8.89622L6.47771 5.55127L9.82266 2.20632C10.1711 1.85789 10.1711 1.23071 9.82266 0.812594C9.47423 0.464161 8.84705 0.464161 8.42893 0.812594L5.08398 4.15754L1.73903 0.812594C1.3906 0.464161 0.763427 0.464161 0.345309 0.812594C-0.00312367 1.16103 -0.00312367 1.7882 0.345309 2.20632L3.69025 5.55127L0.345309 8.89622C-0.00312367 9.24465 -0.00312367 9.87183 0.345309 10.29Z" fill="black"/>
+			</svg>
+		</button>
+
+		<div id="CustomerLoginForm">
+			{% form 'recover_customer_password', id: 'recover', return_to: request.path %}
+				<div id="RecoverPasswordForm" class="pt-35 mt-35 border-top{% unless form.posted_successfully? %} d-none-important{% endunless %}" data-block-visibility="#recover" data-block-onscroll>
+					<h2 class="h3 text-center">{{ 'customer.recover_password.title' | t }}</h2>
+					<p>{{ 'customer.recover_password.subtext' | t }}</p>
+
+					{%- if form.posted_successfully? -%}
+						<span class="hide reset-password-success"></span>
+					{%- endif -%}
+					
+					<label for="RecoverEmail" class="label-required">{{ 'customer.recover_password.email_title' | t }}*</label>
+					<input type="email"
+						name="email"
+						id="RecoverEmail"
+						placeholder="{{ 'customer.recover_password.email_placeholder' | t }}"
+						spellcheck="false"
+						autocomplete="off"
+						autocapitalize="off"
+						required="required"
+						autofocus
+						data-block-visibility-focus>
+					{% include 'form-get-message' %}
+					
+					<input type="submit" class="btn btn--full" value="{{ 'customer.recover_password.submit' | t }}">
+					
+					<div class="mt-15 text-center">
+						<a href="#login">{{ 'customer.recover_password.cancel' | t }}</a>
+					</div>
+				</div>
+			{% endform %}
+
+			{% form 'customer_login', id: 'login', return_to: request.path %}
+				<h3 class="h3 mt-30 mb-40 text-center">{{ 'customer.login.title' | t }}</h3>
+				
+				<label for="CustomerEmail" class="label-required">{{ 'customer.login.email_title' | t }}*</label>
+				<input type="email"
+						name="customer[email]"
+						id="CustomerEmail"
+						class="{% if form.errors contains 'email' %}input-error{% endif %}"
+						placeholder="{{ 'customer.login.email_placeholder' | t }}"
+						spellcheck="false"
+						autocomplete="off"
+						autocapitalize="off"
+						required="required"
+						autofocus
+				>
+
+				{%- if form.password_needed -%}
+					<label for="CustomerPassword" class="label-required">{{ 'customer.login.password_title' | t }}*</label>
+					<input type="password"
+							name="customer[password]"
+							id="CustomerPassword"
+							class="{% if form.errors contains 'password' %}input-error{% endif %}"
+							placeholder="{{ 'customer.login.password_placeholder' | t }}"
+							required="required"
+					>
+				{%- endif -%}
+
+				{% include 'form-get-message' %}
+
+				<div class="text-center">
+					<input type="submit" class="btn btn--full btn--secondary" value="{{ 'customer.login.sign_in' | t }}">
+					{%- if form.password_needed -%}
+						<div><a href="#recover" class="btn-link mt-15 js-button-block-visibility">{{ 'customer.login.forgot_password' | t }}</a></div>
+					{%- endif -%}
+				</div>
+			{% endform %}
+		</div>
+
+
+
+		{%- comment -%}Register form{%- endcomment-%}
+
+		<div id="CustomerRegisterForm">
+		    <h3 class="h3 mt-30 mb-40 text-center">Register</h3>
+
+		    {% form 'create_customer', return_to: request.path %}
+		      <label for="FirstName" class="label-required">{{ 'customer.register.first_name_title' | t }}*</label>
+		      <input type="text"
+		             name="customer[first_name]"
+		             id="FirstName"
+		             placeholder="{{ 'customer.register.first_name_placeholder' | t }}"
+		             required="required"
+		             autofocus
+		             {% if form.first_name %}value="{{ form.first_name }}"{% endif %}>
+
+		      <label for="LastName" class="label-required">{{ 'customer.register.last_name_title' | t }}*</label>
+		      <input type="text"
+		             name="customer[last_name]"
+		             id="LastName"
+		             placeholder="{{ 'customer.register.last_name_placeholder' | t }}"
+		             required="required"
+		             {% if form.last_name %}value="{{ form.last_name }}"{% endif %}>
+
+		      <label for="Email" class="label-required">{{ 'customer.register.email_title' | t }}*</label>
+		      <input type="email"
+		             name="customer[email]"
+		             id="Email"
+		             class="{% if form.errors contains 'email' %}input-error{% endif %}"
+		             placeholder="{{ 'customer.register.email_placeholder' | t }}"
+		             value="{% if form.email %}{{ form.email }}{% endif %}"
+		             spellcheck="false"
+		             autocomplete="off"
+		             autocapitalize="off"
+		             required="required">
+
+		      <label for="CreatePassword" class="label-required">{{ 'customer.register.password_title' | t }}*</label>
+		      <input type="password"
+		             name="customer[password]"
+		             id="CreatePassword"
+		             class="{% if form.errors contains 'password' %}input-error{% endif %}"
+		             placeholder="{{ 'customer.register.password_placeholder' | t }}"
+		             required="required">
+		      {% include 'form-get-message' %}
+
+		      <div class="text-center">
+		        <input type="submit" value="{{ 'customer.register.submit' | t }}" class="btn btn--full btn--secondary">
+		      </div>
+		    {% endform %}
+		  </div>
+
+	</div>
+</div>

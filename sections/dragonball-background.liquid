@@ -1,0 +1,20 @@
+<script>
+  jQuery("#dragonball-collection-page").css("background-image","url({{ section.settings.background_image | image_url }})");
+</script>
+{% schema %}
+{
+    "name": "Dragon Ball Background",
+    "settings": [
+        {
+            "type": "image_picker",
+            "id": "background_image",
+            "label": "Dragon Ball Background image"
+        }
+    ],
+    "presets": [
+        {
+            "name": "Dragon Ball Background"
+        }
+    ]
+}
+{% endschema %}

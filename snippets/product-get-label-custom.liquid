@@ -1,0 +1,25 @@
+<!-- Zeta Digital - Display Custom Badge (08/10/2020) -->
+{{ "zeta_settings.js" | asset_url | script_tag }}
+<div id="custom-label-{{ product.id }}"></div>
+<script>
+  if (typeof custom_labels !== 'undefined') {
+    if (custom_labels.length > 0){
+      document.getElementById("custom-label-{{ product.id }}").innerHTML = '';
+      var product_tags = [{% for tag in product.tags %}"{{ tag }}",{% endfor %}];
+      custom_labels.forEach(function(label){
+        if (product_tags.includes(label.tag)){
+          if (label.image != null){
+            if (window.location.href.includes('products') && label.showOnProductPage == false){
+              return false;
+            }
+            document.getElementById("custom-label-{{ product.id }}").innerHTML += `<div class="label mb-3 mr-3 text-nowrap" style="background-image:url(${label.image});background-size:cover;width:120px;height:120px;"></div>`;
+          }
+          else {
+            document.getElementById("custom-label-{{ product.id }}").innerHTML += `<div class="label mb-3 mr-3 text-nowrap" style="background-color: ${label.background_color}">${label.display_name}</div>`;
+          }
+        }
+      });
+    }
+  }
+</script>
+<!-- Zeta Digital - Display Custom Badge (08/10/2020) -->

@@ -1,0 +1,54 @@
+{% assign product_current = product %}
+{% assign product_vendor = product.vendor %}
+{% assign product_type = product.type %}
+{% assign product_handle = product.handle %}
+{% assign product_id = product.id %}
+
+{% if collection %}
+  {% assign collection_product = collection.handle %}
+{% else %}
+  {% for collection in product.collections %}
+    {% assign collection_product = collection.handle %}
+    {% break %}
+  {% endfor %}
+{% endif %}
+
+<div class="product-upsell-container">
+  <h4>{{ 'products.product.upsell_title' | t }}</h4>
+  <div class="upsell-tab-header">
+    <div class="upsell-tab-header-js active" data-tab="also_like">{{ 'products.product.also_like' | t }}</div>
+    <div class="upsell-tab-header-js" data-tab="more_brand">{{ 'products.product.more_brand' | t }}</div>
+    <div class="upsell-tab-header-js" data-tab="frequently">{{ 'products.product.frequently' | t }}</div>
+  </div>
+  <div class="upsell-tab-content">
+    <div class="upsell-tab-content-js active" data-tab="also_like" data-type="{{ product_type }}">
+      
+    </div>
+    <div class="upsell-tab-content-js" data-tab="more_brand" data-vendor="{{ product_vendor }}">
+    </div>
+    <div class="upsell-tab-content-js" data-tab="frequently">
+      <div
+        class="product-recommendations"
+        data-section-type="product-recommendations"
+        data-base-url="{{ routes.product_recommendations_url }}"
+        data-product-id="{{ product.id }}"
+        data-limit="4"
+      >
+        <div class="product-recommendations__list-slick product-tabs-wrap">
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style type="text/css">
+  .product-upsell-container .slick-next {
+    background-image: url({{ 'icon-right.svg' | asset_url }});
+  }
+  .product-upsell-container .slick-prev {
+    background-image: url({{ 'icon-left.svg' | asset_url }});
+  }
+</style>
+
+{% assign product = product_current %}

@@ -1,0 +1,37 @@
+<!-- Conversionry - 128 Remove copy above collections page, bold title of page 12/1/2021 -->
+<div class="show-test_259 CollectionCategoryShow">
+  <div class="showcase-badges-container">
+    <a href="/collections/preorders">{% render 'icon-fire-flame' %} Hottest Pre-orders</a>
+    <a href="/collections/gameology-clearance-up-to-50-off-sale">{% render 'icon-onsale-badge' %} On sale</a>
+    <a href="/collections/all-time-best-sellers">{% render 'icon-discount-badge' %} Best Sellers</a>
+    <a href="#/filter:product_type:Single$2520Cards">{% render 'icon-single-card' %} Single Cards</a>
+  </div>
+</div>
+
+{%- if collection.handle != 'board-game' -%}{%- break -%}{%- endif -%}
+
+{%- capture URLs -%}https://www.gameology.com.au/collections/new-releases|https://www.gameology.com.au/collections/best-sellers|https://www.gameology.com.au/collections/gameology-great-gift-ideas|https://www.gameology.com.au/collections/family-games{%- endcapture -%}
+{%- capture TEXTs -%}New Releases|Best sellers|Xmas gifts|Family Games{%- endcapture -%}
+
+{%- liquid
+    assign URLs = URLs | split: '|'
+    assign TEXTs = TEXTs | split: '|'
+-%}
+{%- if URLs.size > 0 -%}
+  <!-- Conversionry - 126 Restyle collection Board Game12/1/2021 -->
+  <div class="hidden_task show-test_126">
+    <div class="subcollection">        
+      <div class="subcollection-inner">
+        <div class="container">
+          {%- for link in URLs -%}
+            {%- assign linkSplit = link | split: '/' | last -%}
+            <div class="subcollection-block{% if linkSplit contains collection.url  %} active{%- endif -%}">
+              <a href="{{link}}">{{TEXTs[forloop.index0]}}</a>
+            </div>
+          {%- endfor -%}
+
+        </div>
+      </div>
+    </div>
+  </div>
+{%- endif -%}

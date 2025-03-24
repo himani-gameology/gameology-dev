@@ -1,0 +1,121 @@
+<div class="search-form-header py-10 text-center" style="display: none;">
+    <div class="search-form__form px-10 mx-auto">
+      {% if settings.ss_enable %}
+        <form action="{{ routes.collections_url }}/{{ settings.ss_collection_handle }}" method="get" role="search" class="mb-0">
+            <label class="position-relative d-flex align-items-center mr-0" style="flex: 1;">
+                <input type="search"
+                       class="pl-20 pr-40 mb-0 ss__autocomplete__input"
+                       name="q"
+                       value="{{ search.terms | escape }}"
+                       placeholder="{{ 'general.search.placeholder' | t }}">
+                <i class="position-absolute right-0 mr-15 show_test-249">
+                    {% render 'icon-theme-168' %}
+                </i>
+            </label>
+
+            <!-- Categories Dropdown with Checkboxes -->
+            <div class="category-dropdown position-relative">
+              <button type="button" id="category-button-mobile" class="btn dropdown-toggle">All categories {% render 'icon-theme-229' %}</button>
+              <div id="category-options-mobile" class="category-options d-none">
+                <label>
+                  <input type="checkbox" name="category[]" value="all" checked> All Categories
+                </label>
+                <label>
+                  <input type="checkbox" name="category[]" value="board-games"> Board games
+                </label>
+                <label>
+                  <input type="checkbox" name="category[]" value="tcg"> TCG
+                </label>
+                <label>
+                  <input type="checkbox" name="category[]" value="sports-cards"> Sports Cards
+                </label>
+                <label>
+                  <input type="checkbox" name="category[]" value="role-playing"> Role Playing
+                </label>
+                <label>
+                  <input type="checkbox" name="category[]" value="lcg"> LCG
+                </label>
+                <label>
+                  <input type="checkbox" name="category[]" value="accessories"> Accessories
+                </label>
+                <label>
+                  <input type="checkbox" name="category[]" value="paint-tools"> Paint & Tools
+                </label>
+                <label>
+                  <input type="checkbox" name="category[]" value="collectables"> Collectables
+                </label>
+                <label>
+                  <input type="checkbox" name="category[]" value="puzzles"> Puzzles
+                </label>
+                <label>
+                  <input type="checkbox" name="category[]" value="sale"> Sale
+                </label>
+                <label>
+                  <input type="checkbox" name="category[]" value="gifts"> Gifts
+                </label>
+              </div>
+            </div>
+        </form>
+      {% else %}
+        <form action="{{ routes.search_url }}" method="get" role="search" class="mb-0">
+            <label class="position-relative d-flex align-items-center mr-0">
+                <input type="search"
+                       class="pl-20 pr-40 mb-0"
+                       name="q"
+                       value="{{ search.terms | escape }}"
+                       placeholder="{{ 'general.search.placeholder' | t }}">
+                <input type="hidden" name="options[prefix]" value="last" aria-hidden="true" />
+                <i class="position-absolute right-0 mr-15">
+                    {% render 'icon-theme-168' %}
+                </i>
+            </label>
+        </form>
+      {% endif %}
+    </div>
+</div>
+
+<div class="popular-searches-container" style="display: none;">
+  <div class="popular-searches-title">
+    {% render 'icon-fire' %}
+    Popular
+  </div>
+  <div class="popular-searches-lists">
+    <ul>
+      <li>
+        <a href="https://www.gameology.com.au/collections/gameology-on-sale" role="link" aria-label="item 1 of 6, Clearance">
+          Clearance
+        </a>
+      </li>
+      <li>
+        <a href="https://www.gameology.com.au/collections/shop?q=pokemon" role="link" aria-label="item 1 of 6, pokemon">
+          pokemon
+        </a>
+      </li>
+      <li>
+        <a href="https://www.gameology.com.au/collections/shop?q=one%20piece" role="link" aria-label="item 2 of 6, one piece">
+          one piece
+        </a>
+      </li>
+      <li>
+        <a href="https://www.gameology.com.au/collections/shop?q=wyrmspan" role="link" aria-label="item 3 of 6, wyrmspan">
+          wyrmspan
+        </a>
+      </li>
+      <li>
+        <a href="https://www.gameology.com.au/collections/shop?q=star%20wars%20unlimited" role="link" aria-label="item 4 of 6, star wars unlimited">
+          star wars unlimited
+        </a>
+      </li>
+      <li>
+        <a href="https://www.gameology.com.au/collections/shop?q=fallout" role="link" aria-label="item 5 of 6, fallout">
+          fallout
+        </a>
+      </li>
+      <li>
+        <a href="https://www.gameology.com.au/collections/shop?q=warhammer" role="link" aria-label="item 6 of 6, warhammer">
+          warhammer
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,84 @@
+{% include 'breadcrumbs' %}
+<div id="register" class="register pb-60">
+  <div class="container">
+    <h1 class="h3 mt-30 mb-40 text-center">{{ 'customer.register.title' | t }}</h1>
+    {% form 'create_customer', return_to: routes.account_register_url %}
+      <label for="FirstName" class="label-required">{{ 'customer.register.first_name_title' | t }}</label>
+      <input type="text"
+             name="customer[first_name]"
+             id="FirstName"
+             placeholder="{{ 'customer.register.first_name_placeholder' | t }}"
+             required="required"
+             autofocus
+             {% if form.first_name %}value="{{ form.first_name }}"{% endif %}>
+      <label for="LastName" class="label-required">{{ 'customer.register.last_name_title' | t }}</label>
+      <input type="text"
+             name="customer[last_name]"
+             id="LastName"
+             placeholder="{{ 'customer.register.last_name_placeholder' | t }}"
+             required="required"
+             {% if form.last_name %}value="{{ form.last_name }}"{% endif %}>
+      <label for="Email" class="label-required">{{ 'customer.register.email_title' | t }}</label>
+      <input type="email"
+             name="customer[email]"
+             id="Email"
+             class="{% if form.errors contains 'email' %}input-error{% endif %}"
+             placeholder="{{ 'customer.register.email_placeholder' | t }}"
+             value="{% if form.email %}{{ form.email }}{% endif %}"
+             spellcheck="false"
+             autocomplete="off"
+             autocapitalize="off"
+             required="required">
+      <label for="CreatePassword" class="label-required">{{ 'customer.register.password_title' | t }}</label>
+      <input type="password"
+             name="customer[password]"
+             id="CreatePassword"
+             class="{% if form.errors contains 'password' %}input-error{% endif %}"
+             placeholder="{{ 'customer.register.password_placeholder' | t }}"
+             required="required">
+      {% include 'form-get-message' %}
+      <div class="text-center">
+        <input type="submit" value="{{ 'customer.register.submit' | t }}" class="btn btn--full btn--secondary">
+        <a href="{{ shop.url }}" class="h6 btn-link mt-20 mb-0">{{ 'customer.register.cancel' | t }}</a>
+      </div>
+    {% endform %}
+  </div>
+</div>
+<div id="register-success" class="d-none flex-column pb-60">
+  <div class="container text-center mt-50 mt-lg-100">
+    <img src="https://cdn.shopify.com/s/files/1/0921/7330/files/checked_2.png?v=1665055138" width="100">
+    <h1 class="h3 mt-20 mb-40 d-flex flex-column justify-content-center align-items-center" style="font-size:26px;">Welcome to the gamer's guild!</h1>
+    <a id="back-to-homepage-btn" href="{{ shop.url }}">Back to Home</a> <a id="register-success-btn" href="{{ shop.url }}/account">My Account</a>
+  </div>
+</div>
+
+<style>
+  #register-success-btn {
+    width: max-content;
+    background-color: #25a799;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+  }
+  #register-success-btn:hover {
+    background-color: #1f8277;
+  }
+  #back-to-homepage-btn {
+    width: max-content;
+    background-color: #b7b7b7;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+  }
+  #back-to-homepage-btn:hover {
+    background-color: #999999;
+  }
+</style>
+
+<script>
+  {% if customer.email %}
+    document.getElementById("register-success").classList.remove("d-none");
+    document.getElementById("register-success").classList.add("d-flex");
+    document.getElementById("register").classList.add("d-none");
+  {% endif %}
+</script>

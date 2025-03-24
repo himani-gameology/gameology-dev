@@ -1,0 +1,131 @@
+<div class="container imageGridLovegames">
+  <div class="custom-image-grid">
+    <!-- Replace the title with an image -->
+    <div class="grid-title">
+      <img src="{{ 'https://cdn.shopify.com/s/files/1/0921/7330/files/LovedBy-Gamers.png?v=1700194630' }}" alt="Loved by Gamers" class="grid-title-image" />
+  </div>
+  
+
+    <div class="grid-container">
+      {% for block in section.blocks %}
+      <div class="grid-item">
+        {% if block.settings.image %}
+        <img src="{{ block.settings.image | img_url: 'medium' }}" alt="{{ block.settings.alt_text }}" />
+        {% endif %}
+        {% if block.settings.title %}
+        <h3 class="grid-item-title">{{ block.settings.title }}</h3>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+</div>
+
+<style>
+  .custom-image-grid {
+    margin: 20px 0;
+    text-align: center;
+  }
+
+  /* Styling for the section title image */
+  .custom-image-grid .grid-title {
+    margin-bottom: 15px;
+  }
+
+  .custom-image-grid .grid-title-image {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .custom-image-grid .grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 35px;
+  }
+
+  .custom-image-grid .grid-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .custom-image-grid .grid-item-title {
+    text-align: center;
+    margin-top: 5px;
+    font-size: 14px;
+    color: #333;
+  }
+
+
+  .imageGridLovegames .grid-title img{
+    padding-top: 37px;
+    padding-bottom: 30px;
+    width: 290px;
+  }
+
+  .imageGridLovegames .grid-container{
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
+ 
+
+
+  @media (max-width:790px){
+    .imageGridLovegames .grid-title img{
+      padding-top: 0;
+    }
+
+    .imageGridLovegames .grid-item:last-child{
+      display: none !important;
+    }
+
+    .custom-image-grid .grid-container{
+      grid-template-columns: repeat(3, 1fr) !important;
+    }
+
+  }
+
+
+</style>
+
+
+
+{% schema %}
+{
+  "name": "Custom Block Grid",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "image_block",
+      "name": "Image Block",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "alt_text",
+          "label": "Alt Text",
+          "default": "Default alt text"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Default title"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image Grid",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

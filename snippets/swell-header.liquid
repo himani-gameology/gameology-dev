@@ -1,0 +1,175 @@
+<link href="https://fonts.googleapis.com/css?family=Cabin&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Maven+Pro&display=swap" rel="stylesheet">
+
+{% if customer == null %}
+<div class="swell-header">
+  	<h1>THE GAMEOLOGY LEGION</h1>
+  	<p class="hero-subheader">As a rewards member, you'll get closer to earning exclusive rewards<br> every time you shop!</p>
+  	<div class="swell-header-buttons">
+    	<button onclick="window.location.href='/account/register'" class="button-join">JOIN NOW</button>
+    	<button onclick="window.location.href='/account'" class="button-login">SIGN IN</button>
+  	</div>
+</div>
+{% else %}
+<div class="row align-items-center justify-content-center mt-25">
+  <div class="promobox px-10 promobox--text">
+    <div class="promobox__content h-100 h-100-inner w-100 mx-auto">
+      <div class="d-flex flex-column">
+        <p class="promobox__text-1 h5">WELCOME,</p>
+        <p class="promobox__text-2 h3 mt-5">{{customer.first_name}} {{customer.last_name}}!</p>
+        <div class="promobox__text-3 fs-lg mt-15">
+          <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-12 col-sm-12">
+              <p class="h5"><strong>Your Membership</strong></p>
+              <div class="row mt-10">
+                <div class="col-lg-8 col-md-8 col-sm-12 text-center">
+                   <div id="Lieutenant" class="mb-0"><img src="https://cdn.shopify.com/s/files/1/0921/7330/files/reward-lieutenant.png?v=1600049854" class="tier-img"></div>
+                   <div id="Colonel" class="mb-0"><img src="https://cdn.shopify.com/s/files/1/0921/7330/files/reward-colonel.png?v=1600049854" class="tier-img"></div>
+                   <div id="General" class="mb-0"><img src="https://cdn.shopify.com/s/files/1/0921/7330/files/reward-general.png?v=1600049854" class="tier-img"></div>
+                   <h2 id="no-rank" class="mb-0"><img src="https://cdn.shopify.com/s/files/1/0921/7330/files/reward-lieutenant.png?v=1600049854" class="tier-img"></h2>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 text-center" style="-ms-transform: translateY(20%); transform: translateY(20%);">
+                    <p class="h2 mb-0"><span class="swell-point-balance"></span></p>
+                  	<p class="h5 mb-0">Points</p>
+                    <p>Points earned $1 spent = 1 point</p>
+                </div>
+              </div>
+            </div>
+            <div id="redeem-block" class="col-lg-6 col-md-12 col-sm-12">
+              <p class="h5"><strong>Redeem for Discounts</strong></p>
+              <div class="all-redemption-options mt-10"></div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-25"></div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+<style>
+  	#redeem-block {
+      	padding-left: 80px;
+    }
+    .promobox__content {
+    	max-width:750px;
+    }
+  	#Lieutenant,#Colonel,#General,#no-rank {
+  		display:none
+  	}
+  	@font-face {
+		font-family: "LifeCraft";
+		src: url("https://cdn.shopify.com/s/files/1/0921/7330/files/LifeCraft_Font.woff") format("woff");
+	}
+  	.text-customer-header {
+  		max-width:800px;
+      	margin-left:auto;
+      	margin-right:auto;
+      	margin-top: 25px;
+    }
+  	.text-customer-header h2{
+     	color: #ffffff;
+    	padding: 10px;
+      	font-family:Montserrat;
+    	margin-left: auto;
+  		margin-right: auto;
+    	margin-bottom:0;
+      	margin-top:0;
+  	}
+  	.text-customer-header h2.thin{ 
+  		font-weight:500;
+    }
+  	.text-customer-header #Lieutenant,.text-customer-header #Colonel,.text-customer-header #General {
+  		margin-top:0px;
+    }
+  	.swell-header h1{
+    	font-family:LifeCraft;
+      	font-size:65px;
+      	color:#c4a156;
+    }
+  	.swell-header .hero-subheader{
+  		color:#fff;
+    }
+	.swell-header {
+    	background: url(https://cdn.shopify.com/s/files/1/0921/7330/files/Gameology_Hero_Section.png);
+    	background-size: cover;
+    	padding-top: 40px;
+    	background-position: center;
+    	padding-bottom: 40px;
+    	display: block;
+    	text-align: center;
+	}
+  	#customer-btn-container {
+  		max-width:800px;
+      	margin-left:auto;
+      	margin-right:auto;
+    }
+	.swell-header .button-redeem, .swell-header .button-join {
+    	background: #47141d;
+    	border: 0;
+    	color: #fff;
+    	font-size: 14px;
+    	width: 100%;
+    	max-width: 168px;
+    	padding: 15px 10px;
+	}
+  	.swell-header-buttons {
+    	margin-top: 45px;
+	}
+  	.swell-header .button-rewards-history,.swell-header .button-login {
+  		background: #c4a156;
+    	border: 0;
+    	color: #fff;
+   		font-size: 14px;
+    	width: 100%;
+    	max-width: 168px;
+    	padding: 15px 10px;
+    }
+  
+  	@media only screen and (max-width: 991px) { 
+      	.text-customer-header #Lieutenant,.text-customer-header #Colonel,.text-customer-header #General { 
+        	margin-bottom:20px;
+        }
+  		.swell-header .button-redeem,.swell-header .button-join, .swell-header .button-rewards-history,.swell-header .button-login {
+  		  	width:50%;
+  		}
+    	.swell-header {  
+            margin-bottom: -1px;
+            padding-left:20px;
+        	padding-right:20px;
+        }
+      	.swell-header h1 {
+    			font-size: 40px;
+    			color: #c4a156;
+		}
+      	.swell-header .hero-subheader br{
+  			display:none;
+    	}
+      	.swell-header .button-redeem, .swell-header .button-join {
+    		width: 50%;
+    		padding: 15px 10px;
+    		margin-bottom: 10px;
+    		margin-top: 10px;
+		}
+      	.swell-header .button-rewards-history, .swell-header .button-login {
+    		width: 50%;
+    		padding: 15px 10px;
+          	margin-bottom: 10px;
+    		margin-top: 10px;
+		}
+    	.swell-header-buttons {
+    		margin-top: 0 !important;
+		}
+        .promobox__content {
+        	max-width:350px;
+        }
+        #redeem-block {
+    		padding-left: 10px;
+          	padding-right: 10px;
+          	margin-top: 50px;
+    	}
+    }
+  	
+</style>
+{{ "swell-redemption-options.js" | asset_url | script_tag }}
